@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ConsolidatedTrainingNeedsLines>
+<style>
+    .employees-applied {
+        color: inherit;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+
+<hr />
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Course ID</th>
+                <th>Course Name</th>
+                <th>Employees Applied</th>
+                @if (ViewBag.Status == "Pending Committee Verdict")
+                {
+                    <th>Verdict</th>
+                    <th>Comments</th>
+                    <th>Action</th>
+                }
+                else if (ViewBag.Status == "Pending Approval" || ViewBag.Status == "Released")
+                {
+                    <th>Verdict</th>
+                    <th>Comments</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr data-course-id="@item.CourseId">
+                        <td>@Html.DisplayFor(modelItem => item.CourseId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
+                        <td>
+                            <a href="javascript:void(0);" class="employees-applied" data-id="@item.CourseId" data-number="@item.EmployeesApplied">
+                                @item.EmployeesApplied
+                            </a>
+                        </td>
+                        @if (ViewBag.Status == "Pending Committee Verdict")
+                        {
+                            <td>
+                                <select class="form-control verdict-edit" disabled>
+                                    <option value="Approved" @(item.Verdict == "Approved" ? "selected" : "")>Approved</option>
+                                    <option value="Rejected" @(item.Verdict == "Rejected" ? "selected" : "")>Rejected</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control comments-edit" value="@item.Comments" readonly />
+                            </td>
+                            <td>
+                                <button class="btn btn-warning update-btn" onclick="EditItem('@item.CourseId');">Update</button>
+                            </td>
+                        }
+                        else if (ViewBag.Status == "Pending Approval" || ViewBag.Status == "Released")
+                        {
+                            <td>
+                                <select class="form-control verdict-edit" disabled>
+                                    <option value="Approved" @(item.Verdict == "Approved" ? "selected" : "")>Approved</option>
+                                    <option value="Rejected" @(item.Verdict == "Rejected" ? "selected" : "")>Rejected</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control comments-edit" value="@item.Comments" readonly />
+                            </td>
+                        }
+
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Employees Applied</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Initialize DataTable
+        $("#datatable-buttons").DataTable({
+            lengthChange: true,
+            lengthMenu: [5, 10, 25, 50, 100],
+            destroy: true
+        });
+
+        // Open modal with AJAX content
+        $(document).on('click', '.employees-applied', function () {
+            const financial = $('#txtFinancial').val(); // Ensure this element is defined
+            const itemId = $(this).data('id');
+            const employeesApplied = $(this).data('number');
+
+            $('#detailsModalLabel').text(`Employees Applied (${employeesApplied})`);
+
+            $.ajax({
+                url: '/Training/TrainingNeedsRequests',
+                type: 'GET',
+                data: { courseId: itemId, financialYear: financial },
+                success: function (data) {
+                    $('#modalContent').html(data);
+                    $('#detailsModal').modal('show');
+                },
+                error: function () {
+                    $('#modalContent').html('<p class="text-danger">An error occurred while fetching the details.</p>');
+                }
+            });
+        });
+    });
+</script>

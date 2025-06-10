@@ -1,0 +1,79 @@
+﻿@model Latest_Staff_Portal.ViewModel.ApprovedPRNLineList
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+        <tr>
+            <th>Line No</th>
+            <th>Procurement Plan ID</th>
+            <th>Procurement Plan Entry No</th>
+            <th>Solicitation Type</th>
+            <th>Procurement Method</th>
+            <th>Preference Reservation Code</th>
+            <th>Description</th>
+            <th>Unit of Measure</th>
+            <th>Quantity</th>
+            <th>Direct Unit Cost</th>
+            <th>Amount</th>
+            <th>Amount Including VAT</th>
+            <th class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ListOfApprovedPRNLine != null && Model.ListOfApprovedPRNLine.Any())
+        {
+            foreach (var item in Model.ListOfApprovedPRNLine)
+            {
+                <tr>
+                    <td>@item.LineNo</td>
+                    <td>@item.ProcurementPlanID</td>
+                    <td>@item.ProcurementPlanEntryNo</td>
+                    <td>@item.PPSolicitationType</td>
+                    <td>@item.PPProcurementMethod</td>
+                    <td>@item.PPPreferenceReservationCode</td>
+                    <td>@item.Description</td>
+                    <td>@item.UnitOfMeasureCode</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.DirectUnitCost.ToString("C")</td>
+                    <td>@item.Amount.ToString("C")</td>
+                    <td>@item.AmountIncludingVAT.ToString("C")</td>
+                    <td class="tdAction" style="text-align:right">
+                        <a href="javascript:void(0);" class="text-success" data-toggle="tooltip" data-placement="top" title="Edit" onclick="EditItem('@item.No', @item.LineNo);">Edit</a>
+                        <a href="javascript:void(0);" class="text-danger ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.No', @item.LineNo);">Delete</a>
+                        <a href="javascript:void(0);" class="text-info ml-3" data-toggle="tooltip" data-placement="top" title="View" onclick="ViewItem('@item.No', @item.LineNo);">View</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="13" style="color: red; text-align: center;">No Records Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@* Uncomment this section if you want to show the 'Add Line' button based on status *@
+@*
+    @if (Model.Status == "Open")
+    {
+        <div style="text-align:right">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="AddImprestLine();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+            </button>
+        </div>
+    }
+*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status === "Open") {
+            $(".tdAction").show();
+        } else {
+            $(".tdAction").hide();
+        }
+    });
+</script>

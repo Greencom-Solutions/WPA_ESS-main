@@ -1,0 +1,62 @@
+﻿@model Latest_Staff_Portal.ViewModel.ProcurementPlanAmmendments
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Geo-location", htmlAttributes: new { @class = "control-label col-md-6" })
+            @*@Html.DropDownListFor(model => model.Global_Dimension_1_Code, Model.ListOfDim1, "--select Location Code--", new { @class = "form-control", id = "dim1" })*@
+            @Html.TextBoxFor(model => model.Global_Dimension_1_Code, new { @class = "form-control", id = "dim1", @readonly = "readonly", @style = "background-color: #e6e6e6" })
+            @Html.ValidationMessageFor(model => model.Global_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Admin Unit", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(model => model.Global_Dimension_2_Code, Model.ListOfDim2, "--select Location Code--", new { @class = "form-control select2", id = "dim2" })
+            @* @Html.TextBoxFor(model => model.Global_Dimension_2_Code, new { @class = "form-control", id = "dim2",@readonly="readonly", @style= "background-color: #e6e6e6" })*@
+            @Html.ValidationMessageFor(model => model.Global_Dimension_2_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id="Type">
+                <option value="1" selected>Consolidated</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Plan No", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.PlanNo, Model.ListOfProcurementPlans, "--select Location Code--", new { @class = "form-control select2", id = "PlanNo" })
+            @Html.ValidationMessageFor(model => model.PlanNo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", id = "Description" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Ammendment Reason", htmlAttributes: new { @class = "control-label col-md-6" })
+            <textarea class = "form-control" rows="3" id="Ammendment_Reason"></textarea>  
+            @Html.ValidationMessageFor(model => model.Ammendment_Reason, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            var $modal = $(this);
+            setTimeout(function () {
+                $modal.find('.select2').select2({
+                    dropdownParent: $modal
+                });
+            }, 200);
+        });
+    });
+</script>

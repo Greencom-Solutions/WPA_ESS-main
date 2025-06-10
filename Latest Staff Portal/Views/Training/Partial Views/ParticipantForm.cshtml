@@ -1,0 +1,76 @@
+﻿@model Latest_Staff_Portal.ViewModel.Trainees
+<style>
+    .ui-front {
+        z-index: 2000 !important;
+    }
+</style>
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Participant Name</span>
+            @Html.DropDownListFor(m => m.No, new SelectList(Model.ListOfEmployee, "Value", "Text", Model.No), "--Select Employee--", new { id = "ddlParticipant", @class = "form-control" })
+        </div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Expense Type</span>
+            @Html.DropDownListFor(m => m.ExpenseCode, new SelectList(Model.ListOfExpenseType, "Value", "Text", Model.ExpenseCode), "--Select Expense Code--", new { id = "ddlExpenseCode", @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            Destination
+            <input type="text" class="form-control" id="txtDestination" placeholder="Destination"/>
+            @*  @Html.DropDownListFor(model => model.Code, Model.ListOfDestination, "--select Destination--", new { @class = "form-control", @id = "ddlDestination" })*@
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            No of Days
+            <input type="text" class="form-control" id="txtQuantity" placeholder="Days" onkeypress="return functionx(event)"/>
+        </div>
+        <div class="col-md-6">
+            Total Amount
+            <input type="text" class="form-control" id="txtAmount" placeholder="0.00" onkeypress="return functionDecimal(event,this.value)"/>
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Add Participant" onclick="SubmitParticipantLine();"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlParticipant,#ddlExpenseCode").select2({
+            width: '100%'
+        });
+    });
+
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

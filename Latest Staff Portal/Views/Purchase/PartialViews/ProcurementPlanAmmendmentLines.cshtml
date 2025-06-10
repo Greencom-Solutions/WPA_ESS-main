@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ProcurementPlanAmmendmentsLines>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Planning Category</th>
+                <th>Description</th>
+                <th>Total Quantity</th>
+                <th>Total Budgeted Cost</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PlanningCategory)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Budgeted_Cost)
+                    </td>
+                    <td>
+                        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" value="View Plan Entries" onclick="ViewPlanEntries('@item.Procurement_Plan_ID','@item.PlanningCategory');" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

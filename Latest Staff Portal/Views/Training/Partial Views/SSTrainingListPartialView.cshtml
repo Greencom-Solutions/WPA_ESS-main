@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.SelfSponsoredTrainingApplication>
+<style>
+    .btn:hover {
+        color: white !Important;
+    }
+
+    .card-body:hover .btn {
+        color: white !important;
+    }
+</style>
+
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-bordered nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Action</th>
+                <th>Training Responsibility</th>
+                <th>Course Title</th>
+                <th>Description</th>
+                <th>Start DateTime</th>
+                <th>End DateTime</th>
+                <th>Duration</th>
+                <th>Provider Name</th>
+                <th>Training Type</th>
+                <th>Training Category</th>
+                <th>Status</th>
+                <th>Cost</th>
+                <th>Purpose</th>
+                <th>Training Time</th>
+                <th>Training Types</th>
+                <th>Funding Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model != null)
+                {
+                    {
+                        if (Model.Count() > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td> <a href="#" onclick="ViewDoc(`@item.Code`);" class="btn py-1 px-2 btn-primary customBtn" style="{color: white !Important;}" id="ViewDoc">Select</a></td>
+                                    <td>@Html.DisplayFor(modelItem => item.Training_Responsibility)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Course_Title)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Start_DateTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.End_DateTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Duration)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Provider_Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Training_Type)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Training_Category)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Cost)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Purpose)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Training_Time)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Training_Types)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Funding_Source)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" style="color:red">
+                                    No Records Found
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DutyStationNeeds>
+<div class="pre-scrollable">
+    <div class="table-responsive bs-example widget-shadow">
+        <table id="datatable-buttons" class="row-border" style="border-collapse: collapse; border-spacing:revert; width: 100%;">
+            <thead style="background-color:black;color:white">
+                <tr>
+                    <th></th>
+                    <th>No</th>
+                    <th>Station ID</th>
+                    <th>Admin Unit Name</th>
+                    <th>Year</th>
+                    <th>Number of Employess</th>
+                    <th>Submitted Needs</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="button" onclick="SelectedRow('@item.No','@item.Submitted');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.No)
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DutyStation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DutyStationName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FinancialYear)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NumberOfEmployees)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SubmittedNeeds)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Submitted)
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" style="color:red">
+                                No Records Found
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

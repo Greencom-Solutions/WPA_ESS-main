@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ProcurementPlanActivityScheduleLines>
+
+<div class="table-responsive">
+    <table id="datatable-buttons2" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Procurement Plan ID</th>
+                <th>PP Entry</th>
+                <th>Planning Category</th>
+                <th>Line No</th>
+                <th>Procurement Method</th>
+                <th>Activity Code</th>
+                <th>Planned Days</th>
+                <th>Actual Days</th>
+                <th>Planned Dates</th>
+                <th>Actual Dates</th>
+                <th>Actions</th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Procurement_Plan_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PP_Entry)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Planning_Category)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Line_no)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Procurement_Method)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activity_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Planned_Days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Actual_Days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Planned_Dates)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Actual_Dates)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#datatable-buttons2").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

@@ -1,0 +1,338 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseOrderArchive
+
+@{
+    ViewBag.Title = "PurchaseOrderDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+    var buttonStyle = "background: #162f25; color: whitesmoke; border-radius: 10px;";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .dropdown-item {
+        color: #27433c;
+    }
+
+        .dropdown-item:hover {
+            color: white;
+            background-color: #27433c;
+        }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="PurchaseOrdersLink(`scm`);">Purchase</a>
+                </li>
+                <li class="breadcrumb-item active">Posted Purchase Order(@Model.No)</li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <p>Posted Purchase Order (@Model.No)</p>
+        <div class="actions">
+            <button class="btn btn-primary"
+                    onclick="GenerateArchivedReport('@Model.No', '@Model.Version_No');"
+                    aria-label="Generate and Print Contract LPO Report">
+                <i class="fa fa-print me-2" aria-hidden="true"></i> Print Report
+            </button>
+        </div>
+    </div>
+
+        <div class="dl-horizontal">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("No", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Document Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Document_Type, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Buy From Vendor No", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Buy_from_Vendor_No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Buy From Vendor Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Buy_from_Vendor_Name, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Posting Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Posting_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Vendor Invoice Number", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Vendor_Invoice_No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Vendor Order Number", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Vendor_Order_No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Contact", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Buy_from_Contact, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Due Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Due_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Document Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Document_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Address", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Buy_from_Address_2, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h4>Invoicing</h4>
+                    <hr style="border: 1px solid black" />
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Pay to Vendor No", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Pay_to_Vendor_No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Pay to Contact", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Pay_to_Contact, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Pay to Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Pay_to_Name, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Due Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Due_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Payment Discount %", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Payment_Discount_Percent, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Address", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Pay_to_Address_2, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Payment Terms", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Payment_Terms_Code, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h4>Shipping</h4>
+                    <hr style="border: 1px solid black" />
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Shipping to Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Ship_to_Name, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Address", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Ship_to_Address_2, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Requested Receipt Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Requested_Receipt_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Post Code", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Ship_to_Post_Code, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Country/Region", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Ship_to_County, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Contact", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Ship_to_Contact, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+                @*line entry point*@
+                <div id="divLines" class="px-2" style="max-width: 100%;">
+
+                    <b>Lines</b>
+                    <hr style="border: 1px solid black" />
+                    <div id="purchaseOrderLines" class="table-responsive"></div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content bg-white">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><label id="labelF"></label></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#PurchaseOrderLine').DataTable({
+            "paging": true,           
+            "searching": false,
+            "ordering": true,
+            "info": false
+        });
+        LoadLines();
+        
+    });
+
+
+    var LoadLines = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                DocNo: '@Model.No',
+                Status: '@Model.Status'
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: "/Purchase/ArchivedPurchaseOrderLines",
+            success: function (data) {
+                $(purchaseOrderLines).html(data);
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+            }
+        });
+    }
+
+    var GenerateArchivedReport = function (DocNo, Version) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, Version: Version }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/GenerateArchivedReport',
+            success: function (data) {
+                if (data.success) {
+                    $("#modalBody").empty();
+
+                    var iframe = $("<iframe>").attr({
+                        src: "data:application/pdf;base64," + data.message,
+                        width: "100%",
+                        height: "500px",
+                        frameborder: "0" 
+                    });
+                    $("#modalBody").append(iframe);
+                    $("#myModal").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseOrder>
+
+<div class="table-responsive">
+    @if (Model != null && Model.Any() && Model.First().isAccounts == false)
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <select id="statusFilter" class="form-control">
+                    <option value="">Filters</option>
+                    <option value="Open">Open</option>
+                    <option value="Released">Released</option>
+                    <option value="Pending approval">Pending approval</option>
+                    <option value="Cancelled">Cancelled</option>
+
+                    <option value="Returned">Returned</option>
+                </select>
+            </div>
+        </div>
+    }
+
+    <table id="PurchaseOrder" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white">
+            <tr>
+                <th>Action</th>
+                <th>No</th>
+                <th>Buy from Vendor No</th>
+                <th>Buy from Vendor Name</th>
+                <th>Pay to Name</th>
+                <th>Amount</th>
+                <th>Amount(INCL VAT)</th>
+                <th>Status</th>
+                <th class="returnedColumn">Returned</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr data-returned="@item.Returned">
+                        <td>
+                            <input type="button" onclick="ViewDoc('@item.No');" style="background: #162f25; color: whitesmoke; border-radius: 10px" value="Select" />
+                        </td>
+                        <td>@item.No</td>
+                        <td>@item.Buy_from_Vendor_No</td>
+                        <td>@item.Buy_from_Vendor_Name</td>
+                        <td>@item.Pay_to_Name</td>
+                        <td>@item.Amount</td>
+                        <td>@item.Amount_Including_VAT</td>
+                        <td>@item.Status</td>
+                        <td class="returnedColumn">@item.Returned</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var table = $("#PurchaseOrder").DataTable({
+        lengthChange: true,
+        order: [[1, 'desc']],
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true,
+        columnDefs: [
+            { targets: 8, visible: false }
+        ]
+    });
+
+    $("#statusFilter").on('change', function () {
+        var selectedStatus = $(this).val();
+
+        if (selectedStatus === "Returned") {
+            table.column(7).search("").draw();
+
+            table.rows().every(function () {
+                var row = $(this.node());
+                var isReturned = row.attr('data-returned') === "True";
+                if (isReturned) {
+                    row.show();
+                } else {
+                    row.hide();
+                }
+            });
+
+            table.column(8).visible(false);
+
+        } else {
+            table.column(7).search(selectedStatus).draw();
+            table.column(8).visible(false);
+            table.rows().every(function () {
+                $(this.node()).show();
+            });
+        }
+    });
+</script>

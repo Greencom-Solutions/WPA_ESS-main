@@ -1,0 +1,295 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.RequestForQuotationsList>
+
+<table id="datatable-buttons" class="table table-bordered table-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+<thead style="background-color:black;color:white">
+    <tr>
+        <th>Action</th>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Document_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.External_Document_No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PRN_No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location_Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        @* <th>
+            @Html.DisplayNameFor(model => model.Submission_End_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Submission_End_Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bid_Opening_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bid_Opening_Time)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Procurement_Type)
+        </th>
+        @*  <th>
+            @Html.DisplayNameFor(model => model.Requisition_Product_Group)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Procurement_Category_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Target_Bidder_Group)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Solicitation_Type)
+        </th>
+     @*   <th>
+            @Html.DisplayNameFor(model => model.Bid_Submission_Method)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Procurement_Method)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Sealed_Bids)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tender_Validity_Duration)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tender_Validity_Expiry_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Purchaser_Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Purchaser_Name)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.Mandatory_Special_Group_Reserv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Appointer_of_Bid_Arbitrator)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bid_Scoring_Template)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bid_Opening_Committe)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bid_Evaluation_Committe)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Document_Status)
+        </th>
+        @*  <th>
+            @Html.DisplayNameFor(model => model.Published)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date_Time_Published)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        @* <th>
+            @Html.DisplayNameFor(model => model.No_of_Submission)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created_Date_Time)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Created_by)
+        </th>
+        @*  <th>
+            @Html.DisplayNameFor(model => model.Procurement_Plan_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Procurement_Plan_Entry_No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PP_Planning_Category)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PP_Funding_Source_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PP_Total_Budget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PP_Total_Actual_Costs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PP_Total_Commitments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PP_Total_Available_Budget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PP_Preference_Reservation_Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Financial_Year_Code)
+        </th>
+        *@
+    </tr>
+</thead>
+
+<tbody>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            <input type="button" onclick="ViewDoc('@item.Code');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Document_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.External_Document_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PRN_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location_Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        @*  <td>
+            @Html.DisplayFor(modelItem => item.Submission_End_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Submission_End_Time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bid_Opening_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bid_Opening_Time)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Procurement_Type)
+        </td>
+        @*  <td>
+            @Html.DisplayFor(modelItem => item.Requisition_Product_Group)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Procurement_Category_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Target_Bidder_Group)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Solicitation_Type)
+        </td>
+       @* <td>
+            @Html.DisplayFor(modelItem => item.Bid_Submission_Method)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Procurement_Method)
+        </td>
+        @* <td>
+            @Html.DisplayFor(modelItem => item.Sealed_Bids)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tender_Validity_Duration)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tender_Validity_Expiry_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Purchaser_Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Purchaser_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mandatory_Special_Group_Reserv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Appointer_of_Bid_Arbitrator)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bid_Scoring_Template)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bid_Opening_Committe)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bid_Evaluation_Committe)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Document_Status)
+        </td>
+        @*  <td>
+            @Html.DisplayFor(modelItem => item.Published)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date_Time_Published)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.No_of_Submission)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Created_Date_Time)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Created_by)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Procurement_Plan_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Procurement_Plan_Entry_No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PP_Planning_Category)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PP_Funding_Source_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PP_Total_Budget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PP_Total_Actual_Costs)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PP_Total_Commitments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PP_Total_Available_Budget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PP_Preference_Reservation_Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Financial_Year_Code)
+        </td>*@
+
+    </tr>
+}
+</tbody>
+
+</table>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

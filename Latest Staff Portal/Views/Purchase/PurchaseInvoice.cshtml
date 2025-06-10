@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "PurchaseInvoice";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="AccountsLink();">Accounts</a>
+                </li>
+                <li class="breadcrumb-item active"> Purchase Invoice List</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div id="divRegList"></div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPurchaseInvoiceList();
+    });
+    var LoadPurchaseInvoiceList = function () {
+        var status = '@ViewBag.Status';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/PurchaseInvoice/PurchaseInvoiceList?status=" + status,
+            success: function (data) {
+                $("#divRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var ViewDoc = function (DocNo) {
+    var checkStatus = '@ViewBag.Status';
+    ShowProgress();
+
+    var form = $('<form>', {
+        action: '/PurchaseInvoice/PurchaseInvoiceDocument',
+        method: 'POST'
+    }).append(
+        $('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }),
+        $('<input>', {
+            type: 'hidden',
+            name: 'status',
+            value: checkStatus
+        })
+    );
+
+    form.appendTo('body').submit();
+}
+
+</script>
+

@@ -1,0 +1,147 @@
+﻿@model Latest_Staff_Portal.ViewModel.RequiredDocuments
+
+
+<div class="mb-3">
+    <h4>Add Document</h4>
+    <hr />
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("RFQ", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.RFQ, new { htmlAttributes = new { @class = "form-control", @id= "RFQ", @readonly="readonly", @style="background-color: #dedebd" } })
+            @Html.ValidationMessageFor(model => model.RFQ, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Procurement Document Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Procurement_Document_Type_ID, Model.ListOfDocumentTypes, "Select Option", new { @class = "form-control", @id = "Procurement_Document_Type_ID", @onchange="GetDescription(this.value)" })
+            @Html.ValidationMessageFor(model => model.Procurement_Document_Type_ID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input class="form-control" type="text" name="Description" value="" id="Document_Description" readonly />
+            @*@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Description" } })*@
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Requirement Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <select class="form-control" id="Requirement_Type">
+                <option value="" selected hidden>Select Option</option>
+                <option value="0">Mandatory</option>
+                <option value="1">Optional</option>
+            </select>
+
+           @* @Html.EditorFor(model => model.Requirement_Type, new { htmlAttributes = new { @class = "form-control", @id = "Requirement_Type" } })*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Track Certificate Expiry", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Track_Certificate_Expiry, new { @class = "control-label col-md-2", @id= "Track_Certificate_Expiry" })
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div style="text-align: center">
+    <button class="btn btn-primary waves-effect waves-light"  onclick="SubmitDocument();">
+        <i class="fa fa-check" aria-hidden="true"></i> Submit
+    </button>
+</div>
+
+
+
+<script>
+
+    function GetDescription(selectedValue) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                Procurement_Document_Type_ID: selectedValue,     
+            }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/GetDocumentDescription',
+            success: function (data) {
+                HideProgress();
+                $('#Document_Description').val(data.description);
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+               
+    }
+
+
+    function SubmitDocument() {
+        var RFQ = $('#RFQ').val();
+        var Procurement_Document_Type_ID = $('#Procurement_Document_Type_ID').val();
+        var Description = $('#Description').val();
+        var Requirement_Type = $('#Requirement_Type').val();
+        var Track_Certificate_Expiry = $('#Track_Certificate_Expiry').val();
+
+
+
+        if (!Procurement_Document_Type_ID) {
+            Swal.fire("Warning", "Select Procurement Document Type", "warning");
+            return;
+        }
+        if (!Description) {
+            Swal.fire("Warning", "Enter Description", "warning");
+            return;
+        }
+        if (!Requirement_Type) {
+            Swal.fire("Warning", "Select Requirement Type", "warning");
+            return;
+        }
+
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                RFQ: RFQ,
+                Procurement_Document_Type_ID: Procurement_Document_Type_ID,
+                Description: Description,
+                Requirement_Type: Requirement_Type,
+                Track_Certificate_Expiry: Track_Certificate_Expiry
+            }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/SubmitDocument',
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    Swal.fire('Success', 'Record successfully submitted', 'success').then(
+                        window.Location.href= data.message);
+                }
+                else {
+                    HideProgress()
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+               
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+</script>

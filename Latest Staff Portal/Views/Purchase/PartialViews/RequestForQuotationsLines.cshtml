@@ -1,0 +1,56 @@
+﻿@model Latest_Staff_Portal.ViewModel.RequestForQuotationsLinesList
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+        <tr>
+            <th>Standard Purchase Code</th>
+            <th>Line No</th>
+            <th>Type</th>
+            <th>Filtered Type Field</th>
+            <th>No</th>
+            <th>Variant Code</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit of Measure Code</th>
+            <th>Amount Excl VAT</th>
+            <th>Location</th>
+            <th>Admin Unit</th>
+            <th>Vote</th>
+            <th>Pograme</th>
+            <th>Item Category</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ListOfRequestForQuotationsLines != null && Model.ListOfRequestForQuotationsLines.Any())
+        {
+            foreach (var item in Model.ListOfRequestForQuotationsLines)
+            {
+                <tr>
+                    <td>@item.Standard_Purchase_Code</td>
+                    <td>@item.Line_No</td>
+                    <td>@item.Type</td>
+                    <td>@item.FilteredTypeField</td>
+                    <td>@item.No</td>
+                    <td>@item.Variant_Code</td>
+                    <td>@item.Description</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Unit_of_Measure_Code</td>
+                    <td>@item.Amount_Excl_VAT</td>
+                    <td>@item.Shortcut_Dimension_1_Code</td>
+                    <td>@item.Shortcut_Dimension_2_Code</td>
+                    <td>@item.ShortcutDimCode_x005B_3_x005D_</td>
+                    <td>@item.ShortcutDimCode_x005B_4_x005D_</td>
+                    <td>@item.Item_Category</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="15" style="color: red;">No Records Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

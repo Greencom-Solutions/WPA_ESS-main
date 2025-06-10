@@ -1,0 +1,99 @@
+﻿@model Latest_Staff_Portal.ViewModel.IFSTenderCommitteeLines
+
+<div class="card-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+				@Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @id = "documentNo", @readonly = "readonly", @style = "background-color:#dedebd" } })
+				@Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.Label("Committee Type", htmlAttributes: new { @class = "control-label col-md-2" })
+				@Html.EditorFor(model => model.Committee_Type, new { htmlAttributes = new { @class = "form-control", @id = "committeeType", @readonly = "readonly", @style = "background-color:#dedebd" } })
+				@Html.ValidationMessageFor(model => model.Committee_Type, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.Label("Member No", htmlAttributes: new { @class = "control-label col-md-12", @for = "Member_No" })
+				@Html.DropDownListFor(m => m.Member_No, Model.ListOfmemberNo, "--Select Member Number--", new { @class = "form-control select2", @id = "Member_No", onchange = "GetMemberDetails()" })
+				@Html.ValidationMessageFor(m => m.Member_No, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.Label("Member Name", htmlAttributes: new { @class = "control-label col-md-2" })
+				@Html.EditorFor(model => model.Member_Name, new { htmlAttributes = new { @class = "form-control", @id = "txtMemberName", @readonly = "readonly", @style = "background-color:#dedebd" } })
+				@Html.ValidationMessageFor(model => model.Member_Name, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				@Html.Label("Role", htmlAttributes: new { @class = "control-label col-md-2" })
+				<select id="role" class="form-control">
+					<option value="" selected hidden>-- Select Role --</option>
+					<option value="0">Member</option>
+					<option value="1">Chairperson</option>
+					<option value="2">Secretary</option>
+					<option value="3">Secretariat</option>
+				</select>
+				@Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+			</div>
+		</div>
+	</div>
+
+	<hr />
+	<div class="form-group">
+		<div align="center">
+			<input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="submitMember();" />
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		var Member_No = $("#Member_No").val();
+		//alert(Member_No);
+		GetMemberDetails(Member_No);
+
+		// Initialize select2 for dropdowns
+		/*$("#Member_Name, #Member_No").select2({
+			width: '100%'
+		});*/
+        $("#Member_No").select2({
+            width: '100%'
+        });
+	});
+
+	function GetMemberDetails() {
+		var selectedValue = $("#Member_No").val();
+
+		ShowProgress();
+
+		$.ajax({
+			url: "/Purchase/GetMemberDetails",
+			type: 'GET',
+			data: { Member_No: selectedValue },
+			success: function (response) {
+				if (response.success !== false) {
+					$("#txtMemberName").val(response.MemberName);
+					$("#txtMemberName").trigger('change');
+				} else {
+					console.error(response.message);
+				}
+				HideProgress();
+			},
+			error: function (xhr, status, error) {
+				console.error("Error fetching dimensions:", error);
+				HideProgress();
+			}
+		});
+	}
+</script>

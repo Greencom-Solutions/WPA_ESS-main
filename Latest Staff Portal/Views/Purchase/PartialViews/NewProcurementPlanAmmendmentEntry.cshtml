@@ -1,0 +1,490 @@
+﻿@model Latest_Staff_Portal.ViewModel.ProcurementPlanRevisionEntries
+
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => Model.ProcurementPlanID, "Procurement Plan ID", new { @class = "control-label col-md-6" })
+            @Html.EditorFor(m => Model.ProcurementPlanID, new { htmlAttributes = new { @class = "form-control", @id = "ProcurementPlanID", @disabled = "@disabled" } })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => Model.Planning_Category, "Planning Category", new { @class = "control-label col-md-6" })
+            @Html.EditorFor(m => Model.Planning_Category, new { htmlAttributes = new { @class = "form-control", @id = "Planning_Category", @disabled = "@disabled" } })
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => Model.RevisedPlanNo, "Revised Plan No", new { @class = "control-label col-md-6" })
+            @Html.EditorFor(m => Model.RevisedPlanNo, new { htmlAttributes = new { @class = "form-control", @disabled = "@disabled" } })
+        </div>
+    </div>
+
+    @*   <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(m => Model.VoteItem, "Vote Item", new { @class = "control-label col-md-6" })
+                @Html.DropDownListFor(m => m.VoteItem, Model.ListOfVoteItems, "Select Option--", new { @class = "form-control", @id = "VoteItem" })
+
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Plan Item Type", htmlAttributes: new { @class = "control-label col-md-6" })
+            <select id="PlanItemType" class="form-control">
+                <option value="1">Item</option>
+                <option value="2">Fixed Asset</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Plan Item", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(m => m.PlanItemNo, Model.ListOfItems, "Select Option--", new { @class = "form-control", @id = "PlanItemNo" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Desc" } })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Procurement Type", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(m => m.Procurement_Type, Model.ListOfProcTypes, "Select Option--", new { @class = "form-control", @id = "Procurement_Type" })
+        </div>
+    </div>
+
+
+    @* <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Solicitation Type", htmlAttributes: new { @class = "control-label col-md-6" })
+                @Html.DropDownListFor(m => m.Solicitation_Type, Model.ListOfSolicitationTypes, "Select Option--", new { @class = "form-control", @id = "Solicitation_Type" })
+
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Procurement Method", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(modelItem => Model.Procurement_Method,
+                new SelectList(
+                    new[]
+                    {
+                       /* new { Value = "0", Text = "Open Tender" },
+                        new { Value = "1", Text = "RFQ" },
+                        new { Value = "2", Text = "RFP" },
+                        new { Value = "3", Text = "Two Stage Tender" },
+
+                        new{Value = "4", Text = "Design Competition Tender" },
+                        new {Value = "5", Text = "Restricted Tender" },
+                        new { Value = "6", Text = "Direct Procurement" },
+
+                        new{Value = "7", Text = "Low Value Procurement" },
+                        new{Value = "8", Text = "Force Account" },
+                        new { Value = "9", Text = "Framework Agreement" },
+                        new { Value = "10", Text = "Reverse Auction" },*/
+
+
+                         new { Value = "1", Text = "Open Tender" },
+                         new { Value = "2", Text = "RFQ" },
+                         new { Value = "3", Text = "RFP" },
+                         new { Value = "4", Text = "Two Stage Tender" },
+
+                         new{Value = "5", Text = "Design Competition Tender" },
+                         new {Value = "6", Text = "Restricted Tender" },
+                         new { Value = "7", Text = "Direct Procurement" },
+
+                         new{Value = "8", Text = "Low Value Procurement" },
+                         new{Value = "9", Text = "Force Account" },
+                         new { Value = "10", Text = "Framework Agreement" },
+                         new { Value = "11", Text = "Reverse Auction" },
+
+
+
+                },
+                    "Value", // Field used for value
+                    "Text",  // Field used for display
+                    Model.Procurement_Method // Selected value
+                ),
+                new
+                {
+                    @class = "form-control expanded-dropdown",
+                    @id = "Procurement_Method",
+                    @onchange = "updateStatus(this, '@item.Id')"
+                }
+            )
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Alternative Procurement Methods", htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(modelItem => Model.Alternative_Procurement_Methods, new { htmlAttributes = new { @class = "form-control", @id = "Alternative_Procurement_Methods_" } })
+        </div>
+    </div>
+
+
+
+
+    @*  <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Funding Source ID", htmlAttributes: new { @class = "control-label col-md-6" })
+                @Html.DropDownListFor(m => m.Funding_Source_ID, Model.ListOfFundingSourceID, "Select Option--", new { @class = "form-control", @id = "Funding_Source_ID" })
+
+            </div>
+        </div>*@
+    @*
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Requisition Product Group", htmlAttributes: new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(modelItem => Model.Requisition_Product_Group,
+                    new SelectList(
+                        new[]
+                        {
+
+                            new { Value = "0", Text = "Goods" },
+                            new { Value = "1", Text = "Services" },
+                            new { Value = "2", Text = "Works" },
+                            new { Value = "3", Text = "Assets" }
+                        },
+                        "Value", // Field used for value
+                        "Text",  // Field used for display
+                        Model.Requisition_Product_Group // Selected value
+                    ),
+                    new
+                    {
+                        @class = "form-control expanded-dropdown",
+                        @id = "Requisition_Product_Group",
+                        @onchange = "updateStatus(this, '@item.Id')"
+                    }
+                )
+            </div>
+        </div>*@
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Quantity", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Quantity", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Unit Cost", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Unit_Cost, new { htmlAttributes = new { @class = "form-control", @id = "Unit_Cost" , @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Vote", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(m => m.Shortcut_Dimension_3_Code, Model.ListOfVote, "Select Option--", new { @class = "form-control", @id = "Shortcut_Dimension_3_Code" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Sub Program", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(m => m.Shortcut_Dimension_4_Code, Model.ListOfSubProgram, "Select Option--", new { @class = "form-control", @id = "Shortcut_Dimension_4_Code" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Class", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(m => m.Shortcut_Dimension_5_Code, Model.ListOfClass, "Select Option--", new { @class = "form-control", @id = "Shortcut_Dimension_5_Code" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Funding Source", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(m => m.Shortcut_Dimension_6_Code, Model.ListOfFundingSource, "Select Option--", new { @class = "form-control", @id = "Shortcut_Dimension_6_Code" })
+
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q1 Quantity", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Q1_Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Q1_Quantity", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q1 Amount", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Q1_Amount,
+                new { htmlAttributes = new { @class = "form-control", @id = "Q1_Amount", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q2 Quantity", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Q2_Quantity,
+                new { htmlAttributes = new { @class = "form-control", @id = "Q2_Quantity", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q2 Amount", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Q2_Amount,
+                new { htmlAttributes = new { @class = "form-control", @id = "Q2_Amount", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q3 Quantity", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Q3_Quantity,
+                new { htmlAttributes = new { @class = "form-control", @id = "Q3_Quantity", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q3 Amount", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Q3_Amount,
+                new { htmlAttributes = new { @class = "form-control", @id = "Q3_Amount", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q4 Quantity", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Q4_Quantity,
+                new { htmlAttributes = new { @class = "form-control", @id = "Q4_Quantity", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Q4 Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(modelItem => Model.Q4_Amount,
+                new { htmlAttributes = new { @class = "form-control", @id = "Q4_Amount", @onblur = "validateAmounts()" } })
+        </div>
+    </div>
+
+
+
+
+
+    <!-- PWD Percent -->
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("PWD %", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.PWD_Percent,
+                new { htmlAttributes = new { @class = "form-control", @id = "PWD_Percent", @onkeyup = "setAgpo()" } })
+        </div>
+    </div>
+
+    <!-- Women Percent -->
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Women %", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Women_Percent,
+                new { htmlAttributes = new { @class = "form-control", @id = "Women_Percent", @onkeyup = "setAgpo()" } })
+        </div>
+    </div>
+
+    <!-- Youth Percent -->
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Youth %", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Youth_Percent,
+                new { htmlAttributes = new { @class = "form-control", @id = "Youth_Percent", @onkeyup = "setAgpo()" } })
+        </div>
+    </div>
+
+    <!-- AGPO Percent -->
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("AGPO %", htmlAttributes: new { @class = "control-label col-md-6" })
+            <input class="form-control" type="text" name="name" value="" id="AGPO_Percent" disabled />
+            @*  @Html.EditorFor(modelItem => Model.AGPO_Percent,
+                new { htmlAttributes = new { @class = "form-control", @id = "AGPO_Percent" } })*@
+        </div>
+    </div>
+
+
+    <!-- Citizen Contractors Percent -->
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Citizen Contractors %", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.EditorFor(modelItem => Model.Citizen_Contractors_Percent,
+                new { htmlAttributes = new { @class = "form-control", @id = "Citizen_Contractors_Percent" , @onblur = "checkTotalPercentage()" } })
+        </div>
+    </div>
+
+    <!-- Action Taken -->
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Action Taken", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(
+                modelItem => Model.Action_Taken,
+                new SelectList(
+                    new[]
+                    {
+
+                      /*  new { Value = "0", Text = "Edited" },
+                        new { Value = "1", Text = "Delete" },
+                        new { Value = "2", Text = "Retain" },*/
+                        new { Value = "3", Text = "Addition" }
+                    },
+                    "Value",
+                    "Text",
+                    Model.Action_Taken
+                ),
+                new { @class = "form-control expanded-dropdown", @id = "Action_Taken" }
+            )
+        </div>
+    </div>
+
+    <!-- Status -->
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.DropDownListFor(
+                modelItem => Model.Status,
+                new SelectList(
+                    new[]
+                    {
+                        new { Value = "0", Text = "New" },
+                       /* new { Value = "1", Text = "Pending Approval" },
+                        new { Value = "2", Text = "Approved" },
+                        new { Value = "3", Text = "Rejected" }*/
+                    },
+                    "Value",
+                    "Text",
+                    Model.Status
+                ),
+                new { @class = "form-control expanded-dropdown", @id = "Status" }
+            )
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Initialize datepickers
+        $('#Planning_Date, #Procurement_Start_Date, #Procurement_End_Date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+
+        // Adjust the position of the datepicker for both fields
+        $('#Planning_Date, #Procurement_Start_Date, #Procurement_End_Date').focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+
+        // Set default value to today's date
+        var today = new Date();
+        var day = ("0" + today.getDate()).slice(-2);
+        var month = ("0" + (today.getMonth() + 1)).slice(-2);
+        var todayFormatted = day + "/" + month + "/" + today.getFullYear();
+        $('#Planning_Date, #Procurement_Start_Date, #Procurement_End_Date').val(todayFormatted);
+    });
+
+    function setAgpo() {
+        var PWD_Percent = parseFloat($("#PWD_Percent").val()) || 0;
+        var Women_Percent = parseFloat($("#Women_Percent").val()) || 0;
+        var Youth_Percent = parseFloat($("#Youth_Percent").val()) || 0;
+
+        // Calculate the total
+        var totalAGPOPercent = PWD_Percent + Women_Percent + Youth_Percent;
+
+        // Set the value of AGPO_Percent
+        $("#AGPO_Percent").val(totalAGPOPercent);
+
+        if (totalAGPOPercent > 100) {
+            /*alert("AGPO% cannot exceed 100%");*/
+            Swal.fire('Error', 'AGPO% cannot exceed 100%', 'error');
+            $("#PWD_Percent").val(0);
+            $("#Women_Percent").val(0);
+            $("#Youth_Percent").val(0);       
+            $("#AGPO_Percent").val(0);
+        }
+    }
+
+    function checkTotalPercentage() {
+        var AGPO_Percent = parseFloat($("#AGPO_Percent").val());
+        var Citizen_Contractors_Percent = parseFloat($("#Citizen_Contractors_Percent").val());
+    
+        var totalPercentage = AGPO_Percent + Citizen_Contractors_Percent;
+        if (totalPercentage > 100) {
+            Swal.fire('Error', 'Citizen Contractors%  cannot exceed 100', 'error');
+          /*  alert("AGPO% + Citizen Contractors%  cannot exceed 100%");*/
+            $("#Citizen_Contractors_Percent").val(0);
+
+        }
+    }
+
+    function validateAmounts() {
+        var totalQuantity = parseFloat($("#Quantity").val()) || 0;
+        var totalCost = parseFloat($("#Unit_Cost").val()) || 0;
+
+        totalAmount = totalQuantity * totalCost;
+
+        var Q1_Quantity = parseFloat($("#Q1_Quantity").val()) || 0;
+        var Q2_Quantity = parseFloat($("#Q2_Quantity").val()) || 0;
+        var Q3_Quantity = parseFloat($("#Q3_Quantity").val()) || 0;
+        var Q4_Quantity = parseFloat($("#Q4_Quantity").val()) || 0;
+
+        var Q1_Amount = parseFloat($("#Q1_Amount").val()) || 0;
+        var Q2_Amount = parseFloat($("#Q2_Amount").val()) || 0;
+        var Q3_Amount = parseFloat($("#Q3_Amount").val()) || 0;
+        var Q4_Amount = parseFloat($("#Q4_Amount").val()) || 0;  
+
+        totalQ1Amount = Q1_Quantity * Q1_Amount;
+        totalQ2Amount = Q2_Quantity * Q2_Amount;
+        totalQ3Amount = Q3_Quantity * Q3_Amount;
+        totalQ4Amount = Q4_Quantity * Q4_Amount;
+
+        totalQuarterQuantity = Q1_Quantity + Q2_Quantity + Q3_Quantity + Q4_Quantity;
+        totalQuarterAmounts = Q1_Amount + Q2_Amount + Q3_Amount + Q4_Amount;
+
+
+       /* if (totalQuarterQuantity > totalQuantity) {
+            Swal.fire('Error', 'Sum of total quarter quantities exceed the quantity', 'error');
+            $("#Q1_Quantity").val(0);
+            $("#Q2_Quantity").val(0);
+            $("#Q3_Quantity").val(0);
+            $("#Q4_Quantity").val(0);
+        }*/
+
+        if (totalQuarterAmounts > totalAmount) {
+            Swal.fire('Error', 'Sum of total quarter amounts exceed the total amount', 'error');
+            $("#Q1_Amount").val(0);
+            $("#Q2_Amount").val(0);
+            $("#Q3_Amount").val(0);
+            $("#Q4_Amount").val(0);
+
+        }
+
+
+
+       
+    }
+
+</script>
+
+

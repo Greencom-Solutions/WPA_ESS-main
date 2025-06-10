@@ -1,0 +1,64 @@
+﻿@model Latest_Staff_Portal.ViewModel.ContractPaymentDetailsLines
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.LabelFor(model => model.Item_Line_No, "Item", new { @class = "control-label col-md-12" })
+            <div class="dropDown">
+                @Html.DropDownList("Items", ViewBag.ItemsDropDownList as List<SelectListItem>, "Select Items", new { @class = "form-control select2", id = "itemNo" })
+            </div>
+
+            @Html.ValidationMessageFor(model => model.Item_Line_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" onclick="SubmitContractPaymentDetails();" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+
+    function SubmitContractPaymentDetails() {
+        var contractNo = '@ViewBag.Contract_No';
+        var docNo = '@ViewBag.Document_No';
+        var LineNo = $('#itemNo').val();
+
+        ShowProgress();
+
+        $.ajax({
+            url: '/Purchase/SubmitContractPaymentDetails',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ DocNo: docNo, LineNo: LineNo, ContractNo: contractNo }), 
+            success: function (data) {
+                if (data.success) {
+                    $("#myModal").modal("hide");
+                    HideProgress();
+                    LoadApprovedPRNLine(docNo);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Contract added successfully!'
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                });
+            }
+        });
+    }
+
+</script>

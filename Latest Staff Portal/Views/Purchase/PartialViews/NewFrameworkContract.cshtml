@@ -1,0 +1,87 @@
+﻿@model Latest_Staff_Portal.ViewModel.FrameworkContractCard
+
+<div class="row">
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Responsibility Center", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Responsibility_Center, Model.ListOfResponsibilityCentres, "--Select Responsibility Center--", new { @class = "form-control", id = "Responsibility_Center" })
+            @Html.ValidationMessageFor(model => model.Responsibility_Center, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Location", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Location_Code, Model.ListOfLocationCodes, "--Select Location--", new { @class = "form-control", id = "Location_Code"})
+            @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Tender Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Tender_Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Tender_Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Tender Summary", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Tender_Summary, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Tender_Summary, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Procurement Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Procurement_Type, Model.ListOfProcurementTypes, "--Select Procurement Type--", new { @class = "form-control", id = "Procurement_Type" })
+            @Html.ValidationMessageFor(model => model.Procurement_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Requisition Product Group", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id="Requisition_Product_Group">
+                <option value="" selected hidden>Select Requisition Product Group</option>
+                <option value="Goods">Goods</option>
+                <option value="Services">Services</option>
+                <option value="Works">Works</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Procurement Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Procurement_Category, Model.ListOfProcurementCategories, "--Select Procurement Category--", new { @class = "form-control", id = "Procurement_Category" })
+            @Html.ValidationMessageFor(model => model.Procurement_Category, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Purchaser", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Purchaser_Code, Model.ListOfPurchaserCodes, "--Select Purchaser--", new { @class = "form-control", id = "Purchaser_Code" })
+            @Html.ValidationMessageFor(model => model.Purchaser_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Language", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Language_Code, Model.ListOfLanguageCodes, "--Select Language--", new { @class = "form-control", id = "Language_Code"})
+            @Html.ValidationMessageFor(model => model.Language_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitFrameworkContract();" />
+</div>

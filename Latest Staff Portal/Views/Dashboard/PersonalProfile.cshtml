@@ -1,0 +1,341 @@
+﻿@using Latest_Staff_Portal.Models
+@model Latest_Staff_Portal.ViewModel.EmployeeView
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+    var imgSrc = "";
+    var CustBal = "";
+    if (Session["Username"] == null)
+    {
+        Html.Action("Login", "Login");
+    }
+    else
+    {
+
+        if (Session["ImgProfile"] == null)
+        {
+
+        }
+        else
+        {
+            imgSrc = Session["ImgProfile"].ToString();
+        }
+    }
+}
+<style>
+    .mb-1, .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    .content-label {
+        display: inline-block;
+        margin-left: 5px;
+        min-width: 100px;
+    }
+
+        .content-label label {
+            font-size: 12px;
+            font-weight: bold
+        }
+
+    .content-data {
+        display: inline-block;
+    }
+
+        .content-data span {
+            font-size: 12px;
+        }
+</style>
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3 class="page-title mb-3">
+                <b>My Profile</b>
+            </h3>
+            <hr />
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="margin: 2px;outline: solid 1px #ccc;border-radius: 10px; padding: 10px">
+    <div class="col-md-4 mb-4 mt-1" style="background-color: whitesmoke; padding-bottom: 50px; border-radius: 10px;">
+        <div class="row">
+            <div class="col-md-12" style="text-align: center; padding-top: 30px">
+                <a data-toggle="modal" data-target="#myModalProfile" title="Update Profile Pic" href="#">
+                    <div id="divProfPic"></div>
+                </a>
+            </div>
+            <div class="col-md-12">
+                <div style="padding: 5px;">
+                    <hr />
+                    <div class="mb-3; p-3">
+                        <b>Staff No :</b> @Model.No<br />
+                    </div>
+                    <div class="p-3">
+                        <b>Title:</b> @Model.Title       
+                    </div>
+                    <div class="p-3">
+                        <b>Name : </b> @Model.FirstName @Model.MiddleName @Model.LastName
+                    </div>
+                    <hr />
+                    <div class="text-center;">
+                        <div class="mb-3">
+                            <button class="btn btn-info btn-sm w-100" onclick="ChangePasswordLink()">Change Password</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-warning btn-sm w-100" data-toggle="modal" data-target="#myModalProfile" title="Update Profile Pic">Update Profile Pic</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8" style=" background: none">
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="card mb-1 shadow-none">
+                <div class="card-header" id="headingOne" aria-controls="collapseOne" aria-expanded="true" data-toggle="collapse" href="#collapseOne">
+                    <h6 class="m-0">
+                        <span class="fa fa-arrow-up" style="color: #162f25"> Personal Information</span>
+
+                    </h6>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row" style="padding: 10px">
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="content-label">
+                                        <label>Gender :</label>
+                                    </div>
+                                    <div class="content-data">
+                                        <span class="label label-warning">@Model.Gender</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="content-label">
+                                        <label>Marital Status :</label>
+                                    </div>
+                                    <div class="content-data">
+                                        <span class="label label-warning">@Model.Marital_Status</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="content-label">
+                                        <label>Nationality :</label>
+                                    </div>
+                                    <div class="content-data">
+                                        <span class="label label-warning">@Model.Country_Region_Code</span>
+                                    </div>
+                                </div>
+                            </div>
+                           
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-1 shadow-none">
+            <div class="card-header" id="headingTwo" aria-expanded="false" aria-controls="collapseTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                <h6 class="m-0">
+                    <span class="fa fa-arrow-down" style="color: #162f25"> Contact Details</span>
+                </h6>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                 data-parent="#accordion">
+                <div class="card-body">
+                    <div class="row" style="padding: 2px">
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="content-label">
+                                    <label>Postal Code :</label>
+                                </div>
+                                <div class="content-data">
+                                    <span class="label label-warning">@Model.Post_Code</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="content-label">
+                                    <label>Nationality :</label>
+                                </div>
+                                <div class="content-data">
+                                    <span class="label label-warning"> @Model.Country_Region_Code</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="content-label">
+                                    <label>Company Email:</label>
+                                </div>
+                                <div class="content-data">
+                                    <span class="label label-warning"> @Model.E_Mail</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="content-label">
+                                    <label>Mobile No. :</label>
+                                </div>
+                                <div class="content-data">
+                                    <span class="label label-warning">@Model.Mobile_Phone_No</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="content-label">
+                                    <label>Work Tel. :</label>
+                                </div>
+                                <div class="content-data">
+                                    <span class="label label-warning">@Model.Phone_No_2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+<script src="~/SiteJS/DashboardJS.js"></script>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadProfilePic();
+    });
+    function LoadProfilePic() {
+        ShowProgress();
+        $.ajax({
+            url: "/Dashboard/ProfilePicture",
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ gender:`@Model.Gender` }),
+
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+
+            success: function (data) {
+                $("#divProfPic").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Warning', 'There is some problem to process your request. Please try after some time', 'warning');
+            }
+        });
+    }
+    var UploadProfilePic = function () {
+        ShowProgress();
+        var filename; var base64String; var filetype;
+        var files = document.getElementById('fileAttachment').files;
+        if (files.length) {
+            var file = files[0];
+            var blob = file.slice();
+            filetype = file.type;
+            filename = file.name;
+            var reader = new FileReader();
+            reader.onloadend = function (evt) {
+                if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+                    var cont = evt.target.result
+                    base64String = getB64Str(cont);
+                    //Send the JSON array to Controller using AJAX.
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/SubmitProfilePicAttachment",
+                        //data: data,
+                        data: JSON.stringify({ base64Upload: base64String, fileName: filename, Extn: filetype }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                HideProgress();
+                                LoadProfilePic();
+                                $("#myModalProfile").modal("hide");
+                            }
+                            else {
+                                Swal.fire('Warning', data.message, 'warning');
+                                HideProgress();
+                            }
+                        },
+                        error: function (err) {
+                            HideProgress();
+                            Swal.fire('Warning', err, 'warning');
+                        }
+                    });
+                }
+            };
+            reader.readAsArrayBuffer(blob);
+        }
+    };
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var UpdateBankDetails = function () {
+        $("#labelF3").text("Update Bank Details");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/UpdateBankDetails',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,165 @@
+﻿@model Latest_Staff_Portal.ViewModel.IFSTenderDocumentSource
+
+<div class="mb-3">
+    <h4>Add Bid Document Source</h4>
+    <hr />
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @id= "Document_No", @readonly="readonly", @style="background-color: #dedebd" } })
+            @Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Source", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model=>model.Tender_Source_ID, Model.ListOfDocumentSources, "Select Option", new { @class = "form-control", @id= "Tender_Source_ID", @onchange = "GetDescription(this.value)" })
+           
+            @Html.ValidationMessageFor(model => model.Tender_Source_ID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id= "Description2" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Url Link", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Url_Link, new { htmlAttributes = new { @class = "form-control", @id= "Url_Link" } })
+            @Html.ValidationMessageFor(model => model.Url_Link, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Date Published", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Date_Published" onkeydown="return false;" autocomplete="off" />
+            @*@Html.EditorFor(model => model.Date_Published, new { htmlAttributes = new { @class = "form-control", @id = "Date_Published" } })*@
+            @Html.ValidationMessageFor(model => model.Date_Published, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+<div style="text-align: center">
+    <button class="btn btn-primary waves-effect waves-light" onclick="SubmitTenderDocumentSource();">
+        <i class="fa fa-check" aria-hidden="true"></i> Submit
+    </button>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#Date_Published').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#Date_Published").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+      
+    });
+
+    function GetDescription(selectedValue) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                Procurement_Document_Type_ID: selectedValue,
+            }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/GetDocumentSourceDescription',
+            success: function (data) {
+                HideProgress();
+                $('#Description2').val(data.description);
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+
+
+
+
+    function SubmitTenderDocumentSource() {
+        var Document_No = $('#Document_No').val();
+        var Tender_Source_ID = $('#Tender_Source_ID').val();
+        var Description = $('#Description2').val();
+        var Url_Link = $('#Url_Link').val();
+        var Date_Published = $('#Date_Published').val();
+
+        if (!Tender_Source_ID) {
+            Swal.fire("Warning", "Select Tender Source", "warning");
+            return;
+        }
+        if (!Description) {
+            Swal.fire("Warning", "Enter Description", "warning");
+            return;
+        }
+       /* if (!Url_Link) {
+            Url_Link = "";
+            *//*Swal.fire("Warning", "Enter Url Link", "warning");
+            return;*//*
+        }*/
+        if (!Date_Published) {
+            Swal.fire("Warning", "Select Date Published", "warning");
+            return;
+        }
+      
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                Document_No: Document_No,
+                Tender_Source_ID: Tender_Source_ID,
+                Description: Description,
+                Url_Link: Url_Link,
+                Date_Published: Date_Published
+            }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/SubmitTenderDocumentSource',
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    Swal.fire('Success', 'Record successfully submitted', 'success').then(
+                        window.Location.href = "RequestForQuotationsDocumentView?DocNo" + Document_No);
+                }
+                else {
+                    HideProgress()
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+</script>

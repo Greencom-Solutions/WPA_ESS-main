@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.IFSTenderCommitteeList>
+
+<table id="datatable-buttons" class="table table-bordered table-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+	<thead style="background-color:black;color:white">
+		<tr>
+			<th>Action</th>
+			<th>Document No</th>
+			<th>Committee Type</th>
+			<th>Description</th>
+			<th>Appointment Effective Date</th>
+			<th>Appointing Authority</th>
+			<th>Tender Name</th>
+			<th>Approval Status</th>
+		
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			// Encrypt the document number in C# and store the result
+
+			<tr>
+				<td>
+					<input type="button" onclick="ViewDoc('@item.Document_No');" style="background: #162f25; color: whitesmoke; border-radius:10px" value="Select" />
+				</td>
+				<td>@Html.DisplayFor(modelItem => item.Document_No)</td>
+				<td>@Html.DisplayFor(modelItem => item.Committee_Type)</td>
+				<td>@Html.DisplayFor(modelItem => item.Description)</td>
+				<td>@Html.DisplayFor(modelItem => item.Appointment_Effective_Date)</td>
+				<td>@Html.DisplayFor(modelItem => item.Appointing_Authority)</td>
+				<td>@Html.DisplayFor(modelItem => item.Tender_Name)</td>
+				<td>@Html.DisplayFor(modelItem => item.Approval_Status)</td>
+				
+			</tr>
+		}
+	</tbody>
+</table>
+
+<script>
+	function ViewDoc(encryptedDocNo) {
+		ShowProgress();
+		// Use the encrypted document number in the URL
+		window.location = "/Purchase/IFSTenderCommitteeDocumentView?DocNo=" + encodeURIComponent(encryptedDocNo);
+	}
+
+	$("#datatable-buttons").DataTable({
+		lengthChange: true,
+		lengthMenu: [5, 10, 25, 50, 100]
+	});
+</script>

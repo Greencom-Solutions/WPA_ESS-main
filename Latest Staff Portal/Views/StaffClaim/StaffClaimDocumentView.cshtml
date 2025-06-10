@@ -1,0 +1,664 @@
+﻿@using Latest_Staff_Portal.ViewModel
+@model Latest_Staff_Portal.ViewModel.StaffClaims
+
+@{
+    ViewBag.Title = "StaffClaimDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="StaffClaimsLink();">Staff Claims</a>
+                </li>
+                <li class="breadcrumb-item active">Staff Claim Document Details(@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+    <div class="card-body">
+        <div class="alert alert-danger mt-3" style="font-size: 0.9em;">
+            <strong style="color: red;">*</strong> If Bank Validation Fails, click on <b>Update Details</b> in the top right tab.
+        </div>
+        <div style="text-align:right">
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="GetFO22('@Model.No')">
+                <i class="fas fa-print" aria-hidden="true"></i> Preview F.O.22
+            </button>
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" class="BtnPadding" onclick="GenerateExpenseRequisitionReport('@Model.ExpenditureRequisitionCode');">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Memo Report
+            </button>
+            <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="ViewDimensions()">
+                <i class="fas fa-project-diagram" aria-hidden="true"></i> Dimensions
+            </button>
+
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" class="BtnPadding" onclick="ViewDocComments('@Model.No');">
+                <i class="fa fa-list-ol" aria-hidden="true"></i> Comments
+            </button>
+            @{
+                var essRole = Session["ESSRoleSetup"] as ESSRoleSetup;
+
+                if (  Model.Status == "Released" && Model.Posted == "False")
+                {
+                    <button style="background: #162f25; color:whitesmoke;  border-radius:10px" class="BtnPadding" onclick="Post('@Model.No');">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Post (@Model.No)
+                    </button>
+
+                }
+            }
+            @if (Model.Status == "Pending Approval")
+            {
+
+                <button style="background: #162f25; color:whitesmoke; border-radius:10px" class="BtnPadding" onclick="CancelDocApprovalRequest('@Model.No');">
+                    <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Approval Request
+                </button>
+                <button style="background: #162f25; color:whitesmoke; border-radius:10px" class="BtnPadding" onclick="ViewApprovalTrail('@Model.No');">
+                    <i class="fa fa-barcode" aria-hidden="true"></i> Approval Trail
+                </button>
+            }
+            @if (Model.Status == "Open")
+            {
+                <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="UpdateBankDetails('@Model.No')">
+                    <i class="fas fa-project-diagram" aria-hidden="true"></i> Update Employee Bank Details
+                </button>
+            }
+        </div>
+        <hr />
+        <div class="text-center mt-5"><h4>Staff Claim Document (@Model.No)</h4></div>
+        <br />
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Date Requested", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("AIE Receipt Number", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.AieReceipt, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Committed Amount", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.CommittedAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Available Balance", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.AvailableAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.AccountType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtAccountType" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtAccountNo" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtAccountName" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Payee", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Payee, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtPayee" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Payment Narration", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.PaymentNarration, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtPaymentNarration" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.DepartmentName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtDepartmentName" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Administrative Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ShortcutDimension2Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtShortcutDimension2Code" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Project Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtProjectName" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Total Amount LCY", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.TotalAmountLCY, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtTotalAmountLCY" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Strategic Plan", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.StrategicPlan, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStrategicPlan" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Reporting Year Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ReportingYearCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtReportingYearCode" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Workplan Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.WorkplanCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtWorkplanCode" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Activity Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ActivityCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtActivityCode" })
+            </div>
+            <div class="col-md-6 form-group">
+                @Html.Label("Expenditure Requisition Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.ExpenditureRequisitionCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtExpenditureRequisitionCode" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStatus" })
+            </div>
+        </div>
+        <hr style="border:1px solid black" />
+        <b>Staff Claim Lines</b>
+        <hr />
+        <div id="divClaimLines"></div>
+        <hr style="border:1px solid black" />
+        <div class="row">
+            <div class="col-md-12">
+                <b>Attachments</b>
+                <div id="divAttachDocs"></div>
+            </div>
+        </div>
+        <hr style="border:1px solid black" />
+        <hr />
+        @{
+            {
+                if (Model.Status == "Open" && essRole.Station_Accountant)
+                {
+                    <div align="center">
+                        <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>
+
+
+@* //////////////////////////////Modal///////////////////////////////////////// *@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* //////////////////////View Document//////////////////////////// *@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog" aria-labelledby="myModalAttachmentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalAttachmentLabel">View Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body" id="modalAttachmentBody">
+                <iframe id="iframe" style="width:100%;height:75vh;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModalUnits" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyUnits">
+                <iframe id="iframe" style="width:100%;height:450px"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadClaimDocumentLines(`@Model.No`,`@Model.Status`);
+    });
+    var LoadClaimDocumentLines = function (DocNo,Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/StaffClaim/StaffClaimLines",
+            success: function (data) {
+                $("#divClaimLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var GetFO22 = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/StaffClaim/GenerateFo22Report',
+            success: function (data) {
+                if (data.success == true) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    	            var GetDocumentAttachments = function () {
+	var DocNo = `@Model.ExpenditureRequisitionCode`;
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		contentType: "application/json; charset = utf-8",
+		processData: false,
+        data: JSON.stringify({ DocNo: DocNo}),
+        url: "/Common/EdmsDocumentAttachmentList",
+		success: function (data) {
+			$("#divAttachDocs").html(data);
+		},
+		error: function () {
+			Swal.fire("There is some problem to process your request. Please try after some time");
+		}
+	});
+};
+    var StaffClaimRequisitionLink = function () {
+        ShowProgress();
+        window.location = "/StaffClaim/StaffClaims";
+    }
+	var SendDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Imprest/SendImprestApprovalRequest',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+                    LoadClaimDocumentLines(`@Model.No`,`@Model.Status`);
+                    var form = $('<form>', {
+                        action: '/StaffClaim/StaffClaimDocumentView',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: DocNo
+                    }));
+                    form.appendTo('body').submit();
+				}
+				else {
+					HideProgress();
+                    LoadClaimDocumentLines(`@Model.No`,`@Model.Status`);
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+
+	}
+
+	var CancelDocApprovalRequest = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/Imprest/CancelImprestApprovalRequest',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    var form = $('<form>', {
+                        action: '/StaffClaim/StaffClaimDocumentView',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: DocNo
+                    }));
+                    form.appendTo('body').submit();
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "HR Leave Application: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+	var Post = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+            url: '/StaffClaim/PostStaffClaim',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+					Swal.fire('Success', data.message, 'success');
+                    var form = $('<form>', {
+                        action: '/StaffClaim/StaffClaimDocumentView',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: DocNo
+                    }));
+                    form.appendTo('body').submit();
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+        	            var ViewDimensions = function () {
+                    $("#labelF").text("Dimensions");
+
+    var dimension = '@Model.DimensionSetId';
+    $.ajaxSetup({ cache: false });
+    ShowProgress();
+    $.ajax({
+        cache: false,
+        url: '/Common/Dimensions',
+        type: "POST",
+        datatype: "json",
+        cache: false,
+        data: JSON.stringify({ dimensionSetId: dimension }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        success: function (data) {
+            if (data) {
+                $('#modalBody').html(data);
+                $("#myModal").modal("show");
+                HideProgress();
+            }
+            else {
+                HideProgress();
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err, 'warning');
+        }
+    });
+};
+    var GenerateExpenseRequisitionReport = function (docNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: docNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/ExpenseRequisition/GenerateExpenseRequisitionReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+                            viewer.html('<iframe src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    var ValidateBankAccount = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/ValidateBankAccountLines',
+            success: function (data) {
+                if (data.success) {
+                    LoadClaimDocumentLines(`@Model.No`, `@Model.Status`);
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+            var UpdateBankDetails  = function (DocNo) {
+    ShowProgress();
+$.ajax({
+    async: true,
+    type: "POST",
+    datatype: "json",
+    data: JSON.stringify({ DocNo: DocNo}),
+    contentType: "application/json; charset = utf-8",
+    processData: false,
+    url: '/Common/UpdateEmployeeBankDetails',
+    success: function (data) {
+        if (data.success) {
+
+            Swal.fire('Success', data.message, 'success');
+            HideProgress();
+        }
+        else {
+            Swal.fire('Error', data.message, 'error');
+            HideProgress();
+        }
+    },
+    error: function (err) {
+        HideProgress();
+        Swal.fire('Warning', err, 'warning');
+    }
+});
+}
+</script>

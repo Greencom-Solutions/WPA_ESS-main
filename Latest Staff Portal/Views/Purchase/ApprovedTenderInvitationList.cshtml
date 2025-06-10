@@ -1,0 +1,41 @@
+﻿@model IOrderedEnumerable<Latest_Staff_Portal.ViewModel.InvitationToTender>
+<table id="datatable-buttons" class="table table-bordered dt-responsive nowrap">
+    <thead style="background-color:black; color:white;">
+    <tr>
+        <th>Actioning</th>
+        <th>Code</th>
+        <th>Procurement Method</th>
+        <th>Solicitation Type</th>
+        <th>External Document No</th>
+        <th>Description</th>
+        <th>Procurement Type</th>
+        <th>Procurement Category ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="button" onclick="ViewDoc('@item.Code');" style="background: #162f25; color: whitesmoke; border-radius: 10px; border: none; padding: 5px 10px; cursor: pointer;" value="Select"/>
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Code)</td>
+                <td>@Html.DisplayFor(modelItem => item.Procurement_Method)</td>
+                <td>@Html.DisplayFor(modelItem => item.Solicitation_Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.External_Document_No)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.Procurement_Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.Procurement_Category_ID)</td>
+            </tr>
+        }
+    }
+   @* else
+    {
+        <tr>
+            <td colspan="8" style="color:red; text-align:center;">No Records Found</td>
+        </tr>
+    }*@
+    </tbody>
+</table>

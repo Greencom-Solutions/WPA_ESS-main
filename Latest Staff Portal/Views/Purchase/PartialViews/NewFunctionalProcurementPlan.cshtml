@@ -1,0 +1,121 @@
+﻿@model Latest_Staff_Portal.ViewModel.ProcurementPlan
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Created By:", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.CreatedBy, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtCreatedBy" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Name:", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtName" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Corporate Strategic Plan:", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.CorporateStrategicPlanID, Model.ListofStrategicPlans, "--select Corporate Strategic Plan--", new { @class = "form-control select2", id = "ddlCorporateStrategicPlan" })
+                @Html.ValidationMessageFor(model => model.CorporateStrategicPlanID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Financial Budget:", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.FinancialBudgetID, Model.ListOfFinancialBudgets, "--select Financial Budget Id--", new { @class = "form-control select2", id = "ddlFinancialBudget" })
+                @Html.ValidationMessageFor(model => model.FinancialBudgetID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("From", new { @class = "control-label col-md-12" })
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtFromDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("To", new { @class = "control-label col-md-12" })
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtToDate" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Geographical Location", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.GlobalDimension1Code, Model.ListOfDim1, "--Select Court Station--", new { @class = "form-control select2", id = "ddlGeographicalLocation" })
+                @Html.ValidationMessageFor(model => model.GlobalDimension1Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Administrative unit", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.GlobalDimension2Code, Model.ListOfDim2, "--select Activity--", new { @class = "form-control", id = "ddlAdministrativeUnitCode"})
+                @Html.ValidationMessageFor(model => model.GlobalDimension2Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Vote", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.GlobalDimension3Code, Model.ListOfDim3, "--select Vote--", new { @class = "form-control select2", id = "ddlVote", onchange = "GetDimension5Name()" })
+                @Html.ValidationMessageFor(model => model.GlobalDimension3Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Year Code:", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.FinancialYearCode, Model.ListOfFinancialYears, "--Select Financial Year--", new { @class = "form-control select2", id = "ddlYearCode" })
+                @Html.ValidationMessageFor(model => model.FinancialYearCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Description", new { @class = "control-label col-md-12" })
+                <textarea class="form-control" id="txtDescription"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="border:1px solid black"/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitProcurementPlan();"/>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#txtFromDate, #txtToDate').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			autoclose: true,
+			yearRange: '-1:+2',
+			showOtherMonths: true,
+			dateFormat: 'dd/mm/yy'
+		});
+		$('#txtFromDate, #txtToDate').focus(function () {
+			$("#ui-datepicker-div").position({
+				my: "left top",
+				at: "left bottom",
+				of: $(this)
+			});
+		});
+		$("#ddlPlanningCategory, #ddlCorporateStrategicPlan, #ddlGeographicalLocation, #ddlVote, #ddlYearCode").select2({
+			width: '100%'
+		});
+	});
+</script>

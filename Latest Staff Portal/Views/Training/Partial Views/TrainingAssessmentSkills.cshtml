@@ -1,0 +1,80 @@
+﻿@model Latest_Staff_Portal.ViewModel.CurrentSkillsAssessmentList
+
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="ParticipantLines">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>#</th>
+            <th>Major Tasks</th>
+            <th>Training Required</th>
+            <th>Existing Training Needs</th>
+            <th>Training Mode</th>
+            <th>Start Date</th>
+            <th>Institution Name</th>
+            <th style="text-align:center" class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfCurrentSkills != null && Model.ListOfCurrentSkills.Count() > 0)
+            {
+                foreach (var item in Model.ListOfCurrentSkills)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LineNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Major_Tasks)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Training_Required)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Existing_Training_Needs)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Training_Mode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Start_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Institution_Name)
+                        </td>
+                        <td style="text-align:center" class="tdAction">
+                            <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItem('@item.LineNo');">
+                                <i class="mdi mdi-close font-size-16"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<div align="right" class="HideLineButton">
+    <input type="button" value="Add Current Skills" class="btn btn-danger BtnPadding" onclick="AddAssessmentSkills();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

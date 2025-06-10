@@ -1,0 +1,177 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.TrainingRequisition>
+
+@{
+    ViewBag.Title = "TrainingRequisitionListPartialView";
+}
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Code</th>
+                <th>Training Plan No</th>
+                <th>Department</th>
+                <th>Course Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Duration</th>
+                <th>Duration Type</th>
+                <th>Training Region</th>
+                <th>Cost</th>
+                <th>Venue Region Code</th>
+                <th>Venue Region</th>
+                <th>Responsibility Code</th>
+                <th>Responsibility</th>
+                <th>Location</th>
+                <th>Provider</th>
+                <th>Provider Name</th>
+                <th>Training Type</th>
+                <th>Duration (Hours)</th>
+                <th>Planned Budget</th>
+                <th>Planned No. to Train</th>
+                <th>Participants</th>
+                <th>Total Procurement Cost</th>
+                <th>Other Costs</th>
+                <th>Employee No</th>
+                <th>Employee Name</th>
+                <th>Created By</th>
+                <th>Created On</th>
+                <th>Status</th>
+                <th>Bonded</th>
+                <th>Bonding Period</th>
+                <th>Bond End</th>
+                <th>Bond Start</th>
+                <th>Bond Penalty</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons2" type="button" onclick="ViewDoc('@item.Code');" value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Plan_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Department)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course_Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start_DateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End_DateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Region)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Venue_Region_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Venue_Region)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Responsibility_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Responsibility)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Provider)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Provider_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Training_Duration_Hrs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Planned_Budget)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Planned_No_to_be_Trained)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No_of_Participants)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Procurement_Cost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Other_Costs)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created_On)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bonded)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bonding_Period)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Expected_Bond_End)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Expected_Bond_Start)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bond_Penalty)
+                    </td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+});
+</script>

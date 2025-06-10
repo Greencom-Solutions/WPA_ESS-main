@@ -1,0 +1,40 @@
+﻿@using System.Globalization
+@model IEnumerable<Latest_Staff_Portal.ViewModel.StaffClaimLines>
+
+<div class="table-responsive">
+    <table id="staffClaimsWidget" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+            <tr>
+                <th>Account No</th>
+                <th>Account Name</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Amount LCY</th>
+                <th>Validated Bank Name</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.AccountNo</td>
+                        <td>@item.AccountName</td>
+                        <td>@item.Description</td>
+                        <td>@item.Amount.ToString("C", new CultureInfo("sw-KE"))</td>
+                        <td>@item.AmountLCY.ToString("C", new CultureInfo("sw-KE"))</td>
+                        <td>@item.ValidatedBankName</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#staffClaimsWidget").DataTable({
+        lengthChange: true,
+        lengthMenu: [3, 10, 25, 50, 100]
+    });
+</script>

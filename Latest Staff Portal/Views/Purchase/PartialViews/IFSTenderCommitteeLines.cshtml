@@ -1,0 +1,107 @@
+﻿@model Latest_Staff_Portal.ViewModel.IFSTenderCommitteeLineList
+@{ 
+    var Document_Status= ViewBag.Document_Status;
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+            <tr>
+                <th>Document No </th>
+                <th>Committee Type </th>
+                <th>Line No</th>
+                <th>Role</th>
+                <th>Member No</th>
+                <th>Member Name</th>
+                <th>Designation</th>
+                <th>Member Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.ListOfTenderCommitteeLine != null && Model.ListOfTenderCommitteeLine.Any())
+            {
+                foreach (var item in Model.ListOfTenderCommitteeLine)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Document_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Committee_Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Line_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Designation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Member_Email)
+                        </td>
+                        <td>
+                            @if (Document_Status == "Open")
+                            {
+                                <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Document_No', @item.Line_No);">Delete</button>
+                            }
+
+                        </td>
+                    </tr>
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td colspan="16" style="color: red;">
+                        <!-- Updated colspan to match the number of columns -->
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@{
+    if (Model.Status == "Open")
+    {
+        <div style="text-align:right">
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="AddTenderCommitteeLine();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+            </button>
+        </div>
+    }
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".addAction").show();
+            $(".viewAction").show();
+            $(".actionHeader").show();
+            $(".addHeader").show();
+            $(".viewHeader").show();
+        } else {
+            $(".tdAction").hide();
+            $(".addAction").hide();
+            $(".viewAction").hide();
+            $(".actionHeader").hide();
+            $(".addHeader").hide();
+            $(".viewHeader").hide();
+        }
+    });
+</script>

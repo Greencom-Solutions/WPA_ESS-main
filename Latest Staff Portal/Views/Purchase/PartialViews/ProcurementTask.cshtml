@@ -1,0 +1,67 @@
+﻿@model List<Latest_Staff_Portal.ViewModel.ProcurementTask>
+
+<hr />
+<div style="text-align:right">
+    <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Budget Amounts" onclick="BudgetInputs();" />
+</div>
+<hr />
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Procurement Plan ID</th>
+                <th>Entry No</th>
+                <th>Item No</th>
+                <th>Procurement Type</th>
+                <th>Procurement Method</th>
+                <th>Alternative Procurement Methods</th>
+                <th>Quantity</th>
+                <th>Q1 Quantity</th>
+                <th>Q1 Amount</th>
+                <th>Q1 Budget</th>
+                <th>Q2 Quantity</th>
+                <th>Q2 Amount</th>
+                <th>Q2 Budget</th>
+                <th>Q3 Quantity</th>
+                <th>Q3 Amount</th>
+                <th>Q3 Budget</th>
+                <th>Q4 Quantity</th>
+                <th>Q4 Amount</th>
+                <th>Q4 Budget</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ProcurementPlanID</td>
+                        <td>@item.EntryNo</td>
+                        <td>@item.ItemNo</td>
+                        <td>@item.ProcurementType</td>
+                        <td>@item.ProcurementMethod</td>
+                        <td>@item.AlternativeProcurementMethods</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Q1Quantity</td>
+                        <td>@item.Q1Amount</td>
+                        <td>@item.Q1Budget</td>
+                        <td>@item.Q2Quantity</td>
+                        <td>@item.Q2Amount</td>
+                        <td>@item.Q2Budget</td>
+                        <td>@item.Q3Quantity</td>
+                        <td>@item.Q3Amount</td>
+                        <td>@item.Q3Budget</td>
+                        <td>@item.Q4Quantity</td>
+                        <td>@item.Q4Amount</td>
+                        <td>@item.Q4Budget</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div style="text-align:right">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="addLine" value="Add Line" onclick="AddBudgetInput();" />
+    </div>
+</div>

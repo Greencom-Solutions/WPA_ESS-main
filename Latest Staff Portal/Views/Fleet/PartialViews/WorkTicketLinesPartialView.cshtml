@@ -1,0 +1,143 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DailyWorkTicketLines>
+
+@{
+    ViewBag.Title = "WorkTicketLinesPartialView";
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Daily Work Ticket</th>
+                <th>Entry No</th>
+                <th>Transport Requisition No</th>
+                <th>Commencement</th>
+                <th>Destination</th>
+                <th>Route Description</th>
+                <th>Date</th>
+                <th>Driver Allocated</th>
+                <th>Driver Name</th>
+                <th>Journey Route</th>
+                <th>Oil Drawn (Litres)</th>
+                <th>Fuel Drawn (Litres)</th>
+                <th>Order No</th>
+                <th>Time Out</th>
+                <th>Time In</th>
+                <th>Opening Odometer Reading</th>
+                <th>Closing Odometer Reading</th>
+                <th>Total Kilometres</th>
+                <th>Miles Per Litre (Fuel)</th>
+                <th>Miles Per Litre (Oil)</th>
+                <th>Fuel Carried Forward</th>
+                <th>Authorized By</th>
+                <th>GOK Officer</th>
+                <th>Position</th>
+                <th>Defect Date</th>
+                <th>Defect</th>
+                <th>Action Taken / Reported</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Daily_Work_Ticket)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EntryNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transport_Requisition_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Commencement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Destination)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Route_Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver_Allocated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Journey_Route)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Oil_Drawn_Litres)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fuel_Drawn_Litres)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Order_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_out)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_In)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Opening_Odometer_Reading)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Closing_Odometer_Reading)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Kilometres)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Miles_Per_Litre_Fuel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Miles_Per_Litre_Oil)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fuel_Carried_Forward)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Authorized_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GOK_Officer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Position)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Defect_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Defect)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Action_Taken_Reported)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+});
+</script>

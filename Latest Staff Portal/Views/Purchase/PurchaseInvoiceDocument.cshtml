@@ -1,0 +1,392 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseInvoice
+
+@{
+    ViewBag.Title = "PurchaseInvoiceDocument";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 10px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="PurchaseInvoice();"> Purchase Invoice List</a>
+                </li>
+                <li class="breadcrumb-item active"> Purchase Invoice (@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div style="text-align:right">
+            @if (Model.Status == "Released")
+            {
+                <button style="background: #a80808; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="PostDocument('@Model.No')">
+                    <i class="fas fa-bolt" aria-hidden="true"></i> Post Document
+                </button>
+            }
+            <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="ViewDimensions()">
+                <i class="fas fa-project-diagram" aria-hidden="true"></i> Dimensions
+            </button>
+        </div>
+        <hr />
+        <div class="text-center mt-5"><h4>Purchase Invoice Document (@Model.No)</h4></div>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Number", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                        @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Vendor Number", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.BuyFromVendorNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Vendor Name", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.BuyFromVendorName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Posting Date", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.PostingDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("VAT Date", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.VATReportingDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Due Date", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Vendor Invoice Number", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.VendorInvoiceNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Name", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ShortcutDimension1Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative Code", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ShortcutDimension2Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Expected Receipt Date", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.ExpectedReceiptDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.PostingDescription, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    @Html.Label("Status", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr />
+        <div id="divReceiptLines">
+            <hr style="border:1px solid black" />
+            <b>Purchase Invoice Lines</b>
+            <hr />
+            <div id="divPrLines"></div>
+            <hr style="border:1px solid black" />
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Purchase Invoice Attachments</b>
+                    <div id="divAttachDocs"></div>
+                </div>
+            </div>
+            <hr style="border:1px solid black" />
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Purchase Order Attachments</b>
+                    <div id="PoAttachDocs"></div>
+                </div>
+            </div>
+            <hr />
+            <hr style="border:1px solid black" />
+            <div class="row">
+                <div class="col-md-12">
+                    <b>PRN Attachments</b>
+                    <div id="PrnAttachDocs"></div>
+                </div>
+            </div>
+            <hr />
+
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Dimensions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        console.log(`@Model.OrderNo`);
+        LoadPurchaseInvoiceLines(`@Model.No`);
+        GetAttachments(`@Model.OrderNo`, "PoAttachDocs");
+//        GetAttachments(`@Model.PRN_No`, "PrnAttachDocs");
+    });
+    var LoadPurchaseInvoiceLines = function (DocNo) {
+        var checkStatus = '@ViewBag.Status';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ documentNo: DocNo, status: checkStatus }),
+            url: "/PurchaseInvoice/PurchaseInvoiceLine",
+            success: function (data) {
+                $("#divPrLines").html(data);
+                GetDocumentAttachments();
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+        var GetDocumentAttachments = function () {
+	var DocNo = `@Model.ExpenseRequisitionNumber`;
+    var status = '@Model.Status'
+	$.ajax({
+		async: true,
+		type: "POST",
+		datatype: "json",
+		contentType: "application/json; charset = utf-8",
+		processData: false,
+        data: JSON.stringify({ DocNo: DocNo }),
+        url: "/Common/EdmsDocumentAttachmentList",
+		success: function (data) {
+			$("#divAttachDocs").html(data);
+		},
+		error: function () {
+			Swal.fire("There is some problem to process your request. Please try after some time");
+		}
+	});
+};
+
+
+    var GetAttachments = function (DocNo, entryPoint) {
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo}),
+            url: "/Common/EdmsDocumentAttachmentList",
+            success: function (data) {
+                $(`#${entryPoint}`).html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+        var ViewAttachment = function (moduleCheck,docNo,docId) {
+    $.ajaxSetup({ cache: false });
+    ShowProgress();
+    var viewer = $("#modalAttachmentBody");
+    viewer.empty();
+    $.ajax({
+        url: '/Common/GetEdmsDocuments',
+        type: "GET",
+        datatype: "json",
+        cache: false,
+        contentType: "application/json; charset=utf-8",
+        data: {
+            module: moduleCheck,
+            documentNo: docNo,
+            documentType: "Voucher",
+            documentId: docId
+        },
+        success: function (data) {
+            if (data.success) {
+                if (data.base64) {
+                    var mimeType = data.mimeType || 'application/pdf';
+
+                    if (mimeType.startsWith('application/pdf')) {
+                        viewer.html('<iframe src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                    } else if (mimeType.startsWith('image/')) {
+                        viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                    } else {
+                        var blob = b64toBlob(data.base64, mimeType);
+                        var url = window.URL.createObjectURL(blob);
+                        window.open(url, '_blank');
+                    }
+                    $("#myModalAttachment").modal("show");
+                } else {
+                    window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                    Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                }
+            } else {
+                Swal.fire('Warning', data.message, 'warning');
+            }
+            HideProgress();
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+        }
+    });
+};
+    var PostDocument = function (documentNo) {
+        var status = "Released";
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: documentNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/PurchaseInvoice/PostInvoice',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                    window.location = '/PurchaseInvoice/PurchaseInvoice?status=' + status;
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var ViewDimensions = function () {
+    var dimension = '@Model.DimensionSetId';
+    $.ajaxSetup({ cache: false });
+    ShowProgress();
+    $.ajax({
+        cache: false,
+        url: '/Deposits/Dimensions',
+        type: "POST",
+        datatype: "json",
+        cache: false,
+        data: JSON.stringify({ dimensionSetId: dimension }),
+        contentType: "application/json; charset = utf-8",
+        processData: false,
+        success: function (data) {
+            if (data) {
+                $('#modal').html(data);
+                $("#myModal").modal("show");
+                HideProgress();
+            }
+            else {
+                HideProgress();
+                Swal.fire('Warning', data.message, 'warning');
+            }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err, 'warning');
+        }
+    });
+};
+</script>
+

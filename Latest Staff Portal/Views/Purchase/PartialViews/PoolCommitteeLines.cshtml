@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PoolCommitteeLines>
+
+@{
+    var Document_Status = ViewBag.Document_Status;
+}
+
+<div class="table-responsive">
+    <table id="datatable-buttons2" class="table table-bordered table-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Document No</th>
+               @* <th>Line No</th>*@
+                <th>Member No</th>
+               @* <th>Role</th>*@
+                <th>Member Name</th>
+                <th>Member Email</th>
+                <th>Telephone No</th>
+                <th>Staff No</th>
+                <th>Geographical Location</th>
+                @*<th>Admin Unit</th>*@
+                <th>Action</th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_No)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Line_No)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member_No)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member_Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Telephone_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Staff_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Global_Dimension_1_Code)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Global_Dimension_2_Code)
+                    </td>*@
+                    <td>
+                        @if (Document_Status == "Open")
+                        {
+                            <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Document_No', @item.Line_No);">Delete</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@{
+    if (@Document_Status == "Open")
+    {
+        <div style="text-align:right">
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="AddPoolCommitteeLine();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+            </button>
+        </div>
+    }
+}
+
+
+
+<script type="text/javascript">
+    function ReloadTable() {
+        $("#datatable-buttons2").DataTable({
+            lengthChange: true,
+            lengthMenu: [10, 20, 30, 100],
+            "bDestroy": true
+        });
+    }
+
+    $(document).ready(function () {
+        ReloadTable();
+
+        const docNo = '@(Model.FirstOrDefault()?.Document_No)';
+    });
+</script>
+

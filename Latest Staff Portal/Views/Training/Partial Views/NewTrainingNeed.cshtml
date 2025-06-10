@@ -1,0 +1,74 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingNeedRequests
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Course", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.CourseId, new SelectList(Model.ListOfCourses, "Value", "Text", Model.CourseId), "--Select Course--", new { id = "ddlCourse", @class = "form-control select2", onchange = "showSelectedText()" })
+                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Course Description", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtCourseDescription" class="form-control" disabled></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Source", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Source, new SelectList(new[]
+                {
+                    new SelectListItem { Text = "ANUPEAisal", Value = "1" },
+                    new SelectListItem { Text = "Government Directive", Value = "2" },
+                    new SelectListItem { Text = "Career Development", Value = "3" },
+                    new SelectListItem { Text = "Other", Value = "4" }
+                }, "Value", "Text", Model.Source), "--Select Type--", new { id = "ddlSource", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Source, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Remarks", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtRemarks" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitTrainingNeedRequest();"/>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#ddlDim2,#ddlDim1,#ddlDim3,#ddlCourse,#ddlTrainer").select2({
+        //    width: '100%'
+        //});
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200);
+        });
+
+    });
+</script>

@@ -1,0 +1,191 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.SelfSponsoredTrainingApplication>
+
+@{
+    ViewBag.Title = "SelfSponsored";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="HumanResourceLink();">Dashboard</a></li>
+                <li class="breadcrumb-item active">Self Sponsored Training</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card ">
+    <div class="card-body">
+        <div class="card-header d-flex justify-content-between align-items-center mb-2 p-1">
+            <h5 class="m-0">Self Sponsored Training List</h5>
+            <a href="#" onclick="NewSSAplication();" class="btn py-2 px-3 btn-primary" style="color: white !important;">New</a>
+        </div>
+
+        <div id="divSSTraininglList"></div>
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title"><label id="labelF"></label></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadSSTrainingList();
+    });
+    var LoadSSTrainingList = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Training/SSTrainingListPartialView",
+            success: function (data) {
+                HideProgress();
+                $("#divSSTraininglList").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/Performance/ViewIndividualScorecard?DocNo=" + DocNo;
+    }
+
+
+    var NewSSAplication = function () {
+        NewItem("New Self-Sponsored Training Application", "/Training/NewSelfSponsoredTrainingApplication");
+
+    }
+
+
+    function NewItem(title, url) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: url,
+            success: function (data) {
+                $("#labelF").html(title);
+                $("#modalBody").html(data);
+                $("#myModal").modal('show');
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                alert("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+    var SumbitSSApplication = function () {
+        var Training_Category = $("#Training_Category").val();
+        var Training_Type = $("#Training_Type").val();
+        var startDateTime = $("#startDateTime").val();
+        var Training_Time = $("#Training_Time").val();
+        var Venue = $("#Venue").val();
+        var Description = $("#Description").val();
+        var course_title = $("#course_title").val();
+
+        if (Training_Category === "") {
+            Swal.fire("Please select Training Category");
+            return;
+        } else if (Training_Type === "") {
+            Swal.fire("Please select Training Type");
+            return;
+        } else if (startDateTime === "") {
+            Swal.fire("Please select Start Date");
+            return;
+        } else if (Training_Time === "") {
+            Swal.fire("Please select Training Time");
+            return;
+        } else if (Venue === "") {
+            Swal.fire("Please enter Venue");
+            return;
+        } else if (Description === "") {
+            Swal.fire("Please enter Description");
+            return;
+        } else {
+            ShowProgress();
+            var SSApplication = {
+                Training_Category: Training_Category,
+                Training_Type: Training_Type,
+                startDateTime: startDateTime,
+                Training_Time: Training_Time,
+                Training_Venue_Region: Venue,
+                Description: Description,
+                Course_Title: course_title,
+
+            };
+
+            $.ajax({
+                async: true,
+                type: "POST",
+                dataType: 'JSON',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ newApplication: SSApplication }),
+                url: "/Training/SubmitSelfSponsoredTrainingApplication",
+                success: function (data) {
+                    HideProgress();
+                    if (data.success) {
+                        Swal.fire("Training Application submitted successfully");
+                        $("#myModal").modal('hide');
+                        LoadSSTrainingList();
+                    } else {
+                        Swal.fire(data.message || "There is a problem processing your request. Please try again later.");
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire("There is a problem processing your request. Please try again later.");
+                }
+            });
+        }
+    };
+
+
+</script>
+
+
+

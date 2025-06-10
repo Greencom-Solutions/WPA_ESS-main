@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.POAttachmentLine>
+
+@{
+    var AttachmentCode = ViewBag.AttachmentCode;
+    var Status = ViewBag.Status;
+}
+<style>
+    .btnPadding {
+        padding: 5px;
+        font-size: 10px;
+    }
+</style>
+
+<div class="pre-scrollable">
+    <div class="alert alert-info" role="alert" style="display: @(Model.Any() ? "none" : "block")">
+        No attachments available for the selected document.
+    </div>
+
+    <table id="DocumentAttachmnts" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>No.</th>
+                <th>File Type</th>
+                <th>File Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                int index = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>@Html.DisplayFor(modelItem => item.LPO_Type)</td>
+                        <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                        <td>
+                            <button id="btnview" class="btn btn-primary btnPadding"
+                                    onclick="ViewAttachment('@item.Module', '@item.Document_No', '@item.DocumentID');">
+                                View Attachment
+                            </button>
+
+                            @if (Status == "Open")
+                            {
+                                <button id="btndelete" class="btn btn-danger btnPadding"
+                                        onclick="DeleteAttachment('@item.DocumentID', '@item.LineNo');">
+                                    Delete Attachment
+                                </button>
+
+                                <input type="button" id="addAttachment" value="Add Attachment" class="btn btn-primary btnPadding" onclick="AddAttachment(`@item.LineNo`);" />
+                            }
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function ReloadTable() {
+        $("#DocumentAttachmnts").DataTable({
+            lengthChange: true,
+            lengthMenu: [10, 20, 30, 100],
+            "bDestroy": true
+        });
+    }
+
+    $(document).ready(function () {
+        ReloadTable();
+
+        const docNo = '@(Model.FirstOrDefault()?.Document_No)';
+    });
+</script>

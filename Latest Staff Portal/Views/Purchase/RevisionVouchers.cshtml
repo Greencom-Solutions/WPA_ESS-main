@@ -1,0 +1,357 @@
+﻿@{
+    ViewBag.Title = "PurchaseRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    .selectedTableRow {
+        background-color: #74788d;
+        color: white;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="ProcurementDashboard();">Procurement</a>
+                </li>
+                <li class="breadcrumb-item active">Revision Vouchers</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <hr />
+        <div style="text-align:right">
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="NewRevisionVoucher();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> New Revision Voucher
+            </button>
+        </div>
+        <hr />
+        <div id="divPurchaseRegList"></div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadFunctionalProcurementPlan();
+    });
+    var LoadFunctionalProcurementPlan = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: "/Purchase/RevisionVouchersList",
+            success: function (data) {
+                $("#divPurchaseRegList").html(data);
+                HideProgress();
+            },
+            error: function () {
+                HideProgress();
+                alert("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+    var NewProcurementPlan = function () {
+        $("#labelF").text("New Requisition Form");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/NewProcurementPlan',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    function SubmitProcurementPlan() {
+        var createdBy = $("#txtCreatedBy").val();
+        var name = $("#txtName").val();
+        var corporateStrategicPlanID = $("#ddlCorporateStrategicPlan").val();
+        var financialBudgetID = $("#ddlFinancialBudget").val();
+        var fromDate = $("#txtFromDate").val();
+        var toDate = $("#txtToDate").val();
+        var globalDimension1Code = $("#ddlGeographicalLocation").val();
+        var globalDimension2Code = $("#ddlAdministrativeUnitCode").val();
+        var globalDimension3Code = $("#ddlVote").val();
+        var financialYearCode = $("#ddlYearCode").val();
+        var description = $("#txtDescription").val();
+
+
+        if (!corporateStrategicPlanID) {
+            Swal.fire('Warning', 'Please select a Corporate Strategic Plan.', 'warning');
+            return;
+        }
+        if (!financialBudgetID) {
+            Swal.fire('Warning', 'Please select a Financial Budget.', 'warning');
+            return;
+        }
+        if (!fromDate) {
+            Swal.fire('Warning', 'Please fill in the From Date field.', 'warning');
+            return;
+        }
+        if (!toDate) {
+            Swal.fire('Warning', 'Please fill in the To Date field.', 'warning');
+            return;
+        }
+        if (!globalDimension1Code) {
+            Swal.fire('Warning', 'Please select a Geographical Location.', 'warning');
+            return;
+        }
+        if (!globalDimension2Code) {
+            Swal.fire('Warning', 'Please select an Administrative Unit Code.', 'warning');
+            return;
+        }
+        if (!globalDimension3Code) {
+            Swal.fire('Warning', 'Please select a Vote.', 'warning');
+            return;
+        }
+        if (!financialYearCode) {
+            Swal.fire('Warning', 'Please select a Year Code.', 'warning');
+            return;
+        }
+        if (!description) {
+            Swal.fire('Warning', 'Please fill in the Description field.', 'warning');
+            return;
+        }
+
+        var procurementPlan = {
+            CreatedBy: createdBy,
+            Name: name,
+            CorporateStrategicPlanID: corporateStrategicPlanID,
+            FinancialBudgetID: financialBudgetID,
+            FromDate: fromDate,
+            ToDate: toDate,
+            GlobalDimension1Code: globalDimension1Code,
+            GlobalDimension2Code: globalDimension2Code,
+            GlobalDimension3Code: globalDimension3Code,
+            FinancialYearCode: financialYearCode,
+            Description: description
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/SubmitProcurementPlan",
+            data: JSON.stringify(procurementPlan),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    window.location = data.message;
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/Purchase/RevisionVouchersDocument?docNo=" + DocNo;
+    }
+    var SendDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/SendPurchaseAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadPurchaseRequisition();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var DelegateDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DelegateApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadPurchaseRequisition();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/CancelPurchaseAppForApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    LoadPurchaseRequisition();
+                    $("#myModalLinks").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+    var ViewApprovalTrail = function (DocNo) {
+        $("#labelF").text("Document Approval Trail");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Purchase Header: Quote," + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        var RecordID = "Purchase Header: Quote," + DocNo;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    function ProcurementDashboard() {
+        window.location = "Dashboard/Procurement";
+    }
+</script>

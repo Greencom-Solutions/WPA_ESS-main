@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseOrderArchive>
+<div class="table-responsive">
+    <table id="archivedPurchaseOrder" class="table table-bordered dt-responsive nowrap">
+        <thead style="background-color: black; color: white">
+        <tr>
+            <th>Action</th>
+            <th>No</th>
+            <th>Version No</th>
+            <th>Date Archived</th>
+            @* <th>Archived By</th> *@
+            <th>Buy from Vendor No</th>
+            <th>Buy from Vendor Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="button" onclick="ViewDoc('@item.No');" style="background: #162f25; color: whitesmoke; border-radius: 10px" value="Select" />
+                    </td>
+                    <td>@item.No</td>
+                    <td>@item.Version_No</td>
+                    <td>@item.Date_Archived</td>
+                    @* <td>@item.Archived_By</td> *@
+                    <td>@item.Buy_from_Vendor_No</td>
+                    <td>@item.Buy_from_Vendor_Name</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+
+</div>
+
+
+
+<script>
+    var table = $("#archivedPurchaseOrder").DataTable({
+        lengthChange: true,
+        order: [[1, 'desc']],
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>

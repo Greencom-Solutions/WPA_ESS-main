@@ -1,0 +1,180 @@
+﻿@model Latest_Staff_Portal.ViewModel.IFSSecurities
+
+<div class="mb-3">
+    <h4>Add Security</h4>
+    <hr />
+</div>
+
+<div class="row">
+
+  
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("IFS Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.IFS_Code, new { htmlAttributes = new { @class = "form-control", @readonly="readonly" , @style="background-color: #dedebd", @id= "IFS_Code" } })
+            @Html.ValidationMessageFor(model => model.IFS_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Form Of Security", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(model => model.Form_of_Security, Model.ListOfSecurityForms, "Select Option", new { @class = "form-control", @id= "Form_of_Security" })
+           @* @Html.EditorFor(model => model.Form_of_Security, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.Form_of_Security, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Security Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <select class="form-control" id="Security_Type">
+                <option value="" selected hidden>Select option</option>
+                <option value="0">Bid/Tender Security</option>
+                <option value="1">Performance/Contract Security</option>
+                <option value="2">Advanced Payment Security</option>
+            </select>
+           @* @Html.EditorFor(model => model.Security_Type, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.Security_Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @*<div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Required at Bid Submission", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Required_at_Bid_Submission)
+                    @Html.ValidationMessageFor(model => model.Required_at_Bid_Submission, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "Description" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Security_Amount_LCY", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Security_Amount_LCY, new { htmlAttributes = new { @class = "form-control", @id = "Security_Amount_LCY" } })
+            @Html.ValidationMessageFor(model => model.Security_Amount_LCY, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Security Validity Expiry", htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Bid_Security_Validity_Expiry" onkeydown="return false;" autocomplete="off" />
+            @*@Html.EditorFor(model => model.Bid_Security_Validity_Expiry, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.Bid_Security_Validity_Expiry, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+</div>
+
+<div style="text-align: center">
+    <button class="btn btn-primary waves-effect waves-light" onclick="SubmitIFSSecurity();">
+        <i class="fa fa-check" aria-hidden="true"></i> Submit
+    </button>
+</div>
+
+
+
+<script>
+
+
+    $(document).ready(function () {
+        $('#Bid_Security_Validity_Expiry').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#Bid_Security_Validity_Expiry").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+       
+    });
+
+
+
+    function SubmitIFSSecurity() {
+        var IFS_Code = $('#IFS_Code').val();
+        var Form_of_Security = $('#Form_of_Security').val();
+        var Security_Type = $('#Security_Type').val();
+        var Description = $('#Description').val();
+        var Security_Amount_LCY = $('#Security_Amount_LCY').val();
+        var Bid_Security_Validity_Expiry = $('#Bid_Security_Validity_Expiry').val();
+      
+
+
+
+        if (!Form_of_Security) {
+            Swal.fire("Warning", "Select Form Of Security", "warning");
+            return;
+        }
+
+        if (!Security_Type) {
+            Swal.fire("Warning", "Select Security Type", "warning");
+            return;
+        }
+
+        if (!Description) {
+            Swal.fire("Warning", "Enter Description", "warning");
+            return;
+        }
+        if (!Security_Amount_LCY) {
+            Swal.fire("Warning", "Enter Security Amount", "warning");
+            return;
+        }
+
+        if (!Bid_Security_Validity_Expiry) {
+            Swal.fire("Warning", "Select Bid Security Validity Expiry", "warning");
+            return;
+        }
+
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                IFS_Code: IFS_Code,
+                Form_of_Security: Form_of_Security,
+                Security_Type: Security_Type,
+                Description: Description,
+                Security_Amount_LCY: Security_Amount_LCY,
+                Bid_Security_Validity_Expiry: Bid_Security_Validity_Expiry
+            }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/SubmitIFSSecurity',
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    Swal.fire('Success', 'Record successfully submitted', 'success').then(
+                        window.Location.href=data.message);
+                }
+                else {
+                    HideProgress()
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+
+    }
+</script>

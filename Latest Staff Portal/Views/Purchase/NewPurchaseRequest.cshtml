@@ -1,0 +1,94 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisition
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <span style="font-weight: bold">PRN Type</span>
+                <select class="form-control" id="ddlPrnType">
+                    <option value="">--Select PRN Type--</option>
+                    <option value="1">Standard</option>
+                    <option value="2">Project Works</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Location Code:", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.Location_Code, Model.ListOfLocations, "--select Location Code--", new { @class = "form-control", id = "ddlLocationCode" })
+                @Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Planning Category", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.PP_Planning_Category, Model.ListOfPlanningCategories, "--select County--", new { @class = "form-control", id = "ddlPlanningCategory", onchange = "GetDimension5Name()" })
+                @Html.ValidationMessageFor(model => model.PP_Planning_Category, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <span style="font-weight: bold">Product Requisition Group</span>
+                <select class="form-control" id="ddlPrnType">
+                    <option value="">--Select Product Product Group--</option>
+                    <option value="1">Goods</option>
+                    <option value="2">Services</option>
+                    <option value="3">Works</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Geographical Code", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.Shortcut_Dimension_1_Code, Model.ListOfDim1, "--select Geographical Code--", new { @class = "form-control", id = "ddlDim1" })
+                @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Administrative unit Code", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.Shortcut_Dimension_2_Code, Model.ListOfDim2, "--select Activity--", new { @class = "form-control", id = "ddlDim2", onchange = "GetDimension4Name()" })
+                @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<hr style="border:1px solid black"/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitPurchaseRequisition();"/>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#txtDate').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			autoclose: true,
+			yearRange: '-1:+2',
+			showOtherMonths: true,
+			dateFormat: 'dd/mm/yy'
+		});
+		$("#txtDate").focus(function () {
+			$("#ui-datepicker-div").position({
+				my: "left top",
+				at: "left bottom",
+				of: $(this)
+			});
+		});
+		$("#ddlPlanningCategory,#ddlLocationCode,#ddlDim1,#ddlDim2").select2({
+			width: '100%'
+		});
+		//document.getElementById("ddlDim2").disabled = true;
+		//document.getElementById("ddlDim1").disabled = true;
+		//document.getElementById("ddlDim3").disabled = true;
+	});
+</script>

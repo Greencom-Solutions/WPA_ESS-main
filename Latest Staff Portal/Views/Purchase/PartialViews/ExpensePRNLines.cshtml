@@ -1,0 +1,51 @@
+﻿@model Latest_Staff_Portal.ViewModel.ExpensePRNLineList
+
+<div class="table-responsive">
+    <table id="prnLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+            <tr>
+                <th>Proc Plan Entry No</th>
+                <th>Proc Type</th>
+                <th>Rate</th>
+                <th>Total</th>
+                <th>Expense Description</th>
+                <th>G/L Account</th>
+                <th>Status</th>
+                @if (Model.Status == "Open")
+                {
+                    <th class="tdAction">Action</th>
+
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListOfExpensePRNLine != null && Model.ListOfExpensePRNLine.Any())
+            {
+                foreach (var item in Model.ListOfExpensePRNLine)
+                {
+                    <tr>
+                        <td>@item.ProcPlanEntryNo</td>
+                        <td>@item.ProcType</td>
+                        <td>@item.Rate</td>
+                        <td>@item.Total</td>
+                        <td>@item.Name</td>
+                        <td>@item.GLAccount</td>
+                        <td>@item.Status</td>
+                        @if (Model.Status == "Open")
+                        {
+                            <td>
+                                <button class="btn btn-danger ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="DeleteAllocationLines('@item.DocumentNo', '@item.LineNo','@item.SourceLineNo');">Delete</button>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#prnLines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

@@ -1,0 +1,416 @@
+﻿@model Latest_Staff_Portal.ViewModel.ProcurementPlanRevisionEntriesViewModel
+
+@{
+    var Approval_Status = ViewBag.ApprovalStatus as string;
+    var procurementPlanID = ViewBag.procurementPlanID;
+    var Plan_No = ViewBag.Plan_No;
+    var planningCategory = ViewBag.planningCategory;
+    var AdminUnit = ViewBag.AdminUnit;
+}
+
+<style>
+    .expanded-dropdown {
+        width: 100%; /* Expand to the width of the table cell */
+        white-space: nowrap; /* Prevent text from wrapping inside the dropdown */
+    }
+
+        .expanded-dropdown option {
+            white-space: normal; /* Allow text wrapping within options */
+            padding: 5px; /* Add padding for better readability */
+        }
+</style>
+
+
+<hr style="border:1px solid black" />
+<b> Procurement Plan Revision Entries </b>
+<hr />
+
+<div class="table-responsive">
+    <table id="datatable-buttons2222" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th hidden>Procurement Plan ID</th>
+                <th hidden>Entry No</th>
+                <th>Plan Item Type</th>
+                <th>Plan Item No<span style="color: black"> ItemNo-Description ItemNo-Description ItemNo-Description </span></th>
+                @* <th>Description<span style="color: black"> Description Description Description </span></th>*@
+                <th hidden>Procurement Type</th>
+                <th>Procurement Method</th>
+                <th>Alternative Procurement Methods</th>
+                @* <th>Funding Source ID</th>*@
+                <th>Requisition Product Group</th>
+                <th>Quantity</th>
+                <th>Unit Cost</th>
+                <th>Vote<span style="color: black"> Vote Vote vote </span></th>
+                <th>Sub Programmes</th>
+                <th>Class <span style="color: black"> Class Class Class </span></th>
+                <th>Funding Source</th>
+                <th>Q1 Quantity</th>
+                <th>Q1 Amount</th>
+
+                <th>Q2 Quantity</th>
+                <th>Q2 Amount</th>
+
+                <th>Q3 Quantity</th>
+                <th>Q3 Amount</th>
+
+                <th>Q4 Quantity</th>
+                <th>Q4 Amount</th>
+
+                <th>AGPO Percent</th>
+                <th>PWD Percent</th>
+                <th>Women Percent</th>
+                <th>Youth Percent</th>
+                <th>Citizen Contractors Percent</th>
+                <th>Action Taken</th>
+                @* <th style="width: 150px;">Status <span style="color: black"> Status Status </span></th> *@
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @if (Model.RevisionEntries != null && Model.RevisionEntries.Any())
+            {
+                foreach (var item in Model.RevisionEntries.Select((value, index) => new { value, index }))
+                {
+                    <tr>
+                        <td hidden>
+                            @Html.EditorFor(modelItem => item.value.ProcurementPlanID, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @id = "ProcurementPlanID_" + item.value.EntryNo } })
+                        </td>
+                        <td hidden>
+                            @Html.EditorFor(modelItem => item.value.EntryNo, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @id = "EntryNo_" + item.value.EntryNo } })
+                        </td>
+
+                        <td>
+                            @* @Html.EditorFor(modelItem => item.value.PlanItemType, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @id = "PlanItemType_" + item.value.EntryNo } })*@
+                            <select id="PlanItemType_@item.value.EntryNo" class="form-control" disabled>
+                                <option value="1" @(item.value.PlanItemType == "Item" ? "selected" : "")>Item</option>
+                                <option value="2" @(item.value.PlanItemType == "Fixed Asset" ? "selected" : "")>Fixed Asset</option>
+                            </select>
+                        </td>
+                        @* **********************************************************************@
+                    <td>
+                        <select id="PlanItemNo_@item.value.EntryNo" class="form-control " onchange="GetDescription(this, '@item.value.EntryNo')">
+                            @if (Model.ListOfItems != null)
+                            {
+                                foreach (var plan in Model.ListOfItems)
+                                {
+                                    <option value="@plan.Value" data-text="@plan.Text" @(plan.Value == item.value.PlanItemNo.ToString() ? "selected" : "")>
+                                        @plan.Value - @plan.Text
+                                    </option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="">No Records Available</option>
+                            }
+                        </select>
+
+
+                    </td>
+
+                        <td hidden>
+                            @Html.EditorFor(modelItem => item.value.Procurement_Type, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @id = "Procurement_Type_" + item.value.EntryNo } })
+                        </td>
+
+                        <td>
+                            @*  @Html.EditorFor(modelItem => item.value.Procurement_Method, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @id = "Procurement_Method_" + item.value.EntryNo, } })*@
+                            @Html.DropDownListFor(modelItem => item.value.Procurement_Method,
+                                new SelectList(
+                                    new[]
+                                    {
+                                        new { Value = "0", Text = "Open Tender" },
+                                        new { Value = "1", Text = "RFQ" },
+                                        new { Value = "2", Text = "RFP" },
+                                        new { Value = "3", Text = "Two Stage Tender" },
+                                        new { Value = "4", Text = "Direct Procurement" },
+                                        new { Value = "5", Text = "Framework Agreement" },
+                                        new { Value = "6", Text = "Reverse Auction" }
+                                    },
+                                    "Text", // Field used for value
+                                    "Text",  // Field used for display
+                                    item.value.Procurement_Method // Selected value
+                                ),
+                                new
+                                {
+                                    @class = "form-control expanded-dropdown",
+                                    @id = "Procurement_Method_" + item.value.EntryNo,
+                                    @onchange = "updateStatus(this, '@item.Id')",
+
+                                     }
+                            )
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Alternative_Procurement_Methods, new { htmlAttributes = new { @class = "form-control", @id = "Alternative_Procurement_Methods_" + item.value.EntryNo } })
+                        </td>
+
+                        <td>
+                            @* @Html.EditorFor(modelItem => item.value.Requisition_Product_Group, new { htmlAttributes = new { @class = "form-control", @id = "Requisition_Product_Group_" + item.value.EntryNo, @disabled = "disabled" } })*@
+                            @Html.EditorFor(modelItem => item.value.Procurement_Method, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", @id = "Procurement_Method_" + item.value.EntryNo, } })
+                            @* @Html.DropDownListFor(modelItem => item.value.Requisition_Product_Group,
+                                    new SelectList(
+                                        new[]
+                                        {
+
+                                            new { Value = "0", Text = "Goods" },
+                                            new { Value = "1", Text = "Services" },
+                                            new { Value = "2", Text = "Works" },
+                                            new { Value = "3", Text = "Assets" }
+                                        },
+                                        "Value", // Field used for value
+                                        "Text",  // Field used for display
+                                        item.value.Requisition_Product_Group // Selected value
+                                    ),
+                                    new
+                                    {
+                                        @class = "form-control expanded-dropdown",
+                                        @id = "Requisition_Product_Group_" + item.value.EntryNo,
+                                        @onchange = "updateStatus(this, '@item.Id')",
+                                        @disabled = "disabled"
+                                    }
+                                )*@
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Quantity_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Unit_Cost, new { htmlAttributes = new { @class = "form-control", @id = "Unit_Cost_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+
+                        <td>
+                            <select id="Shortcut_Dimension_3_Code_@item.value.EntryNo" class="form-control" disabled>
+                                @if (Model.ListOfVote != null)
+                                {
+                                    foreach (var plan in Model.ListOfVote)
+                                    {
+                                        <option value="@plan.Value" @(plan.Value == item.value.Shortcut_Dimension_3_Code ? "selected" : "")>@plan.Text</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No Records Available</option>
+                                }
+                            </select>
+
+                        </td>
+                        <td>
+                            <select id="Shortcut_Dimension_4_Code_@item.value.EntryNo" class="form-control" disabled>
+                                @if (Model.ListOfSubProgram != null)
+                                {
+
+                                    foreach (var plan in Model.ListOfSubProgram)
+                                    {
+                                        <option value="@plan.Value" @(plan.Value == item.value.Shortcut_Dimension_4_Code ? "selected" : "")>@plan.Text</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No Records Available</option>
+                                }
+                            </select>
+
+                        </td>
+                        <td>
+                            <select id="Shortcut_Dimension_5_Code_@item.value.EntryNo" class="form-control" disabled>
+                                @if (Model.ListOfClass != null)
+                                {
+
+                                    foreach (var plan in Model.ListOfClass)
+                                    {
+                                        <option value="@plan.Value" @(plan.Value == item.value.Shortcut_Dimension_5_Code ? "selected" : "")>@plan.Text</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No Records Available</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select id="Shortcut_Dimension_6_Code_@item.value.EntryNo" class="form-control" disabled>
+                                @if (Model.ListOfFundingSource != null)
+                                {
+
+                                    foreach (var plan in Model.ListOfFundingSource)
+                                    {
+                                        <option value="@plan.Value" @(plan.Value == item.value.Shortcut_Dimension_6_Code ? "selected" : "")>@plan.Text</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">No Records Available</option>
+                                }
+                            </select>
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q1_Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Q1_Quantity_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q1_Amount, new { htmlAttributes = new { @class = "form-control", @id = "Q1_Amount_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q2_Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Q2_Quantity_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q2_Amount, new { htmlAttributes = new { @class = "form-control", @id = "Q2_Amount_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q3_Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Q3_Quantity_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q3_Amount, new { htmlAttributes = new { @class = "form-control", @id = "Q3_Amount_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q4_Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Q4_Quantity_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Q4_Amount, new { htmlAttributes = new { @class = "form-control", @id = "Q4_Amount_" + item.value.EntryNo, @disabled = "disabled" } })
+                        </td>
+
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.AGPO_Percent, new { htmlAttributes = new { @class = "form-control", @id = "AGPO_Percentage_" + item.value.EntryNo, @disabled = "disabled" } })
+
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.PWD_Percent, new { htmlAttributes = new { @class = "form-control", @id = "PWD_Percent_" + item.value.EntryNo } })
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Women_Percent, new { htmlAttributes = new { @class = "form-control", @id = "Women_Percent_" + item.value.EntryNo } })
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Youth_Percent, new { htmlAttributes = new { @class = "form-control", @id = "Youth_Percent_" + item.value.EntryNo } })
+                        </td>
+
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Citizen_Contractors_Percent, new { htmlAttributes = new { @class = "form-control", @id = "Citizen_Contractors_Percent_" + item.value.EntryNo } })
+                        </td>
+
+                        <td>
+                            @Html.EditorFor(modelItem => item.value.Action_Taken, new { htmlAttributes = new { @class = "form-control", @id = "Action_Taken" + item.value.EntryNo, @disabled = "disabled" } })
+
+                        </td>
+
+                        <td>
+                            @if (@Approval_Status == "Open" || @Approval_Status == "Pending Approval")
+                            {
+                                <button class="btn btn-primary waves-effect waves-light"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Edit"
+                                        onclick="SubmitUpdatedProcurementPlanAmmendmentEntry('@item.value.ProcurementPlanID', '@item.value.EntryNo', @planningCategory);">
+                                    Update
+                                </button>
+                            }
+
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+@{
+    if (@AdminUnit == "00000001") //Only members of HQ should be able to add line
+    {
+
+        <div class="text-right">
+            <button class="btn btn-primary waves-effect waves-light" onclick="CreateProcplanLines('@procurementPlanID', '@Plan_No', '@planningCategory');"> Add Line</button>
+        </div>
+    }
+
+}
+
+<script>
+    $("#datatable-buttons2").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+
+
+    $('.select2').select2();
+    function getItems(selectElement, index) {
+    const selectedText = selectElement.options[selectElement.selectedIndex].text;
+        const ProcurementCategory = selectedText.split('-')[1]?.trim();
+
+        if (ProcurementCategory) {
+            ShowProgress();
+            $.ajax({
+                url: '@Url.Action("GetItems", "Purchase")',
+                type: 'GET',
+                data: {
+                    ProcurementCategory: ProcurementCategory,
+                },
+                success: function (response) {
+                    // Handle PlanItemNo dropdown for the specific index
+                    const planItemDropdown = $(`#PlanItemNo_${index}`);
+                    console.log(planItemDropdown);
+                    planItemDropdown.empty(); // Clear existing options
+                    if (response.ListOfOutputs && response.ListOfOutputs.length > 0) {
+                        response.ListOfOutputs.forEach(item => {
+                            planItemDropdown.append(new Option(item.Text, item.Value));
+                        });
+                    } else {
+                        planItemDropdown.append(new Option("No Records Found", ""));
+                    }
+
+                    // Handle Output_Indicators dropdown for the specific index
+                    const outputIndicatorsDropdown = $(`#Output_Indicators_${index}`);
+                    outputIndicatorsDropdown.empty(); // Clear existing options
+                    if (response.ListOfOutputIndicators && response.ListOfOutputIndicators.length > 0) {
+                        response.ListOfOutputIndicators.forEach(item => {
+                            outputIndicatorsDropdown.append(new Option(item.Text, item.Value));
+                        });
+                    } else {
+                        outputIndicatorsDropdown.append(new Option("No Records Found", ""));
+                    }
+
+                    HideProgress();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error occurred: ' + error);
+                    // Optionally show user-friendly error message
+                    alert('An error occurred while fetching items.');
+                    HideProgress();
+                }
+            });
+        } else {
+            // Reset PlanItemNo and Output_Indicators if ProcurementCategory is empty
+            $(`#PlanItemNo_${index}`).html('<option value=""></option>');
+            $(`#Output_Indicators_${index}`).html('<option value=""></option>');
+            HideProgress();
+        }
+    }
+
+    function getElementById(index, elementType) {
+        const id = elementType + "_" + index; // Construct the ID dynamically
+        const element = document.getElementById(id); // Get the element by ID
+        if (element) {
+            console.log(`Element with ID ${id} found:`, element);
+        } else {
+            console.error(`Element with ID ${id} not found.`);
+        }
+        return element;
+    }
+
+    function GetDescription(selectElement, entryNo) {
+        const selectedValue = selectElement.value; // Get the selected value
+        const selectedText = selectElement.options[selectElement.selectedIndex].dataset.text; // Get the corresponding data-text
+
+        // Update the corresponding input field
+        const inputField = document.getElementById(`Desc_${entryNo}`);
+        if (inputField) {
+            inputField.value = selectedText; // Set the selected item's Text in the input field
+        }
+
+    }
+
+</script>

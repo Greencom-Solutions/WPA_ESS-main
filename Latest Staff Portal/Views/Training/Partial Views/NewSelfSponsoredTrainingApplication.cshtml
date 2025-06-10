@@ -1,0 +1,108 @@
+﻿@model Latest_Staff_Portal.ViewModel.SelfSponsoredTrainingApplication
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.Label("Training Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <select id="Training_Type" name="Training_Type" class="form-control">
+                        <option value="">----Select Training Type----</option>
+                        <option value="Virtual">Virtual</option>
+                        <option value="Onsite">Onsite</option>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Training_Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.Label("Training Category", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <select id="Training_Category" name="Training_Category" class="form-control">
+                        <option value="">----Select Training Category----</option>
+                        <option value="Full time">Full time</option>
+                        <option value="Part time">Part time</option>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Training_Category, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.Label("Start DateTime", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" id="startDateTime" name="Start_DateTime" class="form-control" placeholder="MM/DD/YYYY" />
+                    @Html.ValidationMessageFor(model => model.Start_DateTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.Label("Training Time", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <select id="Training_Time" name="Training_Time" class="form-control">
+                        <option value="">----Select Training Time----</option>
+                        <option value="Working Hours">Working Hours</option>
+                        <option value="Weekends">Weekends</option>
+                        <option value="Evening Classes">Evening Classes</option>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Training_Time, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.Label("Institution", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <input type="text" id="Venue" name="Venue" class="form-control" placeholder="Enter institution name" />
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.Label("Training Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <select id="Training_Type" name="Training_Type" class="form-control">
+                        <option value="">----Select Training Type----</option>
+                        <option value="Full time">Webinar</option>
+                        <option value="Part time">Workshop</option>
+                        <option value="Part time">Hybrid</option>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Training_Category, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "5", placeholder = "Provide a description of the training" })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.Label("Course", htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.Course_Title, new SelectList(Model.ListOfCourseTitle, "Value", "Text", Model.Course_Title), "--Select Course--", new { @id = "course_title", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Course_Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12 text-center">
+                <input type="submit" value="Create" class="btn btn-primary" onClick="SumbitSSApplication()" />
+            </div>
+        </div>
+    </div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#startDateTime').datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true,
+            todayHighlight: true,
+        });
+    });
+</script>

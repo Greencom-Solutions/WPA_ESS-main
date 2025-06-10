@@ -1,0 +1,173 @@
+﻿@model Latest_Staff_Portal.ViewModel.NewTrainingFeedBack
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Training No", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(model => model.Training_No, Model.ListOfTraining, "--select Training Document No--", new { @class = "form-control", id = "ddlTrainingNo", onchange = "GetTrainingDetails()" })
+                @Html.ValidationMessageFor(model => model.Training_No, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row" style="background-color:#d5d3d3;color:black">
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("Start Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <label id="dtPicker" style="color:#6B6A03"></label>
+                @*<input type="datetime" class="form-control" placeholder="dd/mm/yyyy" id="dtPicker" onkeydown="return false;" autocomplete="off" onkeyup="DateChanged(this)" />*@
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("End Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <label id="EndDate" style="color:#6B6A03"></label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("Duration", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <label id="TxtDuration" style="color:#6B6A03"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Course", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <label id="TxtCourse" style="color:#6B6A03"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Attachment", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="file" class="form-control" id="LeavefileAttachment"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("General Comment", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <textarea id="txtRemarks" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitTrainingExtension();"/>
+</div>
+<script type="text/javascript">
+        $(document).ready(function () {
+            //$('#ddlNoDays').empty().append('<option selected="selected--No of Days--</option>');
+            //$('#EndDate').html("dd/mm/yyyy");
+            //$('#ReturnDate').html("dd/mm/yyyy");
+
+            //$('#dtPicker').datepicker({
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    autoclose: true,
+            //    yearRange: '-0:+2',
+            //    showOtherMonths: true,
+            //    dateFormat: 'dd/mm/yy',
+            //    minDate: 0
+            //});
+            //$(window).resize(function () {
+            //    $('#dtPicker').datepicker('hide');
+            //    $('#dtPicker').blur();
+            //});
+            $('#dtFrom').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                yearRange: '-0:+2',
+                showOtherMonths: true,
+                dateFormat: 'dd/mm/yy',
+                minDate: -30
+            });
+            $('#dtTo').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true,
+                yearRange: '-0:+2',
+                showOtherMonths: true,
+                dateFormat: 'dd/mm/yy',
+                minDate: 0
+            });
+            $("#dtFrom,#dtTo").focus(function () {
+                $("#ui-datepicker-div").position({
+                    my: "left top",
+                    at: "left bottom",
+                    of: $(this)
+                });
+            });
+
+            $("#ddlLeaveNo").select2({
+                width: '100%'
+            });
+        });
+        var GetTrainingDetails = function () {
+            var DocNo = $("#ddlTrainingNo").children("option:selected").val();
+
+
+            if (DocNo == "") {
+                return;
+            }
+            else {
+                ShowProgress();
+                $.getJSON("/Training/GetTrainingDocDetails", { DocNo: DocNo },
+                    function (data) {
+                        if (data.success == true) {
+                            $("#TxtCourse").text(data.newLV.LeaveType);
+                            $("#dtPicker").text(data.newLV.Starting_Date);
+                            $("#EndDate").text(data.newLV.End_Date);
+                            $("#TxtDuration").text(data.newLV.Return_Date);
+                            // $("#ddlLeaveType").empty().append('<option selected="selected--No of Days--</option>');
+
+                        }
+                        else {
+                            Swal.fire('Warning', data.message, 'warning');
+                        }
+                        HideProgress();
+                    });
+            }
+        }
+
+        var CheckAppliedDays = function () {
+            var appdays = $('#txtNoDays').val();
+            var masiku = document.getElementById('ddlNoDays').innerHTML;// $('#ddlNoDays').val();
+            console.log(appdays);
+            console.log(masiku);
+            if (appdays > masiku) {
+                Swal.fire('error', 'Reimbursed days can not be more than Leave Days', 'error');
+                $('#txtNoDays').val('');
+                return;
+            }
+        }
+        var GetEndReturnDate = function () {
+            $('#dtPicker').val("");
+            $('#EndDate').html("dd/mm/yyyy");
+            $('#ReturnDate').html("dd/mm/yyyy");
+        }
+</script>

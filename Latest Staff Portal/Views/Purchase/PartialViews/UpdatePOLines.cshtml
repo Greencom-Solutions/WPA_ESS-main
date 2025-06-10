@@ -1,0 +1,127 @@
+﻿@model Latest_Staff_Portal.ViewModel.UpdatePurchaseOrderLineViewModel
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row mb-1">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @id = "description", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Specifications</label>
+                    @Html.EditorFor(model => model.Specifications, new { htmlAttributes = new { @class = "form-control", @id = "specifications" } })
+                    @Html.ValidationMessageFor(model => model.Specifications, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-1">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Direct Unit Cost</label>
+                    @Html.EditorFor(model => model.Direct_Unit_Cost, new { htmlAttributes = new { @class = "form-control", @id = "directUnitCost", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Direct_Unit_Cost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Quantity</label>
+                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "quantity", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-1">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Quantity To Receive</label>
+                    @Html.EditorFor(model => model.Qty_to_Invoice, new { htmlAttributes = new { @class = "form-control", @id = "qtyToInvoice" } })
+                    @Html.ValidationMessageFor(model => model.Direct_Unit_Cost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Business Posting Group</label>
+                    @Html.EditorFor(model => model.Gen_Bus_Posting_Group, new { htmlAttributes = new { @class = "form-control", @id = "bsPostingGroup", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Gen_Bus_Posting_Group, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-1">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Product Posting Group</label>
+                    @Html.EditorFor(model => model.Gen_Prod_Posting_Group, new { htmlAttributes = new { @class = "form-control", @id = "prodPostingGroup", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Gen_Prod_Posting_Group, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-primary waves-effect waves-light" onclick="SaveUpdateDescription();">
+                Save
+            </button>
+        </div>
+    </div>
+}
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    var SaveUpdateDescription = function () {
+        ShowProgress();
+        var description = $('#description').val();
+        var directUnitCost = $('#directUnitCost').val();
+        var quantity = $('#quantity').val();
+        var Gen_Bus_Posting_Group = $('#bsPostingGroup').val();
+        var Gen_Prod_Posting_Group = $('#prodPostingGroup').val();
+        var Qnty_To_Invoice = $('#qtyToInvoice').val();
+        var specifications = $('#specifications').val();
+
+
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ DocNo: '@Model.Document_No', Line_No: '@Model.Line_No', Description: description, Direct_Unit_Cost: directUnitCost, Quantity: quantity, Gen_Bus_Posting_Group, Gen_Prod_Posting_Group, Qnty_To_Invoice, specifications  }),
+            url: "/Purchase/SubmitUpdatePoLine",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Document updated successfully'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || "There was a problem processing your request. Please try again later."
+                    });
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: "There was a problem processing your request. Please try again later."
+                });
+            }
+        });
+    };
+</script>

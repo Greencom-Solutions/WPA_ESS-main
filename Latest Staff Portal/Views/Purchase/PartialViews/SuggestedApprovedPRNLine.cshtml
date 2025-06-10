@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ApprovedPRNLine>
+<style>
+    .styled-checkbox {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #162f25;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        position: relative;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+        .styled-checkbox:checked {
+            background-color: #162f25;
+            border-color: #162f25;
+        }
+
+            .styled-checkbox:checked::after {
+                content: '✔';
+                position: absolute;
+                left: 3px;
+                top: -1px;
+                color: white;
+                font-size: 14px;
+            }
+
+
+</style>
+<div class="table-responsive">
+    <table id="PurchaseRequisitionLine1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>#</th>
+                <th style="min-width: 50px;"></th>
+                <th class="text-center">Action</th>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Unit Cost</th>
+                <th>Amount</th>
+                <th>Amt Inc VAT</th>
+                <th>Direct Cost</th>
+                <th>Contract #</th>
+                <th>Women(%)</th>
+                <th>Women Amount</th>
+                <th>Youth(%)</th>
+                <th>Youth Amount</th>
+                <th>AGPO(%)</th>
+                <th>AGPO Amount</th>
+                <th>PWD(%)</th>
+                <th>PWD Amount</th>
+                <th>Awarded Qty</th>
+                <th>Awarded Cost</th>
+                <th>Awarded Amt</th>
+                <th>Procurement Method</th>
+                <th>Alternative Procurement Methods</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                var counter = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="p-2 text-center">@counter</td>
+                        <td>
+                            <input type="checkbox"
+                                   id="exampleCheckbox"
+                                   name="exampleCheckbox"
+                                   value="@item.Line_Selected"
+                                   class="styled-checkbox"
+                                   onclick="GeneratePOCheckBox('@item.LineNo', this.checked)"
+                                   @(item.Line_Selected ? "checked" : "")
+                                   @(item.LPO_Created ? "disabled" : "") />
+                        </td>
+
+
+                        <td class="d-flex flex-column">
+                            <input type="button" style="background: #162f25; color: whitesmoke; border-radius: 10px; margin-bottom: 10px" value="Select Contract" onclick="EditApprovedPRNLine('@item.LineNo');" />
+                          @*  <input type="button" class="my-1" style="background: #162f25;  color: whitesmoke; border-radius: 10px" value="Add Line" onclick="AddContractPaymentDetails('@ViewBag.PRN', '@item.LineNo', '@item.ContractNoToPay')" />*@
+                            <input type="button" style="background: #162f25; color: whitesmoke; border-radius: 10px" value="Edit" onclick="EditAssingedPRNLine('@item.DocumentNo', '@item.LineNo', '@item.Awarded_Quantity', '@item.Awarded_Unit_Cost', '@item.Awarded_Line_Amount')" />
+
+                            @*@if (!string.IsNullOrEmpty(@item.ContractNoToPay))
+                            {
+                                <input type="button" style="background: #162f25; color: whitesmoke; border-radius: 10px" class="mt-1" value="Create Contract PO" onclick="CreateContractPO('@item.DocNo', '@item.ContractNoToPay')" />
+                            }*@
+                        </td>
+                        <td>@item.Description</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.UnitCostLCY</td>
+                        <td>@item.Amount</td>
+                        <td>@item.AmountIncludingVAT</td>
+                        <td>@item.DirectUnitCost</td>
+                        <td>@item.ContractNoToPay</td>
+                        <th>@item.Women_Percent</th>
+                        <td>@item.Women_Amount</td>
+                        <td>@item.Youth_Percent</td>
+                        <td>@item.Youth_Amount</td>
+                        <td>@item.AGPO_Percent</td>
+                        <td>@item.AGPO_Amount</td>
+                        <td>@item.PWD_Percent</td>
+                        <td>@item.PWD_Amount</td>
+                        <td>@item.Awarded_Quantity</td>
+                        <td>@item.Awarded_Unit_Cost</td>
+                        <td>@item.Awarded_Line_Amount</td>
+                        <td>@item.PPProcurementMethod</td>
+                        <td>@item.OtherProcurementMethods</td>
+
+                    </tr>
+                    counter++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="11" style="color:red; text-align:center;">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script>
+    function CreateContractPO(DocNo, ContractNoToPay) {
+        var ContractNo = ContractNoToPay;
+        ShowProgress();
+
+        $.ajax({
+            url: '/Purchase/CreateLPOFromContract',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ DocNo, ContractNo }),
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    LoadApprovedPRNLine(DocNo);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: `Contract PO ${data.docNo}  Created Successfully!`
+                    });
+                    window.location.href = `/Purchase/PurchaseOrdersDocumentView?DocNo=${data.docNo}`;
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong check your connection!'
+                });
+            }
+        });
+    }
+
+
+
+
+</script>

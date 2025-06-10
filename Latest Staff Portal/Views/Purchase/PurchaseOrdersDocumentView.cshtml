@@ -1,0 +1,1430 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseOrder
+
+@{
+    ViewBag.Title = "PurchaseOrderDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+    var buttonStyle = "background: #162f25; color: whitesmoke; border-radius: 10px;";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .dropdown-item {
+        color: #27433c;
+    }
+
+        .dropdown-item:hover {
+            color: white;
+            background-color: #27433c;
+        }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="PurchaseOrdersLink(`@Model.Document_Review_Status`);">Purchase</a>
+                </li>
+                <li class="breadcrumb-item active">Purchase Order(@Model.No)</li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Local Purchase Order (@Model.No)</h4>
+        <br />
+        <div class="d-flex flex-grow-1">
+            
+            <button class="btn btn-primary mr-2" onclick="GenerateLpoReport('@Model.No');" aria-label="Generate Contract LPO Report">
+                <i class="fa fa-print" aria-hidden="true"></i> Generate Report
+            </button>
+
+            @if (Model.Document_Review_Status == "SCM")
+            {
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="apraiseeActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-tasks"></i> Approvals Action
+                    </button>
+                    <div class="dropdown-menu px-3" aria-labelledby="apraiseeActionDropdown">
+                        <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="SendDocForApproval();">
+                            <i class="far fa-check-circle"></i> Send for Approval
+                        </button>
+
+                        <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="CancelDocForApproval();">
+                            <i class="fas fa-ban"></i> Cancel Approval
+                        </button>
+                        <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="ViewApprovalTrail('@Model.No');">
+                            <i class="fas fa-route"></i> Approval Trail
+                        </button>
+                    </div>
+                </div>
+            }
+            
+            @if (Model.Document_Review_Status == "SCM")
+            {
+
+                <button class="btn btn-primary mx-2" onclick="ReOpenLpo('@Model.No');" aria-label="Generate Contract LPO Report">
+                    <i class="fa fa-external-link" aria-hidden="true"></i> Re Open
+                </button>
+            }
+
+
+            @if (Model.Status == "Released")
+            {
+
+                <div class="dropdown mx-2">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="apraiseeActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-tasks"></i> Actions
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="apraiseeActionDropdown">
+
+
+                        @if (Model.Document_Review_Status == "Accounts")
+                        {
+                            <a class="dropdown-item" href="#" onclick="LpoPosting();" aria-label="Post LPO" role="button" style="width: 200px;">
+                                <i class="fas fa-bullseye"></i> Post
+                            </a>
+                            <a class="dropdown-item" href="#" onclick="ShowReturnToSCMModal();" aria-label="Post LPO" role="button" style="width: 200px;">
+                                <i class="fas fa-bullseye"></i> Return To SCM
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item" href="#" onclick="SendPOForReview();" aria-label="Post LPO" role="button" style="width: 200px;">
+                                <i class="fa fa-paper-plane"></i> Send To Accounts
+                            </a>
+                        }
+
+                    </div>
+                </div>
+
+                if (Model.Document_Review_Status == "SCM")
+                {
+
+        @*<button class="btn btn-primary mx-2" onclick="ShowApprovalReasonModal();" aria-label="Cancel LPO Document">
+            <i class="fas fa-ban"></i> Void LPO
+        </button>*@
+                    <button class="btn btn-primary" onclick="PublishLpo();" aria-label="Publish LPO">
+                        <i class="fas fa-upload"></i> Publish
+                    </button>
+                    <button class="btn btn-primary mx-2" onclick="SendLpoToMail();" aria-label="Send LPO via Mail">
+                        <i class="far fa-envelope"></i> Send Mail
+                    </button>
+                }
+
+
+            }
+
+
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="dl-horizontal">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("No", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Document Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Document_Type, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    @if (Model.Status == "Open")
+                    {
+                        <div class="form-group">
+                            @Html.Label("Select Vendor", htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(m => m.Buy_from_Vendor_No, (IEnumerable<SelectListItem>)ViewBag.VendorDropdownList, "Select a Vendor", new { @class = "form-control select2", @id = "vendorNumber" })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            @Html.Label("Select Vendor", htmlAttributes: new { @class = "control-label col-md-12" })
+
+                            @Html.TextBoxFor(m => m.Buy_from_Vendor_No, new { @class = "form-control", @id = "VendorNo", @readonly = "readonly", @style = "background-color:#dedebd" })
+                        </div>
+                    }
+                    @*  @{
+                if (string.IsNullOrEmpty(Model.Buy_from_Vendor_No))
+                {
+                    <div class="form-group">
+                        @Html.Label("Select Vendor", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.DropDownListFor(m => m.Buy_from_Vendor_No, (IEnumerable<SelectListItem>)ViewBag.VendorDropdownList, "Select a Vendor", new { @class = "form-control select2", @id = "vendorNumber" })
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        @Html.Label("Buy from Vendor No", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Buy_from_Vendor_No, new { @class = "form-control", @id = "VendorNo", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                }
+            }*@
+                </div>
+
+                @*   <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Buy from Vendor Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.Buy_from_Vendor_Name, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+            </div>
+        </div>*@
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Posting Description", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Posting_Description, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Posting Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Posting_Date, new
+                        {
+                            @class = "form-control",
+                            @id = "postingDate",
+                            @type = "date",
+                            @value = Model.Posting_Date,
+                            @min = DateTime.Now.ToString("yyyy-MM-dd")
+
+                        })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Procurement Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Procurement_Type, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Contact", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Buy_from_Contact, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Due Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Due_Date, new
+                        {
+                            @class = "form-control",
+                            @id = "dueDate",
+                            @type = "date",
+                            @value = Model.Due_Date,
+                            @min = DateTime.Now.ToString("yyyy-MM-dd")
+                        })
+                    </div>
+
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Document Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Document_Date, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Accounts Rejections Reason", htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Accounts_Rejections_Reason, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    @{
+                        @* if (Model.Status == "Released" || Model.Status == "Open") *@
+                        @* { *@
+                        @*     <div class="form-group"> *@
+                        @*         <label>Vendor Invoice No.</label> *@
+                        @*         @Html.Label("Vendor Invoice No.", htmlAttributes: new { @class = "control-label col-md-12" }) *@
+                        @*         @Html.TextBoxFor(m => m.Vendor_Invoice_No, new { @class = "form-control", @readonly = "readonly", @id = "Vendor_Invoice_No", @style = "background-color:#dedebd", @placeholder = "Vendor Invoice Number" }) *@
+                        @*     </div> *@
+                        @* *@
+                        @* } *@
+                        @* else *@
+                        {
+                            <div class="form-group">
+                                <label for="vendorInvoiceNo" class="control-label col-md-12">Vendor Invoice No.</label>
+                                @* <input type="text" class="form-control" id="vendorInvoiceNo" name="Vendor_Invoice_No" placeholder="Enter Vendor Invoice Number" />*@
+                                @Html.TextBoxFor(m => m.Vendor_Invoice_No, new { @class = "form-control", @id = "vendorInvoiceNo" })
+                            </div>
+                        }
+                    }
+                </div>
+
+
+            </div>
+
+
+            @if (Model.Status == "Open" || Model.Status == "Released")
+            {
+                <div align="center">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" onclick="UpdateDocument('@Model.No');">
+                        <i class="fas fa-sync-alt"></i> Update
+                    </button>
+                </div>
+            }
+
+
+
+
+
+            @*line entry point*@
+            <div id="divLines">
+
+                <b>Lines</b>
+                <hr style="border: 1px solid black" />
+                <div id="purchaseOrderLines"></div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <section aria-labelledby="document-attachments-header" class="attachments-section">
+        <h5 id="document-attachments-header" class="font-weight-bolder  px-4">Document Attachments</h5>
+
+        <!-- Requisition Attachments Section -->
+        <section aria-labelledby="requisition-attachments-header" id="DivRequisitionUploads" class="px-4">
+            <header class="py-2 d-flex justify-content-between align-items-center">
+                <h6 id="requisition-attachments-header" class="font-weight-bolder px-3">Requisition Attachments</h6>
+            </header>
+            <hr style="border: 1px solid black" />
+            <div class="px-3" id="PRNAttachments"></div>
+        </section>
+
+         <!-- Document Attachment Entrypoint --> 
+         <section id="DivPurchaseOrder" class="px-4"> 
+             <div class="d-flex justify-content-between"> 
+                 <header class="py-2 d-flex justify-content-between align-items-center"> 
+                     <h6 id="requisition-attachments-header" class="font-weight-bolder px-3">Purchase Order Attachments</h6> 
+                 </header> 
+                 <div class="py-2 d-flex justify-content-between align-items-center"> 
+                     <button style="background: #162f25; color: whitesmoke; border-radius: 10px" 
+                             onclick="AddAttachment();" 
+                             aria-label="Add Attachments"> 
+                         <i class="fas fa-file-plus"></i> Add Attachments 
+                     </button> 
+                 </div> 
+         
+             </div> 
+             <hr style="border: 1px solid black" /> 
+         
+         </section> 
+        
+        <section aria-labelledby="mandatory-attachments-header" id="DivMandatoryAttachments" class="px-4">
+            <header class="py-2 d-flex justify-content-between align-items-center">
+                <h6 id="mandatory-attachments-header" class="font-weight-bolder px-3">Mandatory Attachments</h6>
+            </header>
+            <hr style="border: 1px solid black" />
+            <div id="POMandatoryAttachments"></div>
+        </section>
+
+        
+
+        
+
+
+         <!-- Instructions for Goods Attachments --> 
+         <div class="mb-5 px-4"> 
+             <p class="font-weight-bold px-3">Kindly add the following attachments:</p> 
+             <p class="text-muted px-2"> 
+                 Vendor invoice, Appointment for inspection and Acceptance committee & Inspection and Acceptance report where applicable 
+             </p> 
+         
+             <p class="font-weight-bold pl-4">For goods, kindly attach the following documents:</p> 
+             <ul class="d-flex flex-row text-muted"> 
+                 <li>Goods receipt note</li> 
+                 <li class="mx-5">Delivery note</li> 
+                 <li>S13</li> 
+                 <li class="mx-5">Technical inspection reports, where necessary</li> 
+             </ul> 
+             <p class="font-weight-bold px-3">For services kindly attach:</p> 
+             <ul class="d-flex flex-row text-muted"> 
+                 <li>Payment certificate</li> 
+                 <li class="mx-5"> Technical report from user</li> 
+             </ul> 
+             <hr /> 
+             <div class="px-3" id="divAttachDocs"></div> 
+         </div> 
+    </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="modal-title"><label id="labelF"></label></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal View Doc -->
+    <div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attachment</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px"></div>
+            </div>
+        </div>
+    </div>
+
+
+    @*LPO Report modal entry point*@
+    <div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">LPO Report</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="returnToSupplyChainModal" tabindex="-1" role="dialog" aria-labelledby="returnToSupplyChainModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="returnToSupplyChainModalLabel">PO @Model.No Return to Supply Chain</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="returnToSupplyChainForm">
+                    <div class="form-group">
+                        <label for="reasonToReturn">Reason to return PO to Supply Chain</label>
+                        <textarea class="form-control" id="reasonToReturn" rows="4" placeholder="Enter your reason for returning the document..."></textarea>
+                        <span class="text-danger" id="reasonError"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" id="submitReturn">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="approvalCancellationModal" tabindex="-1" role="dialog" aria-labelledby="approvalCancellationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approvalCancellationModalLabel">PO @Model.No Cancellation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="cancellationForm">
+                    <div class="form-group">
+                        <label for="reasonToCancelApproval">Reason to cancel PO Document</label>
+                        <textarea class="form-control" id="reasonToCancelApproval" rows="4" placeholder="Enter your reason for canceling the document..."></textarea>
+                        <span class="text-danger" id="reasonError"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" id="submitCancellation">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        LoadLines();
+        $('#vendorNumber').select2();
+        GetPRNAttachments();
+        GetDocumentAttachments();
+       // LoadActualLines("/Purchase/POAttachmentLines", "#POMandatoryAttachments", `@Model.No`, `@Model.Status`);
+    });
+
+    function ShowApprovalReasonModal() {
+        ShowProgress();
+        $('#approvalCancellationModal').modal('show');
+        HideProgress();
+    }
+
+    function ShowReturnToSCMModal(){
+        ShowProgress();
+        $('#returnToSupplyChainModal').modal('show');
+        HideProgress();
+    }
+
+
+    $('#submitCancellation').on('click', function() {
+        var reason = $('#reasonToCancelApproval').val();
+        if (reason.trim() === '') {
+            $('#reasonError').text('Reason for cancellation is required.');
+            $('html, body').animate({
+                scrollTop: $('#returnToSupplyChainModal').offset().top
+            }, 500);
+            return;
+        } else {
+            CancelPODoc(reason);
+
+            $('#approvalCancellationModal').modal('hide');
+        }
+    });
+
+
+    $('#submitReturn').on('click', function () {
+        var reason = $('#reasonToReturn').val();
+        if (reason.trim() === '') {
+            $('#reasonError').text('Reason for cancellation is required.');
+            $('html, body').animate({
+                scrollTop: $('#approvalCancellationModal').offset().top
+            }, 500);
+            return;
+        } else {
+            ReturnReturnToSCM(reason);
+
+            $('#approvalCancellationModal').modal('hide');
+        }
+    });
+
+    let epic101 = 0;
+
+    function AddAttachment(LineNo) {
+        epic101 = LineNo;
+
+        let url = "/Common/FileAttachmentForm";
+        if (LineNo) {
+            url += "?lineNo=" + LineNo;
+        }
+        console.log("This is the line id" + LineNo);
+        ShowProgress();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                $('#modalAttachmentBody').html(data);
+                $('#myModalAttachment').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to load the file attachment form. Please try again.', 'error');
+                HideProgress();
+            }
+        });
+    }
+
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "HR Leave Application: " + DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                $("#labelF").text("Approval Trail");
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText || err.statusText, 'warning');
+            }
+        });
+    }
+
+
+    var GetDocumentAttachments = function () {
+        var DocNo = `@Model.No`;
+        var status = '@Model.Status';
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+            url: "/Common/EdmsDocumentAttachmentList",
+            success: function (data) {
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+var SaveAttachmentFile = function (LineNo) {
+    var DocNo = `@Model.No`;
+    var filename; var base64String; var filetype;
+    console.log("Epic Line" + LineNo);
+    var VendorNo = '@Model.Buy_from_Vendor_No';
+    var files = document.getElementById('AttachmentFile').files
+    var lineNo = (epic101 || '').toString();
+    if (files.length) {
+        var file = files[0];
+        if (file.size > 10000000) {
+            Swal.fire('Warning', 'Please only files less than 10MB allowed. Thanks!!', 'warning');
+        }
+        else {
+            var blob = file.slice();
+            filetype = file.type;
+            filename = file.name;
+
+            var reader = new FileReader();
+            reader.onloadend = function (evt) {
+                if (evt.target.readyState == FileReader.DONE) {
+                    var cont = evt.target.result;
+                    base64String = getB64Str(cont);
+                    ShowProgress();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Common/SaveAttachedFile",
+                        data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 38, module: "SCM", documentType: "Purchase Order", lineNo }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                HideProgress();
+                                GetDocumentAttachments();
+                                $('#myModalAttachment').modal("hide");
+                                Swal.fire('Success', data.message, 'success');
+                            }
+                            else {
+                                Swal.fire('Warning', data.message, 'warning');
+                                HideProgress();
+                            }
+                        },
+                        error: function (err) {
+                            HideProgress();
+                            Swal.fire('Warning', err, 'warning');
+                        }
+                    });
+                }
+            };
+            reader.readAsArrayBuffer(blob);
+        }
+    }
+};
+
+    function getB64Str(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+}
+
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+                            mimeType === 'application/msword') {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+
+                            var a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'document.' + (mimeType === 'application/msword' ? 'doc' : 'docx');
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            window.URL.revokeObjectURL(url);
+
+                            Swal.fire('Success', 'Word document downloaded successfully', 'success');
+                        }
+                        else if (mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                            mimeType === 'application/vnd.ms-excel') {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+
+                            var a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'spreadsheet.' + (mimeType === 'application/vnd.ms-excel' ? 'xls' : 'xlsx');
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            window.URL.revokeObjectURL(url);
+
+                            Swal.fire('Success', 'Excel spreadsheet downloaded successfully', 'success');
+                        }
+                        else if (mimeType.startsWith('application/pdf')) {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            viewer.html('<iframe src="' + url + '" width="100%" height="500px" frameborder="0"></iframe>');
+                            $("#myModalAttachment").modal("show");
+                        }
+                        else if (mimeType.startsWith('image/')) {
+                            var imageUrl = 'data:' + mimeType + ';base64,' + data.base64;
+                            viewer.html('<img src="' + imageUrl + '" style="max-width:100%;" />');
+                            $("#myModalAttachment").modal("show");
+                        }
+                        else {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                    } else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    function b64toBlob(base64, contentType) {
+        var byteCharacters = atob(base64);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+            var slice = byteCharacters.slice(offset, offset + 512);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, { type: contentType });
+    }
+
+    var LoadLines = function () {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({
+                DocNo: '@Model.No',
+                Status: '@Model.Status'
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: "/Purchase/PurchaseOrderLines",
+            success: function (data) {
+                $(purchaseOrderLines).html(data);
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+            }
+        });
+    }
+
+
+function SendDocForApproval() {
+    var DocNo = '@Model.No';
+    var VendorNo = '@Model.Buy_from_Vendor_No';
+
+    if (!VendorNo) {
+        Swal.fire('Vendor is Blank', 'Please select a vendor.', 'warning').then(function () {
+            $('#vendorNumber').focus();
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to send this document for approval?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify({ DocNo: DocNo }),
+                url: '/Purchase/SendDocForApproval',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                beforeSend: function () {
+                    ShowProgress();
+                },
+                success: function (response) {
+                    HideProgress();
+                    if (response.success) {
+                        Swal.fire('Success!', 'Document sent for approval successfully.', 'success').then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire('Error!', response.message, 'error');
+                    }
+                },
+                error: function () {
+                    HideProgress();
+                    Swal.fire('Error!', 'An error occurred while sending the document for approval.', 'error');
+                }
+            });
+        }
+    });
+    }
+
+
+function CancelPODoc(reason) {
+        var DocNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to cancel this PO Document?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({Reason: reason, DocNo: DocNo }),
+                    url: '/Purchase/CancelPO',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', 'Document canceled from approval successfully.', 'success').then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('Error!', 'An error occurred while canceling the document from approval.', 'error');
+                    }
+                });
+            }
+        });
+}
+
+    function CancelDocForApproval() {
+        var DocNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to cancel this document from approval?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({DocNo: DocNo }),
+                    url: '/Purchase/CancelDocForApproval',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', 'Document canceled from approval successfully.', 'success').then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('Error!', 'An error occurred while canceling the document from approval.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function CancelLPO(reason) {
+        var DocNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to cancel this document from approval?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({Reason: reason, DocNo: DocNo }),
+                    url: '/Purchase/CancelDocForApproval',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', 'Document canceled from approval successfully.', 'success').then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('Error!', 'An error occurred while canceling the document from approval.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    var GenerateLpoReport = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/GenerateLpo',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    function UpdateDocument() {
+        var docNo = '@Model.No';
+        var VendorNo = $('#vendorNumber').val() || $('#VendorNo').val();
+        var DueDate = $('#dueDate').val();
+        var VendorInvoiceNo = $('#vendorInvoiceNo').val() || $('#Vendor_Invoice_No').val();
+        var PostingDate = $('#postingDate').val();
+        var status = `@Model.Status`;
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                DocNo: docNo,
+                VendorNo: VendorNo,
+                VendorInvoiceNo: VendorInvoiceNo,
+                DueDate: DueDate,
+                PostingDate: PostingDate,
+                status: status
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/UpdatePurchaseOrderDocument',
+            success: function (response) {
+                HideProgress();
+                if (response.success) {
+                    Swal.fire('Success', 'Document updated successfully.', 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred: ' + error, 'error');
+            }
+        });
+    }
+
+    function SendLpoToMail() {
+        var docNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to send this LPO document via email?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({ docNo: docNo }),
+                    url: '/Purchase/SendLPOToMail',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', 'The document was successfully emailed.', 'success').then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('Error!', 'An error occurred while sending the document.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function redirectUrl(url) {
+        window.location.href = url;
+    }
+
+    function LpoPosting () {
+        var docNo = '@Model.No';
+Swal.fire({
+    title: 'Are you sure?',
+    text: "You want to Post this document?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes'
+}).then((result) => {
+    if (result.isConfirmed) {
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify({ DocNo: docNo }),
+            url: '/Purchase/PostLpoDoc',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            beforeSend: function () {
+                ShowProgress();
+            },
+            success: function (response) {
+                HideProgress();
+                if (response.success) {
+                    Swal.fire('Success!', `The Document posted Successfully. Purchase Invoice ${response.code} has been generated.`, 'success').then(() => {
+                        var reviewStatus = '@Model.Document_Review_Status';
+                        if (reviewStatus === 'Accounts') {
+                            redirectUrl("/Purchase/PurchaseOrdersList?stage=accl");
+                        } else {
+                            redirectUrl("/Purchase/PurchaseOrdersList?stage=scm");
+                        }
+                    });
+                } else {
+                    Swal.fire('Error!', response.message, 'error');
+                }
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire('Error!', 'An error occurred while posting the document.', 'error');
+            }
+        });
+    }
+});
+    }
+
+
+
+    function ReOpenLpo(docNo) {
+        var docNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to Re-Open this document?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({ DocNo: docNo }),
+                    url: '/Purchase/ReopenPO',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', `The Document Re-opened Successfully.`, 'success').then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('Error!', 'An error occurred while posting the document.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function SendPOForReview() {
+        var docNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to Send this document to Accounts for Review?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({ DocNo: docNo }),
+                    url: '/Purchase/SendToAccountsForReview',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', `The Document  has been sent for Review.`, 'success').then(() => {
+                                var reviewStatus = '@Model.Document_Review_Status';
+                                if (reviewStatus === 'Accounts') {
+                                    redirectUrl("/Purchase/PurchaseOrdersList?stage=accl");
+                                } else {
+                                    redirectUrl("/Purchase/PurchaseOrdersList?stage=scm");
+                                }
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function ReturnReturnToSCM(reason) {
+        var DocNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to Return this document to Supply Chain?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({Reason: reason, DocNo: DocNo }),
+                    url: '/Purchase/ReturnReturnToSCM',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', 'Document Returned successfully.', 'success').then(() => {
+                                var reviewStatus = '@Model.Document_Review_Status';
+                                if (reviewStatus === 'Accounts') {
+                                    redirectUrl("/Purchase/PurchaseOrdersList?stage=accl");
+                                } else {
+                                    redirectUrl("/Purchase/PurchaseOrdersList?stage=scm");
+                                }
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('Error!', 'An error occurred while canceling the document from approval.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    var DeleteAttachment = function (docId, line) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                documentId: docId,
+                lineNo: line
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Common/RemoveFileAsync',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    GetDocumentAttachments();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    GetDocumentAttachments();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+
+    function PublishLpo() {
+        var docNo = '@Model.No';
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to Publish this document?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({ DocNo: docNo }),
+                    url: '/Purchase/PublishLpo',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            Swal.fire('Success!', 'Document Published successfully.', 'success').then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error!', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        Swal.fire('Error!', 'An error occurred while publishing the document.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function DeleteZeroQuantitiesLines(LineNo) {
+        var docNo = '@Model.No';
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You want to delete this Line!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                ShowProgress();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/Purchase/DeletePOLine",
+                    data: JSON.stringify({ DocNo: docNo, LineNo: LineNo }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            LoadLines();
+                            Swal.fire('Deleted!', response.message, 'success');
+
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        HideProgress();
+                        Swal.fire('Error', `Error occurred while loading the data. ${error}`, 'error');
+                    }
+                });
+            } else {
+                Swal.fire('Cancelled', 'The item was not deleted', 'info');
+            }
+        });
+    }
+
+    function UpdateOrderLines(LineNo, Description, DirectUnitCost, Quantity, Gen_Bus_Posting_Group, Gen_Prod_Posting_Group, Specifications) {
+        var docNo = '@Model.No';
+        var updatedItems = {
+            Line_No: LineNo,
+            Document_No: docNo,
+            Description: Description,
+            Direct_Unit_Cost: DirectUnitCost,
+            Quantity: Quantity,
+            Gen_Bus_Posting_Group: Gen_Bus_Posting_Group,
+            Gen_Prod_Posting_Group: Gen_Prod_Posting_Group,
+            Specifications: Specifications
+
+        };
+
+        console.log(updatedItems)
+        ShowProgress();
+
+        $.ajax({
+            type: 'POST',
+            url: "/Purchase/UpdatePOLines",
+            data: JSON.stringify(updatedItems),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $('#modalBody').html(response);
+                $('#myModal').find('.modal-title').html("Edit PO Description Needed");
+                $('#myModal').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', `Error occurred while loading the data. ${error}`, 'error');
+            }
+        });
+        }
+
+        var GetPRNAttachments = function () {
+            var DocNo = `@Model.Requisition_No`;
+            $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                data: JSON.stringify({ DocNo: DocNo}),
+                url: "/Common/EdmsDocumentAttachmentList",
+                success: function (data) {
+                    $("#PRNAttachments").html(data);
+                },
+                error: function () {
+                    Swal.fire("There is some problem to process your request. Please try after some time");
+                }
+            });
+        }
+
+
+</script>

@@ -1,0 +1,133 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseItemDetails
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-12" id="Div2" runat="server">
+            <span style="font-weight: bold">PRF Type</span>
+            <select class="form-control" id="PRVType" name="PRVType" readonly="true" style="background-color:#dedebd">
+                <option value="">--Select Type--</option>
+                <option value="1">Service</option>
+                <option value="2">Item</option>
+                <option value="4">Asset</option>
+            </select>
+        </div>
+        @Html.TextBoxFor(m => m.RequisitionType, new { style = "display: none;", @class = "form-control", id = "txtRequisitionType", @readonly = "readonly" })
+
+
+    </div>
+    <hr/>
+    <div class="row" id="DivExpenseCode">
+        <div class="col-md-6" id="divExpenseCode">
+            Expense Code
+            @Html.DropDownListFor(model => model.ItemDetails.ExpenseCode, Model.ListOfExpenseCodes, "--select Expense Code--", new { @class = "form-control", id = "ddlExpenseCode", onchange = "FilterByExpenseCode()" })
+        </div>
+    </div>
+    <div id="DivService">
+        <div class="row">
+            <div class="col-md-12">
+                <label id="labelSearch"></label>
+                <textarea id="IdSearchItem" rows="2" class="form-control" style="background-color:#dedebd"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Unit Amount
+                <input type="text" class="form-control" id="txtAmount" onkeypress="return functionDecimal(event,this.value)"/>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="DivDays">
+        <div class="col-md-6">
+            No of Days
+            @Html.TextBoxFor(m => m.ItemDetails.NoofDays, new { @class = "form-control", id = "txtNoofDays" })
+
+            @*<input type="text" class="form-control" id="txtNoofDays" onkeypress="return functionx(event)" />*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            Quantity (Unit of Measure eg No of people,items)
+            <input type="text" class="form-control" id="txtQuantity" onkeypress="return functionx(event)"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="divLocation">
+            Receiving Location
+            @Html.DropDownListFor(model => model.ItemDetails.Location, Model.ListOfLocations, "--select Location--", new { @class = "form-control", id = "ddlLocation" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            Specification
+            @Html.TextAreaFor(m => m.ItemDetails.Description2, new { @class = "form-control", id = "txtDescription" })
+            @*<textarea id="txtDescription" class="form-control" maxlength="1000"></textarea>*@
+        </div>
+    </div>
+    <hr/>
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Line" onclick="UpdateLineItem('@Model.ItemDetails.DocNo','@Model.ItemDetails.LnNo');"/>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById("PRVType").disabled = true;
+        document.getElementById("IdSearchItem").disabled = true;
+        document.getElementById("ddlExpenseCode").disabled = true;
+        var ReqType = $("#txtRequisitionType").val();
+        if (ReqType == "Operations") {
+            $("#DivDays").show();
+        }
+        else {
+            $("#DivDays").hide();
+        }
+        if (`@Model.ItemDetails.LineType` == "Service") {
+            $('#PRVType').val("1");
+            $('#labelSearch').text("Service");
+            $("#divLocation").hide();          
+        }
+        else if (`@Model.ItemDetails.LineType` == "Item") {
+            $('#PRVType').val("2");
+            $("#DivExpenseCode").hide();
+            $('#labelSearch').text("Item");
+        }
+        else {
+            $('#PRVType').val("4");
+            $('#labelSearch').text("Fixed Asset");
+        }
+        $("#ddlLocation").select2({
+            width: '100%',
+            placeholder: 'Search...'
+        });
+        $('#IdSearchItem').val(`@Model.ItemDetails.ItemDesc`);
+        $('#txtAmount').val(`@Model.ItemDetails.Amount`);
+        $('#txtQuantity').val(`@Model.ItemDetails.Qnty`);
+        $('#txtDescription').val(`@Model.ItemDetails.Description2`);
+        $('#ddlLocation').val(`@Model.ItemDetails.Location`);
+    });
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

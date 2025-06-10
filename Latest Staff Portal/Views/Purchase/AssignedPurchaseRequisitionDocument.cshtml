@@ -1,0 +1,829 @@
+﻿@model Latest_Staff_Portal.ViewModel.ApprovedPurchaseRequisition
+
+@{
+    ViewBag.Title = "ApprovedPurchaseRequisitionDocument";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="AssignedPurchaseRequisitionLink();">Assigned Purchase Requisitions </a>
+                </li>
+                <li class="breadcrumb-item active">Assigned Purchase Requisition Details(@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4>Assigned Purchase Requisition (@Model.No)</h4>
+        <div class="d-flex">
+            <div class="mr-2">
+                <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="CreateInvitationNotice();" class="btn">
+                    <i class="fa fa-calendar-plus" aria-hidden="true"></i> Create Invitation Notice
+                </button>
+            </div>
+            <div>
+                <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="CreateDirectLPO();" class="btn">
+                    <i class="fa fa-file" aria-hidden="true"></i> Create LPO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Type", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.DocumentType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Number", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PRN Type", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PRNType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Date", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.DocumentDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.LocationCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requisition Product Group", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.RequisitionProductGroup, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requester ID", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.RequesterID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request By No", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.RequestByNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Request By Name", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.RequestByName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ShortcutDimension1Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative Unit Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ShortcutDimension2Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Plan ID", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ProcurementPlanID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Purchaser Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PurchaserCode2, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Planning Category", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PPPlanningCategory, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            @* <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("PP Total Budget", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.PPTotalBudget, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                    </div>
+                </div>*@
+
+            @*    <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("PP Total Actual Costs", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.PPTotalActualCosts, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Solicitation Type", new { @class = "control-label col-md-12", @for = "ddlPPSolicitationType" })
+                    @Html.DropDownListFor(model => model.PPSolicitationType, Model.ListOfSolisitationTypes, "-- Select Procurement Plan  --", new { @class = "form-control", id = "ddlPPSolicitationType" })
+                    @Html.ValidationMessageFor(model => model.PPSolicitationType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Procurement Method", new { @class = "control-label col-md-12", @for = "ddlPPProcurementMethod" })
+                    <select class="form-control" id="ddlPPProcurementMethod" name="PPProcurementMethod">
+                        <option value="" @(string.IsNullOrEmpty(Model.PPProcurementMethod) ? "selected" : "")>--Select PP Procurement Method--</option>
+                        <option value="1" @(Model.PPProcurementMethod?.Trim() == "Open Tender" ? "selected" : "")>Open Tender</option>
+                        <option value="2" @(Model.PPProcurementMethod?.Trim() == "RFQ" ? "selected" : "")>RFQ</option>
+                        <option value="3" @(Model.PPProcurementMethod?.Trim() == "RFP" ? "selected" : "")>RFP</option>
+                        <option value="4" @(Model.PPProcurementMethod?.Trim() == "Two-Stage Tender" ? "selected" : "")>Two-Stage Tender</option>
+                        <option value="5" @(Model.PPProcurementMethod?.Trim() == "Design Competition Tender" ? "selected" : "")>Design Competition Tender</option>
+                        <option value="6" @(Model.PPProcurementMethod?.Trim() == "Restricted Tender" ? "selected" : "")>Restricted Tender</option>
+                        <option value="7" @(Model.PPProcurementMethod?.Trim() == "Direct Procurement" ? "selected" : "")>Direct Procurement</option>
+                        <option value="8" @(Model.PPProcurementMethod?.Trim() == "Low Value Procurement" ? "selected" : "")>Low Value Procurement</option>
+                        <option value="9" @(Model.PPProcurementMethod?.Trim() == "Force Account" ? "selected" : "")>Force Account</option>
+                        <option value="10" @(Model.PPProcurementMethod?.Trim() == "Framework Agreement" ? "selected" : "")>Framework Agreement</option>
+                        <option value="11" @(Model.PPProcurementMethod?.Trim() == "Reverse Auction" ? "selected" : "")>Reverse Auction</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+
+                    @Html.Label("PP Invitation Notice Type", new { @class = "control-label col-md-12", @for = "PPInvitationNoticeType" })
+                    <select class="form-control" id="PPInvitationNoticeType" name="PPInvitationNoticeType" , value="@Model.PPInvitationNoticeType">
+                        <option value="" @(string.IsNullOrEmpty(Model.PPInvitationNoticeType) ? "selected" : "")>--Select PP Invitation Notice Type--</option>
+                        <option value="1" @(Model.PPInvitationNoticeType?.Trim().ToLower() == "single  stage tender" ? "selected" : "")>Single Stage Tender</option>
+                        <option value="2" @(Model.PPInvitationNoticeType?.Trim().ToLower() == "two stage tender" ? "selected" : "")>Two Stage Tender</option>
+                        <option value="3" @(Model.PPInvitationNoticeType?.Trim().ToLower() == "rfq" ? "selected" : "")>RFQ</option>
+                        <option value="4" @(Model.PPInvitationNoticeType?.Trim().ToLower() == "low value procurement" ? "selected" : "")>Low Value Procurement</option>
+                        <option value="5" @(Model.PPInvitationNoticeType?.Trim().ToLower() == "direct procurement" ? "selected" : "")>Direct Procurement</option>
+                        <option value="6" @(Model.PPInvitationNoticeType?.Trim().ToLower() == "framework agreement" ? "selected" : "")>Framework Agreement</option>
+                        <option value="7" @(Model.PPInvitationNoticeType?.Trim().ToLower() == "special rfq" ? "selected" : "")>Special RFQ</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @*<div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("PP Bid Selection Method", htmlAttributes: new { @class = "control-label col-md-12", @for = "txtPPBidSelectionMethod" })
+                        @Html.TextBoxFor(m => m.PPBidSelectionMethod, new { @class = "form-control", @id = "txtPPBidSelectionMethod", @readonly = "readonly", @style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Preference Reservation Code", new { @class = "control-label col-md-12", @for = "ddlPPPreferenceReservationCode" })
+                    @Html.DropDownListFor(model => model.PPPreferenceReservationCode, Model.ListOfPPPreferenceReservationCodes, "-- Select Procurement Plan  --", new { @class = "form-control", id = "ddlPPPreferenceReservationCode" })
+                    @Html.ValidationMessageFor(model => model.PPPreferenceReservationCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+        @*<div class="row">
+                <div class="col-md-6">
+                    <div class="form-group d-flex">
+                        @Html.Label("Consolidate PRN", htmlAttributes: new { @class = "control-label col-md-6", @for = "chkConsolidatePRN" })
+                        <div class="form-check ml-1">
+                            @Html.CheckBoxFor(m => m.ConsolidatePRN, new { @class = "form-check-input", @id = "chkConsolidatePRN", @onclick = "consolidatePrn(this)" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="display:none" id="divconsolidate">
+                    <div class="form-group">
+                        @Html.Label("Consolidate To IFS No", htmlAttributes: new { @class = "control-label col-md-12", @for = "ddlConsolidateToIFSNo" })
+                        @Html.DropDownListFor(model => model.ConsolidateToIFSNo, Model.ListOfIFSNos, "-- Select Procurement Plan  --", new { @class = "form-control", @id = "ddlConsolidateToIFSNo" })
+                        @Html.ValidationMessageFor(model => model.ConsolidateToIFSNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>*@
+        <div align="center">
+            <button type="button" class="btn btn-primary waves-effect waves-light" onclick="UpdateDocument('@Model.No');">
+                <i class="fas fa-sync-alt"></i> Update @*& Create Invitation Notice (@Model.No)*@
+            </button>
+        </div>
+        <div id="divLines" class="my-4"></div>
+    </div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="modal-title"><label id="labelF"></label></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="DivAssignedPurchase" class="px-4 mb-5">
+        <div class="py-2 d-flex justify-content-between align-items-center">
+            <h5 class="font-weight-bolder px-3">Document Attachments </h5>
+
+
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="AddAttachment();">
+
+                <i class="fas fa-file-plus"></i> Add Attachments
+            </button>
+
+        </div>
+        <hr />
+        <div class="mb-4">
+            <p class="font-weight-bold px-3">Please attach the following:</p>
+            <ul class="d-flex flex-row justify-content-around text-muted wrap">
+                <li>Opening committee appointment</li>
+                <li class="mx-1">Opening minutes</li>
+                <li>Submitted bids</li>
+                <li class="mx-1">Evaluation committee appointment</li>
+                <li class="mr-1">Evaluation report</li>
+                <li>Professional brief</li>
+            </ul>
+        </div>
+        <hr />
+
+
+        <div class="px-3" id="divAttachDocs"></div>
+    </div>
+
+    <div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attachment</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalAttachmentBody" style="width: 100%; height: 450px"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        LoadApprovedPRNLine(`@Model.No`);
+        GetDocumentAttachments();
+
+     HideHeaderEditInput(status);
+
+     var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+     if (Successmsg != "") {
+         Swal.fire('Success', Successmsg, 'success', true);
+         $.ajax({
+             type: "POST",
+             url: "/Common/NullibySessions"
+         });
+     }
+
+
+
+    });
+
+    function AddAttachment() {
+        ShowProgress();
+        $.ajax({
+            type: "GET",
+            url: "/Common/FileAttachmentForm",
+            success: function (data) {
+                $('#modalAttachmentBody').html(data);
+                $('#myModalAttachment').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to load the file attachment form. Please try again.', 'error');
+                HideProgress();
+            }
+        });
+    }
+
+
+
+    var GetDocumentAttachments = function () {
+        var DocNo = `@Model.No`;
+        var status = `@Model.Status`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+            url: "/Common/EdmsDocumentAttachmentList",
+            success: function (data) {
+                $("#divAttachDocs").html(data);
+            },
+            error: function () {
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var SaveAttachmentFile = function () {
+        var DocNo = `@Model.No`;
+        var filename; var base64String; var filetype;
+        var VendorNo = '@Model.'
+        var files = document.getElementById('AttachmentFile').files;
+        if (files.length) {
+            var file = files[0];
+            if (file.size > 10000000) {
+                Swal.fire('Warning', 'Please only files less than 10MB allowed. Thanks!!', 'warning');
+            }
+            else {
+                var blob = file.slice();
+                filetype = file.type;
+                filename = file.name;
+                var reader = new FileReader();
+                reader.onloadend = function (evt) {
+                    if (evt.target.readyState == FileReader.DONE) {
+                        var cont = evt.target.result
+                        base64String = getB64Str(cont);
+                        ShowProgress();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Common/SaveAttachedFile",
+                            data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 38, module: "SCM", documentType:"Expenditure Requisition"}),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.success) {
+                                    HideProgress();
+                                    GetDocumentAttachments();
+                                    $('#myModalAttachment').modal("hide");
+                                    Swal.fire('Success', data.message, 'success');
+                                }
+                                else {
+                                    Swal.fire('Warning', data.message, 'warning');
+                                    HideProgress();
+                                }
+                            },
+                            error: function (err) {
+                                HideProgress();
+                                Swal.fire('Warning', err, 'warning');
+                            }
+                        });
+                    }
+                };
+                reader.readAsArrayBuffer(blob);
+            }
+        }
+    };
+
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "Expenditure Requisition",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+                            viewer.html('<iframe src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+
+    var LoadApprovedPRNLine = function (DocNo ) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo }),
+            url: "/Purchase/SuggestedApprovedPRNLine",
+            success: function (data) {
+                $("#divLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+
+    function GeneratePOCheckBox(lineNo, Line_Selected) {
+        var DocNo = '@Model.No';
+        ShowProgress();
+        $.ajax({
+            type: 'POST',
+            url: '/Purchase/Toggle_LPO_Created',
+            data: JSON.stringify({ DocNo: DocNo, LineNo: lineNo, _Line_Selected: Line_Selected }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                HideProgress();
+                if(response.success) {
+                    LoadApprovedPRNLine(DocNo);
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to send data. Please try again.', 'error');
+            }
+        });
+
+
+    }
+
+
+    function EditApprovedPRNLine(lineNo) {
+        var DocNo = '@Model.No';
+        ShowProgress();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Purchase/EditApprovedPRNLine',
+            data: JSON.stringify({ DocNo: DocNo, LineNo: lineNo }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $('#modalBody').html(response);
+                $('#myModal').find('.modal-title').html("Add Contract To Pay To");
+                $('#myModal').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to send data. Please try again.', 'error');
+            }
+        });
+    }
+
+          function AddContractPaymentDetails(PRN, LineNo, ContractToPay) {
+              var DocumentNumber = '@Model.No';
+              ShowProgress();
+        $.ajax({
+            type: 'POST',
+            url: '/Purchase/ContractPaymentDetailsLines',
+            data: JSON.stringify({ PRN: PRN, LineLineNo: LineNo, ContractToPay: ContractToPay  }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $('#modalBody').html(response);
+                $('#myModal').find('.modal-title').html("Contract Payment Details");
+                $('#myModal').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Error', `Failed to send data. Please try again. ${error}`, 'error');
+            }
+        });
+    }
+
+          function AddPaymentDetails(LineNo, PRN, ContractNoToPay) {
+        $.ajax({
+            type: 'POST',
+            url: '/Purchase/NewContractPaymentDetailsLines',
+            data: JSON.stringify({ ContractNoToPay: ContractNoToPay, LineLineNo: LineNo, PRN: PRN }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $('#modalBody').html(response);
+                $('#myModal').find('.modal-title').html("New Contract Payment Details");
+                $('#myModal').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                Swal.fire('Error', 'Failed to send data. Please try again.', 'error');
+            }
+        });
+    }
+
+
+
+    function SendDocForApproval(PurchaseRequisitionNo) {
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You want to send this document for approval?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: `/Home/SendDocForApproval?DocumentNo=${PurchaseRequisitionNo}`,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgressing();
+                    },
+                    success: function (status) {
+                        HideProgressing();
+                        if (status == "success") {
+                            swal.fire('Success!', 'Document Sent Successfully for Approval', 'success', true);
+                            window.location.href = '/Home/ApprovedPurchaseRequisition';
+                        } else {
+                            swal.fire('Error!', status, 'error', true);
+                        }
+                    },
+                    error: function () {
+                        HideProgressing();
+                        swal.fire('Error!', 'An error occurred while sending the document for approval', 'error', true);
+                    }
+                });
+            }
+        });
+	}
+
+
+	function UpdateDocument() {
+		var docNo = '@Model.No';
+		var solicitationType = $('#ddlPPSolicitationType').val();
+		var procurementMethod = $('#ddlPPProcurementMethod').val();
+        var invitationNoticeType = $('#PPInvitationNoticeType').val();
+		var preferenceReservationCode = $('#ddlPPPreferenceReservationCode').val();
+
+		//if (!docNo) {
+		//	Swal.fire('Validation Error', 'Document Number is required.', 'warning').then(function () {
+		//		$('#docNo').focus();
+		//	});
+		//	return;
+		//}
+
+
+		if (!solicitationType) {
+			Swal.fire('Validation Error', 'Solicitation Type is required.', 'warning').then(function () {
+				$('#ddlPPSolicitationType').focus();
+			});
+			return;
+		}
+
+		if (!procurementMethod) {
+			Swal.fire('Validation Error', 'Procurement Method is required.', 'warning').then(function () {
+				$('#ddlPPProcurementMethod').focus();
+			});
+			return;
+		}
+
+		if (!invitationNoticeType) {
+			Swal.fire('Validation Error', 'Invitation Notice Type is required.', 'warning').then(function () {
+                $('#PPInvitationNoticeType').focus();
+			});
+			return;
+		}
+
+		if (!preferenceReservationCode) {
+			Swal.fire('Validation Error', 'Preference Reservation Code is required.', 'warning').then(function () {
+				$('#ddlPPPreferenceReservationCode').focus();
+			});
+			return;
+		}
+
+		ShowProgress();
+
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({
+				docNo: docNo,
+				solicitationType: solicitationType,
+				procurementMethod: procurementMethod,
+				invitationNoticeType: invitationNoticeType,
+				preferenceReservationCode: preferenceReservationCode
+			}),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/Purchase/UpdateProcurementDocument',
+			success: function (response) {
+				HideProgress();
+				if (response.success) {
+				//	CreateInvitaionNotice();
+                    Swal.fire('Success', 'Document updated successfully.', 'success');
+                    window.location.reload();
+				} else {
+					Swal.fire('Error', response.message, 'error');
+				}
+			},
+			error: function (xhr, status, error) {
+				HideProgress();
+				Swal.fire('Error', 'An error occurred: ' + error, 'error');
+			}
+		});
+          }
+
+    var CreateDirectLPO = function() {
+        var DocNo = '@Model.No';
+
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                DocNo: DocNo
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/CreateDirectLPO',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Are you sure you want to generate a PO for this transaction?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, create PO',
+                        cancelButtonText: 'No, cancel',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire('Success', `Purchase Order ${data.DocNo} created successfully.`, 'success');
+                            window.location.reload();
+                        } else {
+                            Swal.fire('Cancelled', 'Purchase Order creation was cancelled.', 'info');
+                        }
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                let errorMessage = err.responseText ? err.responseText : 'An unknown error occurred';
+                Swal.fire('Warning', errorMessage, 'warning');
+            }
+        });
+    }
+
+	var CreateInvitationNotice = function () {
+	var docNo = '@Model.No';
+
+	ShowProgress();
+
+	$.ajax({
+		async: true,
+		type: "POST",
+		dataType: "json",
+		data: JSON.stringify({
+			docNo: docNo,
+
+		}),
+		contentType: "application/json; charset=utf-8",
+		processData: false,
+		url: '/Purchase/CreateInvitationNotice',
+		success: function (data) {
+			HideProgress();
+			if (data.success === true) {
+                window.location = "/Purchase/RequestForQuotations";
+				Swal.fire('Success', 'Document updated and invitation Created successfully.', 'success');
+			} else {
+				Swal.fire('Error', data.message, 'error');
+			}
+		},
+		error: function (err) {
+			HideProgress();
+			Swal.fire('Warning', err.responseText, 'warning');
+		}
+    });
+
+
+
+
+
+    };
+
+    var EditAssingedPRNLine = function (DocNo, LineNo, AwardQnty, AwardUntCst, AwardLineAmount) {
+        ShowProgress();
+        $.ajax({
+            type: 'POST',
+            url: '/Purchase/EditAssingedPRNLines',
+            data: JSON.stringify({ DocNo, LineNo, AwardQnty, AwardUntCst, AwardLineAmount }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                $('#modalBody').html(response);
+                $('#myModal').find('.modal-title').html("Awarded Details");
+                $('#myModal').modal('show');
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Error', `Failed to send data. Please try again. ${error}`, 'error');
+            }
+        });
+    }
+</script>

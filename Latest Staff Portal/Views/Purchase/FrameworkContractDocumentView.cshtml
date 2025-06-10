@@ -1,0 +1,474 @@
+﻿@model Latest_Staff_Portal.ViewModel.FrameworkContractCard
+
+
+@{
+    ViewBag.Title = "RequestForQuotationsDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="FrameworkContractLink();">Framework Contact</a>
+                </li>
+                <li class="breadcrumb-item active">Framework Contract (@Model.Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+
+<div class="card">
+
+    <div class="text-center mt-5">
+        <h4>Framework Contract Document (@Model.Code)</h4>
+    </div>
+    <hr />
+
+    <div style="text-align:right" id="HideEditButton">
+        @*@{
+                if (@Model.Status == "Open")
+                {
+                    <div style="text-align:right" id="HideEditButton">
+                        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="btnEdit" value="Edit Header" onclick="EditDocument();" />
+                    </div>
+                }
+            }*@
+    </div>
+
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("External Document No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.External_Document_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PRN No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PRN_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Responsibility Center ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Responsibility_Center, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Location_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Tender Name ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Tender_Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Tender Summary ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Tender_Summary, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Type ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requisition Product Group ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Requisition_Product_Group, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Category ID ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Category_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Category ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Solicitation Type ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Solicitation_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Purchaser Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Purchaser_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Language Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Language_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created Date Time ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Created_Date_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created By ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Created_by, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Framework Agreement No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Framework_Agreement_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Awarded_Quote_No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Awarded_Quote_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Awarded Bidder No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Awarded_Bidder_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Awarded Bidder Name ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Awarded_Bidder_Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Awarded Bidder Sum ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Awarded_Bidder_Sum, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requesting Region ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Requesting_Region, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requesting Directorate ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Requesting_Directorate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requesting_Department ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Requesting_Department, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Plan ID ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Plan_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Plan Entry No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Plan_Entry_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Job ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Job, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Job Task No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Job_Task_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Planning Category ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Planning_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Funding Source ID ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Funding_Source_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Total Budget ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Total_Budget, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Total Actual Costs ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Total_Actual_Costs, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Total Commitments ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Total_Commitments, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Total Available Budget ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Total_Available_Budget, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Preference Reservation_Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Preference_Reservation_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Financial Year Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Financial_Year_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Project ID ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Project_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <div align="center" id="DivUpdateButton">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdatePurchaseHeader();" />
+        </div>
+        <div id="DivPurchaseRegLines">
+            <hr style="border:1px solid black" />
+            <b>Purchase Lines</b>
+            <hr />
+            <div id="divFrameworkContractLines"></div>
+            <hr style="border:1px solid black" />
+        </div>
+
+    </div>
+
+
+    @{
+        if (Model.Status == "Open")
+        {
+            <div align="center">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.Code) For Approval" onclick="SendDocForApproval('@Model.Code');" />
+            </div>
+        }
+    }
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadFrameworkContractDocumentLines(`@Model.Code` , `@Model.Status`);
+        var status = `@Model.Status`;
+        HideHeaderEditInput(status);
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+    });
+    var LoadFrameworkContractDocumentLines = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/Purchase/FrameworkContractLines",
+            success: function (data) {
+                $("#divFrameworkContractLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var FrameworkContractLink = function () {
+        ShowProgress();
+        window.location = "/Purchase/FrameworkContract";
+    }
+
+     var AddFrameworkContractLine = function () {
+       @*  var Strategy_Plan_ID = '@Model.Strategy_Plan_ID';*@
+         var Code = '@Model.Code';
+
+
+         ShowProgress();
+
+         $.ajax({
+             async: true,
+             type: "GET",
+             dataType: "html",
+             url: '/Purchase/NewFrameworkContractLine',
+             data: {
+                 Code: Code
+             },
+             success: function (data) {
+                 $("#modalBody").html(data);
+                 HideProgress();
+                 $("#myModal").modal("show");
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Warning', err.responseText, 'warning');
+             }
+         });
+ }
+
+
+</script>
+

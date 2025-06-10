@@ -1,0 +1,126 @@
+﻿@using Latest_Staff_Portal.Models
+@{
+    ViewBag.Title = "InvitationToTendersDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+@{
+    var Exists = CommonClass.LeavePlannerExists(Session["Username"].ToString());
+}
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	hr {
+		margin: 4px;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Procurement</a>
+                </li>
+                <li class="breadcrumb-item active">Approved Tender Invitation</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="card-body">
+    @{
+        if (!Exists)
+        {
+            <div style="text-align:right">
+                <input type="button" style="background: #162f25; color:whitesmoke; padding: 1px 5px; border-radius:10px" id="btnEdit" value="New Tender Invitation" onclick=""/>
+            </div>
+        }
+    }
+    <hr/>
+    <div id="divInvitationToTenderList"></div>
+</div>
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		LoadInvitationToTender();
+	});
+	var LoadInvitationToTender = function () {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "GET",
+			dataType: 'HTML',
+			contentType: false,
+			processData: false,
+			url: "/Purchase/InvitationToTenderListPartialView",
+			success: function (data) {
+				$("#divInvitationToTenderList").html(data);
+				HideProgress();
+			},
+			error: function () {
+				HideProgress();
+				alert("There is some problem to process your request. Please try after some time");
+			}
+		});
+	}
+
+	var ViewDoc = function (DocNo) {
+		ShowProgress();
+		window.location = "/Purchase/InvitationDocumentView?DocNo=" + DocNo;
+	}
+</script>

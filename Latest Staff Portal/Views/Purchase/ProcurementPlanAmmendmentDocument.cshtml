@@ -1,0 +1,1325 @@
+﻿@model Latest_Staff_Portal.ViewModel.ProcurementPlanAmmendments
+
+@{
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="ProcurementPlanAmmendmentsLink();">Procurement Plan Ammendments List </a>
+                </li>
+                <li class="breadcrumb-item active">Procurement Plan Ammendments Document(@Model.Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+<div class="card">
+    <div class="card-header">
+        <div style="text-align:right">
+
+
+            @{
+                if (Model.ApprovalStatus == "Open")
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="SendDocForApproval(`@Model.Code`);">
+                        <i class="fa fa-check" aria-hidden="true"></i> Send For Approval
+                    </button>
+
+
+                }
+
+                if (Model.ApprovalStatus == "Pending Approval")
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ViewApprovalTrail(`@Model.Code`);">
+                        <i class="fa fa-check" aria-hidden="true"></i> Approval Trail
+                    </button>
+
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="cancelDocApprovalRequest(`@Model.Code`);">
+                        <i class="fa fa-check" aria-hidden="true"></i> Cancel Approval
+                    </button>
+                }
+
+                if (Model.ApprovalStatus == "Approved")
+                {
+
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ViewApprovalTrail(`@Model.Code`);">
+                        <i class="fa fa-check" aria-hidden="true"></i> Approval Trail
+                    </button>
+                }
+            }
+
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="GetApprovalComments(`@Model.Code`);">
+                <i class="fa fa-list" aria-hidden="true"></i> Comments
+            </button>
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ReportType();">
+                <i class="fa fa-file-alt" aria-hidden="true"></i> Generate Report
+            </button>
+            @*  <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="GeneratePlanRevisionReport(`@Model.Code`);">
+                    <i class="fa fa-file-alt" aria-hidden="true"></i> Print Report
+                </button>*@
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-6" })
+
+                    @Html.EditorFor(model => model.Global_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Global_Dimension_1_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Admin Unit", htmlAttributes: new { @class = "control-label col-md-6" })
+
+                    @Html.EditorFor(model => model.Global_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Global_Dimension_2_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Plan No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.PlanNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.PlanNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approval Status", htmlAttributes: new { @class = "control-label col-md-6" })
+
+                    @Html.EditorFor(model => model.ApprovalStatus, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.ApprovalStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Ammendment Reason", htmlAttributes: new { @class = "control-label col-md-6" })
+
+                    @Html.EditorFor(model => model.Ammendment_Reason, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Ammendment_Reason, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date Created", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.DateCreated, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Time Created", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.TimeCreated, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.TimeCreated, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <!--<div align="center">
+            <button type="button" class="btn btn-primary waves-effect waves-light" onclick="UpdateDocument('@Model.Code');">
+                <i class="fas fa-sync-alt"></i> Update-->
+        @*& Create Invitation Notice (@Model.No)*@
+        <!--</button>
+        </div>-->
+
+        <div id="DivPPAmmendmendLines" style="margin: 10px 20px">
+            <hr style="border:1px solid black" />
+            <b>Procurement Plan Ammendment Lines</b>
+            <hr />
+            <div id="divLines" class="my-4 mb-3"></div>
+            <div id="divLines2" class="my-4"></div>
+
+            <hr style="border:1px solid black" />
+            <b>Document Attachments</b>
+            <hr />
+            <div id="divAttachDocs"></div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////New procurement plan ammendment Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitProcurementPlanAmmendmentEntry();" />
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*//////////////////////Add attachment Modal////////////////////////////*@
+<div class="modal" id="addAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="addAttachmentModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Report Type////////////////////////////*@
+<div class="modal fade" id="myReportTModal" data-toggle="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">Report Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyReportT">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Generate  Report////////////////////////////*@
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Procurement Ammendment Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*////////////////////// Approval Comments////////////////////////////*@
+<div class="modal" id="approvalCommentsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="approvalCommentsModalBody">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        LoadProcurementsPlanAmmendmentsLines(`@Model.Code`);
+
+        /*GetDocumentAttachments();*/
+        @*var status = `@Model.Status`;*@
+        /* HideHeaderEditInput(status);*/
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+         if (Successmsg != "") {
+             Swal.fire('Success', Successmsg, 'success', true);
+             $.ajax({
+                 type: "POST",
+                 url: "/Common/NullibySessions"
+             });
+         }
+    });
+
+    var LoadProcurementsPlanAmmendmentsLines = function (Code) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Code: Code }),
+            url: "/Purchase/ProcurementPlanAmmendmentLines",
+            success: function (data) {
+                $("#divLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+               @* LoadProcurementPlanActivityScheduleLines(`@Model.Code`)*@
+            },
+            error: function () {
+                GetDocumentAttachments();
+               @* LoadProcurementPlanActivityScheduleLines(`@Model.Code`)*@
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var ViewPlanEntries = function (ProcurementPlanID, PlanningCategory) {
+
+        var ApprovalStatus = `@Model.ApprovalStatus`;
+        var Plan_No = `@Model.PlanNo`
+
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ ProcurementPlanID: ProcurementPlanID, Plan_No: Plan_No, PlanningCategory: PlanningCategory, Approval_Status: ApprovalStatus }),
+            url: "/Purchase/ProcurementPlanRevisionEntriesLines",
+            success: function (data) {
+                $("#divLines2").html(data);
+                HideProgress();
+                /* GetDocumentAttachments();*/
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    function CreateProcplanLines(procurementPlanID, Plan_No, PlanningCategory) {
+        // Update modal title
+        $("#labelF").text("New Procurement Plan Amendment Entry");
+
+        // Show progress indicator
+        ShowProgress();
+
+        // AJAX request
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            url: '/Purchase/NewProcurementPlanAmmendmentEntry',
+            data: JSON.stringify({ ProcurementPlanID: procurementPlanID, RevisedPlanNo: Plan_No, PlanningCategory: PlanningCategory }), // Send parameters
+            success: function (data) {
+                // Load response into modal body
+                $("#modalBody").html(data);
+                HideProgress();
+                // Show modal
+                $("#myModal").modal("show");
+            },
+            error: function (xhr) {
+                HideProgress();
+                // Display meaningful error
+                Swal.fire('Warning', xhr.responseText || "An error occurred while processing your request.", 'warning');
+            }
+        });
+    }
+
+    function SendDocForApproval(Code) {
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You want to send this document for approval?",
+            icon: 'warning', // Updated 'type' to 'icon' as per SweetAlert2 documentation
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) { // Updated to 'isConfirmed' per SweetAlert2
+                $.ajax({
+                    type: "POST",
+                    url: "/Purchase/SendProcPlanRevisionApproval",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ DocNo: Code }), // Ensure data is sent as JSON
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            swal.fire('Success!', 'Document Sent Successfully for Approval', 'success')
+                                .then(() => {
+                                    ViewDoc(response.message);
+                                    //window.location.href = response.message; // Redirect to the provided URL
+                                });
+                        } else {
+                            swal.fire('Error!', response.message, 'error'); // Show the error message from the server
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        swal.fire('Error!', 'An unexpected error occurred while sending the document for approval.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+
+    function GetApprovalComments2(Code) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            url: "/Purchase/ApprovalComments",
+            data: JSON.stringify({ Code: Code }),
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                $("#approvalCommentsModalBody").html(data);
+                $("#approvalCommentsModal").modal("show");
+            },
+            error: function (xhr) {
+                HideProgress();
+                Swal.fire('Warning', xhr.responseText || "An error occurred while processing your request.", 'warning');
+            }
+        });
+    }
+
+
+    var GetApprovalComments = function (Code) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ Code: Code }),
+            url: "/Purchase/ApprovalComments",
+            success: function (data) {
+                HideProgress();
+                $("#approvalCommentsModalBody").html(data);
+                $("#approvalCommentsModal").modal("show");
+
+
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    }
+
+
+
+
+
+    function cancelDocApprovalRequest(Code) {
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You want to cancel the approval?",
+            icon: 'warning', // Updated 'type' to 'icon' as per SweetAlert2 documentation
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) { // Updated to 'isConfirmed' per SweetAlert2
+                $.ajax({
+                    type: "POST",
+                    url: "/Purchase/CancelProcPlaRevApproval",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ DocNo: Code }), // Ensure data is sent as JSON
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgress();
+                    },
+                    success: function (response) {
+                        HideProgress();
+                        if (response.success) {
+                            swal.fire('Success!', 'Document Approval Cancelled', 'success')
+                                .then(() => {
+                                    ViewDoc(response.message);
+                                   //window.location.href = response.message; // Redirect to the provided URL
+                                });
+                        } else {
+                            swal.fire('Error!', response.message, 'error'); // Show the error message from the server
+                        }
+                    },
+                    error: function () {
+                        HideProgress();
+                        swal.fire('Error!', 'An unexpected error occurred while sending the document for approval.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function PostProcurementPlan(Code) {
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You want to post this document?",
+            icon: 'warning', // Updated 'type' to 'icon' as per SweetAlert2 documentation
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) { // Updated to 'isConfirmed' per SweetAlert2
+                $.ajax({
+                    type: "POST",
+                    url: "/Purchase/postProcurementPlan",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ DocNo: Code }), // Ensure data is sent as JSON
+                    dataType: "json",
+                    beforeSend: function () {
+                        ShowProgressing();
+                    },
+                    success: function (response) {
+                        HideProgressing();
+                        if (response.success) {
+                            swal.fire('Success!', 'Document Sent Successfully Posted', 'success')
+                                .then(() => {
+                                    ViewDoc(response.message);
+                                    //window.location.href = response.message; // Redirect to the provided URL
+                                });
+                        } else {
+                            swal.fire('Error!', response.message, 'error'); // Show the error message from the server
+                        }
+                    },
+                    error: function () {
+                        HideProgressing();
+                        swal.fire('Error!', 'An unexpected error occurred while sending the document for approval.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+	function UpdateDocument() {
+		var docNo = '@Model.Code';
+		var solicitationType = $('#ddlPPSolicitationType').val();
+		var procurementMethod = $('#ddlPPProcurementMethod').val();
+        var invitationNoticeType = $('#PPInvitationNoticeType').val();
+		var preferenceReservationCode = $('#ddlPPPreferenceReservationCode').val();
+
+		//if (!docNo) {
+		//	Swal.fire('Validation Error', 'Document Number is required.', 'warning').then(function () {
+		//		$('#docNo').focus();
+		//	});
+		//	return;
+		//}
+
+
+		if (!solicitationType) {
+			Swal.fire('Validation Error', 'Solicitation Type is required.', 'warning').then(function () {
+				$('#ddlPPSolicitationType').focus();
+			});
+			return;
+		}
+
+		if (!procurementMethod) {
+			Swal.fire('Validation Error', 'Procurement Method is required.', 'warning').then(function () {
+				$('#ddlPPProcurementMethod').focus();
+			});
+			return;
+		}
+
+		if (!invitationNoticeType) {
+			Swal.fire('Validation Error', 'Invitation Notice Type is required.', 'warning').then(function () {
+                $('#PPInvitationNoticeType').focus();
+			});
+			return;
+		}
+
+		if (!preferenceReservationCode) {
+			Swal.fire('Validation Error', 'Preference Reservation Code is required.', 'warning').then(function () {
+				$('#ddlPPPreferenceReservationCode').focus();
+			});
+			return;
+		}
+
+		ShowProgress();
+
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({
+				docNo: docNo,
+				solicitationType: solicitationType,
+				procurementMethod: procurementMethod,
+				invitationNoticeType: invitationNoticeType,
+				preferenceReservationCode: preferenceReservationCode
+			}),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/Purchase/UpdateProcurementDocument',
+			success: function (response) {
+				HideProgress();
+				if (response.success) {
+				//	CreateInvitaionNotice();
+					Swal.fire('Success', 'Document updated successfully.', 'success');
+				} else {
+					Swal.fire('Error', response.message, 'error');
+				}
+			},
+			error: function (xhr, status, error) {
+				HideProgress();
+				Swal.fire('Error', 'An error occurred: ' + error, 'error');
+			}
+		});
+    }
+
+    function SubmitUpdatedProcurementPlanAmmendmentEntry(procurementPlanID, entryNo, PlanningCategory) {
+
+       // Collect data from the form
+        var formData = {
+            docNo: '@Model.Code',
+            docType: '@Model.Type',
+            PlanningCategory: PlanningCategory,
+            ProcurementPlanID: procurementPlanID,
+            EntryNo: $('#EntryNo_' + entryNo).val(),
+
+            PlanItemType: $('#PlanItemType_' + entryNo).val(),
+            PlanItemNo: $('#PlanItemNo_' + entryNo).val(),
+            Description: $('#Desc_' + entryNo).val(),
+            Procurement_Type: $('#Procurement_Type_' + entryNo).val(),
+
+            Procurement_Method: $('#Procurement_Method_' + entryNo).val(),
+            Alternative_Procurement_Methods: $('#Alternative_Procurement_Methods_' + entryNo).val(),
+           /* Funding_Source_ID: $('#Funding_Source_ID_' + entryNo).val(),*/
+            Requisition_Product_Group: $('#Requisition_Product_Group_' + entryNo).val(),
+            Quantity: $('#Quantity_' + entryNo).val(),
+            Unit_Cost: $('#Unit_Cost_' + entryNo).val(),
+            Shortcut_Dimension_3_Code: $('#Shortcut_Dimension_3_Code_' + entryNo).val(),
+            Shortcut_Dimension_4_Code: $('#Shortcut_Dimension_4_Code_' + entryNo).val(),
+            Shortcut_Dimension_5_Code: $('#Shortcut_Dimension_5_Code_' + entryNo).val(),
+            Shortcut_Dimension_6_Code: $('#Shortcut_Dimension_6_Code_' + entryNo).val(),
+            Q1_Quantity: $('#Q1_Quantity_' + entryNo).val(),
+            Q1_Amount: $('#Q1_Amount_' + entryNo).val(),
+
+            Q2_Quantity: $('#Q2_Quantity_' + entryNo).val(),
+            Q2_Amount: $('#Q2_Amount_' + entryNo).val(),
+
+            Q3_Quantity: $('#Q3_Quantity_' + entryNo).val(),
+            Q3_Amount: $('#Q3_Amount_' + entryNo).val(),
+
+            Q4_Quantity: $('#Q4_Quantity_' + entryNo).val(),
+            Q4_Amount: $('#Q4_Amount_' + entryNo).val(),
+
+            AGPO_Percent: $('#AGPO_Percentage_' + entryNo).val(),
+            PWD_Percent: $('#PWD_Percent_' + entryNo).val(),
+            Women_Percent: $('#Women_Percent_' + entryNo).val(),
+            Youth_Percent: $('#Youth_Percent_' + entryNo).val(),
+            Citizen_Contractors_Percent: $('#Citizen_Contractors_Percent_' + entryNo).val(),
+            Action_Taken: $('#Action_Taken_' + entryNo).val(),
+            Status: $('#Status_' + entryNo).val()
+        };
+
+
+
+        switch (formData.docType) {
+            case "Functional":
+                formData.docType = 0;
+                break;
+
+            case "Consolidated":
+                formData.docType = 1;
+                break;
+
+        }
+
+        switch (formData.Action_Taken) {
+            case "Retained": // Retained
+                formData.Action_Taken = 0;
+                break;
+
+            case "Editted": // Editted
+                formData.Action_Taken = 1;
+                break;
+
+            case "Delete": // Delete
+                formData.Action_Taken = 2;
+                break;
+
+            case "Addition": // Addition
+                formData.Action_Taken = 3;
+                break;
+
+
+        }
+
+       /* switch (formData.Requisition_Product_Group) {
+            case "Goods":
+                formData.Requisition_Product_Group = 0;
+                break;
+
+            case "Services":
+                formData.Requisition_Product_Group = 1;
+                break;
+
+            case "Works":
+                formData.Requisition_Product_Group = 2;
+                break;
+
+            case "Assets":
+                formData.Requisition_Product_Group = 3;
+                break;
+        }*/
+
+        switch (formData.Procurement_Method) {
+            case "Open Tender":
+                formData.Procurement_Method = 1;
+                break;
+
+            case "RFQ":
+                formData.Procurement_Method = 2;
+                break;
+
+            case "RFP":
+                formData.Procurement_Method = 3;
+                break;
+
+            case "Two Stage Tender":
+                formData.Procurement_Method = 4;
+                break;
+
+
+            case "Design Competition Tender":
+                formData.Procurement_Method = 5;
+                break;
+
+            case "Restricted Tender":
+                formData.Procurement_Method = 6;
+                break;
+
+
+            case "Direct Procurement":
+                formData.Procurement_Method = 7;
+                break;
+
+            case "Low Value Procurement":
+                formData.Procurement_Method = 8;
+                break;
+
+            case "Force Account":
+                formData.Procurement_Method = 9;
+                break;
+
+            case "Framework Agreement":
+                formData.Procurement_Method = 10;
+                break;
+
+            case "Reverse Auction":
+                formData.Procurement_Method = 11;
+                break;
+
+            default:
+                formData.Procurement_Method = 0;
+                break
+
+
+
+        }
+
+        switch (formData.PlanItemType) {
+            case "Item": // Retained
+                formData.PlanItemType = 0;
+                break;
+
+            case "Fixed Asset": // Editted
+                formData.PlanItemType = 1;
+                break;
+        }
+
+        //percentages validation
+        var isValid = true;
+        var NewAGPOPercentValue = Number(formData.Youth_Percent) + Number(formData.Women_Percent) + Number(formData.PWD_Percent);
+        formData.AGPO_Percent = NewAGPOPercentValue;
+        var TotalPercentageValidation = Number(formData.Citizen_Contractors_Percent) + Number(formData.AGPO_Percent);
+
+        // Total Percentage Validation checks
+        if (TotalPercentageValidation != 100) {
+            Swal.fire('Warning', 'AGPO + Citizen distribution should be equal to 100', 'warning');
+            isValid = false;
+        }
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        // Prepare data object
+        var updatePlanEntry = formData;
+
+	    ShowProgress();
+
+	    $.ajax({
+		    async: true,
+		    type: "POST",
+		    dataType: "json",
+            data: JSON.stringify(updatePlanEntry),
+		    contentType: "application/json; charset=utf-8",
+		    processData: false,
+            url: '/Purchase/SubmitUpdatedEntry',
+		    success: function (response) {
+			    HideProgress();
+			    if (response.success) {
+                    Swal.fire('Success', 'Record updated successfully.', 'success');
+                    ViewDoc(response.message);
+			    } else {
+				    Swal.fire('Error', response.message, 'error');
+			    }
+		    },
+		    error: function (xhr, status, error) {
+			    HideProgress();
+			    Swal.fire('Error', 'An error occurred: ' + error, 'error');
+		    }
+	    });
+    }
+
+    function SubmitProcurementPlanAmmendmentEntry() {
+        var isValid = true;
+        docNo = '@Model.Code';
+
+        // Collect data from the form
+        var formDetails = {
+            docNo: docNo,
+            procurementPlanID: $('#ProcurementPlanID').val(),
+            Planning_Category: $('#Planning_Category').val(),
+
+            PlanItemType: $('#PlanItemType').val(),//this*******************************************
+            PlanItemNo: $('#PlanItemNo').val(),
+            Description: $('#Desc').val(),
+            Procurement_Type: $('#Procurement_Type').val(),// THIS...................................................
+
+            Procurement_Method: $('#Procurement_Method').val(),//this*******************************************
+            Alternative_Procurement_Methods: $('#Alternative_Procurement').val(),
+            Preference_Reservation_Code: $('#Preference_Reservation_Code').val(),
+           /* Funding_Source_ID: $('#Funding_Source_ID').val(),*/
+           /* Requisition_Product_Group: $('#Requisition_Product_Group').val(),*///this*******************************************
+            Quantity: $('#Quantity').val(),
+            Unit_Cost: $('#Unit_Cost').val(),
+            Line_Budget_Cost: $('#Line_Budget_Cost').val(),
+            Shortcut_Dimension_3_Code: $('#Shortcut_Dimension_3_Code').val(),
+            Shortcut_Dimension_4_Code: $('#Shortcut_Dimension_4_Code').val(),
+            Shortcut_Dimension_5_Code: $('#Shortcut_Dimension_5_Code').val(),
+            Shortcut_Dimension_6_Code: $('#Shortcut_Dimension_6_Code').val(),
+            Q1_Quantity: $('#Q1_Quantity').val(),
+            Q1_Amount: $('#Q1_Amount').val(),
+
+            Q2_Quantity: $('#Q2_Quantity').val(),
+            Q2_Amount: $('#Q2_Amount').val(),
+
+            Q3_Quantity: $('#Q3_Quantity').val(),
+            Q3_Amount: $('#Q3_Amount').val(),
+
+            Q4_Quantity: $('#Q4_Quantity').val(),
+            Q4_Amount: $('#Q4_Amount').val(),
+
+            AGPO_Percent: $('#AGPO_Percent').val(),
+            PWD_Percent: $('#PWD_Percent').val(),
+            Women_Percent: $('#Women_Percent').val(),
+            Youth_Percent: $('#Youth_Percent').val(),
+            Citizen_Contractors_Percent: $('#Citizen_Contractors_Percent').val(),
+            Action_Taken: $('#Action_Taken').val()
+        }
+
+        // Validation checks
+        if (!formDetails.PlanItemType) {
+            Swal.fire('Warning', 'Please select Plan Item Type.', 'warning');
+            isValid = false;
+            return;
+        }
+
+        if (!formDetails.Procurement_Type) {
+            Swal.fire('Warning', 'Please select Procurement Type.', 'warning');
+            isValid = false;
+            return;
+        }
+
+        if (!formDetails.Procurement_Method) {
+            Swal.fire('Warning', 'Please select Procurement Method.', 'warning');
+            isValid = false;
+            return;
+        }
+
+        if (!formDetails.Unit_Cost) {
+            Swal.fire('Warning', 'Enter Unit Cost.', 'warning');
+            isValid = false;
+            return;
+        }
+
+        //percentages validation
+        var AGPOPercentValue = Number(formDetails.Youth_Percent) + Number(formDetails.Women_Percent) + Number(formDetails.PWD_Percent);
+        formDetails.AGPO_Percent = AGPOPercentValue;
+        var TotalPercentageValidation = Number(formDetails.Citizen_Contractors_Percent) + Number(formDetails.AGPO_Percent);
+
+        // Total Percentage Validation checks
+        if (TotalPercentageValidation != 100) {
+            Swal.fire('Warning', 'AGPO + Citizen distribution should be equal to 100', 'warning');
+            isValid = false;
+        }
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+
+      // Prepare data object
+        var createPlanEntry = formDetails;
+        ShowProgress();
+
+       $.ajax({
+           async: true,
+           type: "POST",
+           dataType: "json",
+           data: JSON.stringify(createPlanEntry),
+           contentType: "application/json; charset=utf-8",
+           processData: false,
+           url: '/Purchase/SubmitProcurementPlanAmmendmentEntry',
+           success: function (response) {
+	            HideProgress();
+	            if (response.success) {
+                        Swal.fire('Success', 'Record successfully submitted.', 'success');
+                        ViewDoc(response.message);
+	            } else {
+		            Swal.fire('Error', response.message, 'error');
+	            }
+            },
+            error: function (xhr, status, error) {
+	            HideProgress();
+	            Swal.fire('Error', 'An error occurred: ' + error, 'error');
+            }
+       });
+    }
+
+
+    var ViewDoc = function (Code) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/Purchase/ProcurementPlanAmmendmentDocument',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'Code',
+            value: Code
+        }));
+        form.appendTo('body').submit();
+    };
+
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "HR Leave Application: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var ReportType = function () {
+        ShowProgress();
+        $.ajax({
+            url: '/Purchase/ReportType',
+            datatype: "json",
+            type: "POST",
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                $("#modalBodyReportT").html(data);
+                HideProgress();
+                $("#myReportTModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    var GetReportByType = function () {
+          var documentNo = '@Model.Code';
+          var reportType = $("#ddlType").children("option:selected").val();
+          ShowProgress();
+
+          $.ajax({
+              async: true,
+              datatype: "json",
+              type: "POST",
+              data: JSON.stringify({ documentNumber: documentNo, reportType: reportType }),
+              processData: false,
+              contentType: "application/json; charset=utf-8",
+              url: '/Purchase/GetAmmendmentReportByType',
+              success: function (data) {
+                  HideProgress();
+
+                  if (data.success) {
+                      if (reportType === "1") {
+                          try {
+                              const byteCharacters = atob(data.message);
+                              const byteArray = new Uint8Array([...byteCharacters].map(char => char.charCodeAt(0)));
+                              const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                              const link = document.createElement('a');
+                              const url = URL.createObjectURL(blob);
+
+                              link.href = url;
+                              link.download = `${documentNo}_Functional_Procurement_Plan.xlsx`;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+
+                              URL.revokeObjectURL(url); // Free up memory
+
+                              $("#myReportTModal").modal("hide");
+                          } catch (error) {
+                              console.error("Error processing file:", error);
+                              alert("Failed to generate the report. Please try again.");
+                          }
+                      } else {
+                          $("#myReportTModal").modal("hide");
+                          $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                          $("#myModalUnits").modal("show");
+                          HideProgress();
+                      }
+                  } else {
+                      Swal.fire('Warning', data.message, 'warning');
+                  }
+              },
+              error: function (err) {
+                  HideProgress();
+                  Swal.fire('Warning', err, 'warning');
+              }
+          });
+    }
+
+
+
+    var GeneratePlanRevisionReport = function (DocNo) {
+        var DocNo = '@Model.Code';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/GeneratePlanRevisionReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    //attachments
+    var GetDocumentAttachments = function () {
+        var DocNo = `@Model.Code`;
+        var status = '@Model.ApprovalStatus';
+
+        $.ajax({
+	        async: true,
+	        type: "POST",
+	        datatype: "json",
+	        contentType: "application/json; charset = utf-8",
+	        processData: false,
+            data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+            url: "/Common/EdmsDocumentAttachmentList",
+	        success: function (data) {
+		        $("#divAttachDocs").html(data);
+	        },
+	        error: function () {
+		        Swal.fire("There is some problem to process your request. Please try after some time");
+	        }
+        });
+    };
+    var AddAttachment = function () {
+        $("#labelF").text("File Upload");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "GET",
+            datatype: "html",
+            url: '/Common/FileUploadForm',
+            success: function (data) {
+                $("#addAttachmentModalBody").html(data);
+                HideProgress();
+                $("#addAttachmentModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var SaveAttachmentFile = function () {
+        var DocNo = `@Model.Code`;
+        var filename; var base64String; var filetype;
+        var files = document.getElementById('AttachmentFile').files;
+        if (files.length) {
+	        var file = files[0];
+            if (file.size > 50000000) {
+                Swal.fire('Warning', 'Please only files less than 50MB allowed. Thanks!!', 'warning');
+            }
+	        else {
+		        var blob = file.slice();
+		        filetype = file.type;
+		        filename = file.name;
+		        var reader = new FileReader();
+		        reader.onloadend = function (evt) {
+			        if (evt.target.readyState == FileReader.DONE) {
+				        var cont = evt.target.result
+				        base64String = getB64Str(cont);
+				        ShowProgress();
+				        $.ajax({
+					        type: "POST",
+					        url: "/Common/SaveAttachedFile",
+                            data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 70098, module: "SCM", documentType:"Procurement Plan Ammendments"}),
+					        contentType: "application/json; charset=utf-8",
+					        dataType: "json",
+					        success: function (data) {
+						        if (data.success) {
+							        HideProgress();
+                                    $("#addAttachmentModal").modal("hide");
+                                    Swal.fire('Success', data.message, 'success');
+                                    ViewDoc(DocNo);
+                                    GetDocumentAttachments();
+						        }
+						        else {
+                                    GetDocumentAttachments();
+							        Swal.fire('Warning', data.message, 'warning');
+							        HideProgress();
+						        }
+					        },
+					        error: function (err) {
+						        HideProgress();
+						        Swal.fire('Warning', err, 'warning');
+					        }
+				        });
+			        }
+		        };
+		        reader.readAsArrayBuffer(blob);
+	        }
+        }
+    };
+    function getB64Str(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    var DeleteAttachment = function (docId, line) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                documentId: docId,
+                lineNo: line
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Common/RemoveFileAsync',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    GetDocumentAttachments();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    GetDocumentAttachments();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+    var ViewAttachment = function (moduleCheck, docNo, docId) {
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        var viewer = $("#modalAttachmentBody");
+        viewer.empty();
+
+        $.ajax({
+            url: '/Common/GetEdmsDocuments',
+            type: "GET",
+            datatype: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: {
+                module: moduleCheck,
+                documentNo: docNo,
+                documentType: "User request",
+                documentId: docId
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.base64) {
+                        var mimeType = data.mimeType || 'application/pdf';
+
+                        if (mimeType.startsWith('application/pdf')) {
+
+                            var byteCharacters = atob(data.base64);
+                            var byteNumbers = new Array(byteCharacters.length);
+                            for (var i = 0; i < byteCharacters.length; i++) {
+                                byteNumbers[i] = byteCharacters.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            var blob = new Blob([byteArray], { type: mimeType });
+                            var blobUrl = URL.createObjectURL(blob);
+
+
+                            viewer.html('<iframe src="' + blobUrl + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                        } else if (mimeType.startsWith('image/')) {
+
+                            viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                        } else {
+                            var blob = b64toBlob(data.base64, mimeType);
+                            var url = window.URL.createObjectURL(blob);
+                            window.open(url, '_blank');
+                        }
+                        $("#myModalAttachment").modal("show");
+                    } else {
+
+                        window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                        Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+            }
+        });
+    };
+    function b64toBlob(base64, contentType) {
+        var byteCharacters = atob(base64);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+            var slice = byteCharacters.slice(offset, offset + 512);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, { type: contentType });
+    }
+
+
+</script>

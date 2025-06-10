@@ -1,0 +1,1953 @@
+﻿@model Latest_Staff_Portal.ViewModel.RequestForQuotationCard
+
+@{
+    ViewBag.Title = "RequestForQuotationsDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 20px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #4CAF50;
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+</style>
+
+
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="RequestForQuotationsLink();">Request For Quotations</a>
+                </li>
+                <li class="breadcrumb-item active">Standard Request For Quotation (@Model.Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+<div class="card">
+    <div class="card-header">
+        <div style="text-align:right; margin-bottom: 20px">
+            @{
+
+                <button class="mb-2" style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GetCommitteeList('@Model.Code');">
+                    <i class="fa fa-list" aria-hidden="true"></i> Committee Members
+                </button>
+                <button class="mb-2" style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GetRFQResponsesList('@Model.Code');">
+                    <i class="fa fa-list" aria-hidden="true"></i> RFQ Responses
+                </button>
+                <button class="mb-2" style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GetRequiredDocuments('@Model.Code');">
+                    <i class="fa fa-list" aria-hidden="true"></i> Required Documents
+                </button>
+                <button class="mb-2" style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="SendRFQ('@Model.Code');">
+                    <i class="fa fa-check" aria-hidden="true"></i> Send RFQ
+                </button>
+                <button class="mb-2" style="background: #162f25; color: whitesmoke; border-radius: 10px; display: none" onclick="GetTenderSecurities('@Model.Code');">
+                    <i class="fa fa-list" aria-hidden="true"></i> Tender Securities
+                </button>
+                <button class="mb-2" style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GetTenderDocumentSources('@Model.Code');">
+                    <i class="fa fa-list" aria-hidden="true"></i> Bid document sources
+                </button>
+
+                <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="SelectVendorToPreviewRFQ('@Model.Code');">
+                    <i class="fa fa-eye" aria-hidden="true"></i> Preview RFQ
+                </button>
+
+                if (Model.Status == "Released" || Model.Status == "Approved")
+                {
+                    <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="PublishInvitation('@Model.Code');">
+                        <i class="fa fa-book" aria-hidden="true"></i> Publish Invitations for @Model.Code
+                    </button>
+                }
+
+
+
+                if (Model.Status == "Open")
+                {
+                    <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="SendDocForApproval('@Model.Code');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Send (@Model.Code) For Approval
+                    </button>
+                }
+
+                else if (Model.Status == "Pending Approval")
+                {
+                    <button style=" background: #162f25; color: whitesmoke; border-radius: 10px" onclick="CancelDocApprovalRequest('@Model.Code');">
+                        <i class="fa fa-close" aria-hidden="true"></i> Cancel (@Model.Code) Approval Request
+                    </button>
+                }
+            }
+
+            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="ViewApprovalTrail('@Model.Code');">
+                <i class="fa fa-list" aria-hidden="true"></i> Approval Trail
+            </button>
+
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="NewIFSTenderCommittee();">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> New  Procurement Committee
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Date ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Document_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("External Document No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.External_Document_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PRN_No ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PRN_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Location Code ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Location_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @id = "Description", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Specification", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Specification, new { @class = "form-control", @id = "Specification" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Location", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDim1, new { @class = "form-control", @id = "GlobalDim1", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Admin Unit", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDim2, new { @class = "form-control", @id = "GlobalDim2", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Type", new { @class = "control-label col-md-12" })
+                    @Html.DropDownListFor(m => m.Procurement_Type, Model.ListOfProcurementTypes, "Select Option", new { @class = "form-control", @id = "Procurement_Type" })
+                </div>
+            </div>
+            @*  <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Requisition Product Group ", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Requisition_Product_Group, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Category ID ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Category_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Target Bidder Group ", new { @class = "control-label col-md-12" })
+                    <select class="form-control" name="Target_Bidder_Group" id="Target_Bidder_Group">
+                        <option value="" @(Model.Target_Bidder_Group == " " ? "selected" : "")>Select Option</option>
+                        <option value="0" @(Model.Target_Bidder_Group == "International Bidders" ? "selected" : "")>International Bidders</option>
+                        <option value="1" @(Model.Target_Bidder_Group == "Citizen" ? "selected" : "")>Citizen</option>
+                        <option value="2" @(Model.Target_Bidder_Group == "AGPO" ? "selected" : "")>AGPO</option>
+                    </select>
+
+                    @* @Html.TextBoxFor(m => m.Target_Bidder_Group, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })*@
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Solicitation Type ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Solicitation_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bid Submission Method ", new { @class = "control-label col-md-12" })
+                    <select class="form-control" name="Bid_Submission_Method" id="Bid_Submission_Method" onchange="handleTenderBoxLocationCode(this.value)">
+                        <option value="" @(Model.Bid_Submission_Method == " " ? "selected" : "")>Select Option</option>
+                        <option value="0" @(Model.Bid_Submission_Method == "Manual Bids" ? "selected" : "")>Manual Bids</option>
+                        <option value="2" @(Model.Bid_Submission_Method == "Fully E-Bid" ? "selected" : "")>Fully E-Bid</option>
+                    </select>
+                    @* @Html.TextBoxFor(m => m.Bid_Submission_Method, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })*@
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procurement Method", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Method, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Sealed Bids", new { @class = "control-label col-md-12" })
+                    <div class="d-flex align-items-center">
+                        <label class="switch">
+                            <input type="checkbox" id="sealedBidsToggle" checked disabled>
+                            <span class="slider round"></span>
+                        </label>
+                        @Html.TextBoxFor(m => m.Sealed_Bids, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd; margin-left: 10px; display: none", @id = "Sealed_Bids" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("RFQ Validity Period ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Tender_Validity_Duration, new { @class = "form-control", @id = "Tender_Validity_Duration" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bid Opening Venue", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Bid_Opening_Venue, new { @class = "form-control", @id = "Bid_Opening_Venue" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group" id="divTenderBoxLocationCode">
+                    @Html.Label("Tender / Quotation  Box Location Code", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Tender_Box_Location_Code, new { @class = "form-control", @id = "Tender_Box_Location_Code" })
+                </div>
+            </div>
+            @*
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Purchaser Code ", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Purchaser_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Procuring Entity", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Procurement_Entity_Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Number Of Invited Bidders", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.No_Of_Invited_Bidders, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Mandatory Special Group Reserve ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Mandatory_Special_Group_Reserv, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            @* <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Appointer of Bid Arbitrator ", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Appointer_of_Bid_Arbitrator, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>
+            *@
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PreBid Meeting Required", new { @class = "control-label col-md-12" })
+                    <div class="d-flex align-items-center">
+                        <label class="switch">
+                            <input type="checkbox" id="PreBid_Meeting_Required" @(Model.PreBid_Meeting_Required ? "checked" : "" ) onchange="handlePreBidMeeting(this)">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Published ", new { @class = "control-label col-md-12" })
+                    <div class="d-flex align-items-center">
+                        <label class="switch">
+                            <input type="checkbox" id="Published" @(Model.Published ? "checked" : "" ) disabled>
+                            <span class="slider round"></span>
+
+                        </label>
+                    </div>
+                    @* @Html.TextBoxFor(m => m.Published, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })*@
+                </div>
+            </div>
+
+            <div class="col-md-6" id="PreBid_Meeting_Venue_div">
+                <div class="form-group">
+                    @Html.Label("PreBid Meeting Venue", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PreBid_Meeting_Venue, new { @class = "form-control", @id = "PreBid_Meeting_Venue" })
+                </div>
+            </div>
+
+            @{
+                string formattedPrebidMeetingDate = string.IsNullOrEmpty(Model.PreBid_Meeting_Date)
+                    ? string.Empty
+                    : DateTime.Parse(Model.PreBid_Meeting_Date).ToString("dd-MM-yyyy"); // Ensure correct format
+            }
+
+            <div class="col-md-6" id="PreBid_Meeting_Date_div">
+                <div class="form-group">
+                    @Html.Label("PreBid Meeting Date", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PreBid_Meeting_Date, new
+                    {
+                        @class = "form-control",
+                        @id = "PreBid_Meeting_Date",
+                        @autocomplete = "off",
+                        @value = Model.PreBid_Meeting_Date != null
+                            ? Convert.ToDateTime(Model.PreBid_Meeting_Date).ToString("dd-MM-yyyy")
+                            : string.Empty,
+                        @type = "text"
+                    })
+                    <div class="a"></div>
+                </div>
+
+            </div>
+
+
+
+            <div class="col-md-6" id="PreBid_Meeting_Time_div">
+                <div class="form-group">
+                    @Html.Label("PreBid Meeting Time", new { @class = "control-label col-md-12" })
+                    @*  @Html.TextBoxFor(m => m.PreBid_Meeting_Time, new { @class = "form-control", @id = "PreBid_Meeting_Time" })*@
+                    <input type="time"
+                           value="@(Model.PreBid_Meeting_Time)"
+                           class="form-control"
+                           id="PreBid_Meeting_Time">
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Date Time Published ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Date_Time_Published, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            @*<div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("No of Submission ", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.No_of_Submission, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created Date Time ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Created_Date_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created by ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Created_by, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+
+            @* <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Procurement Plan ID ", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Procurement_Plan_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+            @*  <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Procurement Plan Entry No ", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.Procurement_Plan_Entry_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PP Planning Category ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.PP_Planning_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", @id = "PP_Planning_Category" })
+                </div>
+            </div>
+            @* <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("PP Funding Source ID ", new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(m => m.PP_Funding_Source_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    </div>
+                </div>*@
+
+
+            @{
+                string formattedsubmissionEndDate = string.IsNullOrEmpty(Model.Submission_End_Date)
+                    ? string.Empty
+                    : DateTime.Parse(Model.Submission_End_Date).ToString("dd-MM-yyyy");
+            }
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Submission End Date", new { @class = "control-label col-md-12" })
+                    <input type="text"
+                           class="form-control"
+                           placeholder="dd/mm/yyyy"
+                           id="submissionEndDate"
+                           onkeydown="return false;"
+                           autocomplete="off"
+                           value="@formattedsubmissionEndDate"
+                           onchange="populateOpeningDate(this.value)" />
+                    <div class="a"></div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Submission End Time", new { @class = "control-label col-md-12" })
+                    @Html.EditorFor(m => m.Submission_End_Time, new { htmlAttributes = new { @class = "form-control", id = "submissionEndTime", type = "time", @onchange = "populateOpeningTime(this.value)" } })
+                </div>
+            </div>
+
+            @{
+                string formattedBidOpeningDate = string.IsNullOrEmpty(Model.Bid_Opening_Date)
+                    ? string.Empty
+                    : DateTime.Parse(Model.Bid_Opening_Date).ToString("dd-MM-yyyy");
+            }
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bid Opening Date", new { @class = "control-label col-md-12" })
+                    <input class="form-control" value="@(formattedBidOpeningDate)" type="text" name="name" id="bidOpeningDate" readonly style="background-color: #dedebd" />
+                </div>
+            </div>
+            @{
+                string formattedBidOpeningTime = string.IsNullOrEmpty(Model.Bid_Opening_Time)
+                    ? string.Empty
+                    : DateTime.Parse(Model.Bid_Opening_Time).ToString("HH:mm");
+            }
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bid Opening Time", new { @class = "control-label col-md-12" })
+                    <input type="time"
+                           value="@formattedBidOpeningTime"
+                           class="form-control"
+                           id="bidOpeningTime"
+                           readonly
+                           style="background-color: #dedebd">
+                </div>
+            </div>
+
+
+            @*<div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Bid Opening Date", new { @class = "control-label col-md-12" })
+                        <input type="text"
+                               class="form-control"
+                               placeholder="dd/mm/yyyy"
+                               id="bidOpeningDate"
+                               onkeydown="return false;"
+                               autocomplete="off"
+                               value="@formattedBidOpeningDate" />
+                        <div class="a"></div>
+                    </div>
+                </div>*@
+
+            @*  <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Bid Opening Time", new { @class = "control-label col-md-12" })
+                        @Html.EditorFor(m => m.Bid_Opening_Time, new { htmlAttributes = new { @class = "form-control", id = "bidOpeningTime", type = "time" } })
+                    </div>
+                </div>
+            *@
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Requires Technical Evaluation", new { @class = "control-label col-md-12" })
+                    <select class="form-control" id="Requires_Technical_Evaluation" name="Requires_Technical_Evaluation">
+                        <option value="">--Select Option--</option>
+                        <option value="0" @(Model.Requires_Technical_Evaluation == "Yes" ? "selected" : "")>Yes</option>
+                        <option value="1" @(Model.Requires_Technical_Evaluation == "No" ? "selected" : "")>No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bid Scoring Template", new { @class = "control-label col-md-12" })
+                    @Html.DropDownListFor(model => model.Bid_Scoring_Template, Model.ListOfScoringTemplate, "-- Select Procurement Plan --", new { @class = "form-control", id = "bidScoringTemplate" })
+                    @Html.ValidationMessageFor(model => model.Bid_Scoring_Template, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bid Opening Committee", new { @class = "control-label col-md-12" })
+                    @Html.DropDownListFor(model => model.Bid_Opening_Committe, Model.ListOfOpening, "-- Select Committee --", new { @class = "form-control", id = "bidOpeningCommittee" })
+                    @Html.ValidationMessageFor(model => model.Bid_Opening_Committe, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Bid Evaluation Committee", new { @class = "control-label col-md-12" })
+                    @Html.DropDownListFor(model => model.Bid_Evaluation_Committe, Model.ListOfEvaluatin, "-- Select Committee --", new { @class = "form-control", id = "bidEvaluationCommittee" })
+                    @Html.ValidationMessageFor(model => model.Bid_Evaluation_Committe, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6" hidden>
+                <div class="form-group">
+                    @Html.Label("Tender Validity Duration", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Tender_Validity_Duration, new { @class = "form-control", id = "tenderValidityDuration" })
+                </div>
+            </div>
+        </div>
+
+
+        <div align="center">
+            @{
+                if (Model.Status == "Open")
+                {
+                    <button type="button" class="btn btn-primary waves-effect waves-light" onclick="UpdateBidDetails();">
+                        <i class="fas fa-sync-alt"></i> Update (@Model.Code)
+                    </button>
+                }
+            }
+
+        </div>
+        <div id="DivPurchaseRegLines">
+            <hr style="border:1px solid black" />
+            <b>RFQ Lines</b>
+            <hr />
+            <div id="divRequestForQuotationsLines"></div>
+            <hr style="border:1px solid black" />
+        </div>
+        <div id="DivPurchaseRegLines">
+            <hr style="border:1px solid black" />
+            <b>Invited Biders</b>
+            <hr />
+            <div id="divBiders"></div>
+
+        </div>
+
+        <div id="DivAttachments">
+            <hr style="border:1px solid black" />
+            <b>Attachments</b>
+            <hr />
+            <div id="divAttachDocs"></div>
+            <hr style="border:1px solid black" />
+        </div>
+    </div>
+
+</div>
+
+
+
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addBider" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Bidder</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="docNo">Document No:</label>
+                    <input type="text" id="docNo" class="form-control" readonly value="@Model.Code">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    @Html.TextBoxFor(m => m.PP_Planning_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", @id = "PP_Planning_Category2" })
+                </div>
+                <div class="form-group">
+                    <label for="vendor">Vendor:</label>
+                    <select id="vendorDropdown" name="vendor" class="form-control select2"></select>
+                </div>
+
+                <!--<div class="form-group">
+                    <label for="description">Description:</label>
+                    <input class="form-control" type="text" name="description" value="" id="description" />-->
+                @*@Html.TextBoxFor(m => m.Description, new { @class = "form-control",  @id= "description" })*@
+                <!--</div>-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitBidder();">Submit Bider</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Select Vendor////////////////////////////*@
+<div id="vendorListPopup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="vendorListPopupLabel">Select Bidder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="vendorListPopupBody">
+                <select id="vendorDropdown2">
+                    <option value="">Select Option</option>
+                </select>
+             
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" style="background: #162f25; color: whitesmoke;" onclick="PreviewRFQ('@Model.Code');">
+                    <i class="fa fa-eye" aria-hidden="true"></i> Preview RFQ
+
+                </button>
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Generate  Report////////////////////////////*@
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">RFQ Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+        $('#submissionEndDate, #bidOpeningDate, #PreBid_Meeting_Date').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			autoclose: true,
+			yearRange: '-1:+2',
+			showOtherMonths: true,
+            dateFormat: 'dd-mm-yy',
+            minDate: 0
+		});
+        $("#submissionEndDate, #bidOpeningDate, #PreBid_Meeting_Date").focus(function () {
+			$("#ui-datepicker-div").position({
+				my: "left top",
+				at: "left bottom",
+				of: $(this)
+			});
+        });
+
+        var dateVal = $('#PreBid_Meeting_Date').val();
+
+        if (dateVal && dateVal.includes('-')) {
+            var parts = dateVal.split('-'); // Expected format: yyyy-MM-dd
+            var formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0]; // Convert to dd-MM-yyyy
+            $('#PreBid_Meeting_Date').val(formattedDate);
+        }
+
+
+
+		LoadRequestForQuotationsDocumentLines(`@Model.Code`, `@Model.Status`);
+        GetVendors(`@Model.PP_Planning_Category`);
+
+        var PreBid_Meeting_Required = false;
+        var PreBid_Meeting_Required_state = $('#PreBid_Meeting_Required').prop('checked');
+
+        handlePreBidMeeting2(PreBid_Meeting_Required_state)
+
+        var status = `@Model.Status`;
+        //HideHeaderEditInput(status);
+
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+
+            $('#addBider').on('shown.bs.modal', function () {
+                setTimeout(function () {
+                    $('.select2').select2({
+                        dropdownParent: $('#addBider'),
+
+                    });
+                }, 200);
+        });
+
+        // Initialize Select2 outside the modal
+        $("#vendorDropdown").select2({
+            width: '100%'  // Ensure full width
+        });
+
+
+        $("#vendorDropdown2").select2({
+            width: '100%'  // Ensure full width
+        });
+
+
+
+		var today = new Date();
+		var day = ("0" + today.getDate()).slice(-2);
+		var month = ("0" + (today.getMonth() + 1)).slice(-2);
+		var todayFormatted = today.getFullYear() + "-" + month + "-" + day;
+        $('#Date').val(todayFormatted);
+
+
+    });
+
+
+    window.onload = function () {
+        var bidSubmissionMethod = document.getElementById('Bid_Submission_Method').value;
+
+        if (bidSubmissionMethod) { // Ensure element exists
+
+            if (bidSubmissionMethod === '2') {
+                document.getElementById('divTenderBoxLocationCode').setAttribute('hidden','')
+            }
+        } else {
+            console.error("Element with ID 'Bid_Submission_Method' not found.");
+        }
+    };
+
+    var LoadRequestForQuotationsDocumentLines = function (DocNo, Status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+			data: JSON.stringify({ DocNo: DocNo, Status: Status }),
+            url: "/Purchase/RequestForQuotationsLines",
+            success: function (data) {
+                $("#divRequestForQuotationsLines").html(data);
+                LoadInvitedBiders(DocNo)
+
+            },
+            error: function () {
+                LoadInvitedBiders(DocNo);
+
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+	};
+	var LoadInvitedBiders = function (DocNo) {
+        var status = '@Model.Status'
+        var description = '@Model.Description'
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status, status, description: description }),
+			url: "/Purchase/InvitedBiders",
+            success: function (data) {
+
+                $("#divBiders").html(data);
+                GetDocumentAttachments()
+
+			},
+			error: function () {
+
+                GetDocumentAttachments()
+
+				Swal.fire("There is some problem to process your request. Please try after some time");
+			}
+		});
+    };
+
+
+
+
+
+
+
+
+
+
+    var RequestForQuotationsLink = function () {
+        ShowProgress();
+        window.location = "/Purchase/RequestForQuotations";
+    }
+	function NewBider() {
+		$('#addBider').modal('show');
+	}
+
+    function GetVendors(Category) {
+        var vendorDropdown = $('#vendorDropdown');
+
+        if (vendorDropdown.length) {
+            $.ajax({
+                url: '@Url.Action("GetVendors", "Purchase")',
+                type: 'POST',
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                datatype: "json",
+                data: JSON.stringify({Category: Category }),
+                success: function(response) {
+                    // Clear the existing options
+                    vendorDropdown.empty();
+
+
+                    // Add default option
+                    vendorDropdown.append('<option value="">-- Select Vendor --</option>');
+
+                    if (response.success && response.ListOfVendors.length > 0) {
+                        $.each(response.ListOfVendors, function(index, item) {
+                            // Append each vendor as an option
+                            vendorDropdown.append(
+                                $('<option>', {
+                                    value: item.Value,
+                                    text: item.Text
+                                })
+                            );
+
+
+                        });
+                    } else {
+                        vendorDropdown.append('<option disabled>No Vendor found</option>');
+
+                    }
+
+                    // Reinitialize the select2 plugin to refresh the dropdown
+                    vendorDropdown.select2({
+                        width: '100%' , // Ensure full width
+                        dropdownParent: $('#addBider')  // Attach the dropdown to the modal if needed
+                    });
+                                    },
+                error: function(xhr, status, error) {
+                    console.error('Error occurred: ' + error);
+                }
+            });
+        } else {
+            vendorDropdown.empty().append('<option value="">-- Select Vendor --</option>');
+
+        }
+    }
+
+    function submitBidder() {
+
+        var docNo = $('#docNo').val();
+        var vendorNo = $('#vendorDropdown').val();
+        var category = $('#PP_Planning_Category').val();
+        var description = $('#description').val();
+
+        if (!vendorNo) {
+            Swal.fire("Validation Error", "Please select a vendor.", "warning");
+            return;
+        }
+
+        ShowProgress();
+        $.ajax({
+            url: '@Url.Action("AddBider", "Purchase")',
+            type: 'POST',
+            data: {
+                docNo: docNo,
+                vendorNo: vendorNo,
+                category: category,
+                description: description
+            },
+            success: function(response) {
+                HideProgress();
+                if (response.success) {
+                    Swal.fire("Success!", response.message, "success").then(function() {
+                        window.location.href = "/Purchase/RequestForQuotationsDocumentView?DocNo=" + docNo;
+                    });
+                } else {
+                    Swal.fire("Error!", response.message, "error");
+                }
+            },
+            error: function(xhr, status, error) {
+                HideProgress();
+                console.error("Error details:", xhr.responseText, status, error);
+                Swal.fire("Error!", "An error occurred: " + error, "error");
+            }
+        });
+    }
+
+    var RemoveItem = function (Code, Vendor_No) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({ Code: Code, Vendor_No: Vendor_No }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/DeleteInvitedBidder',
+            success: function (data) {
+                HideProgress();
+                if (data.success === true) {
+                    Swal.fire('Success', data.message, 'success');
+                    //window.location.reload;
+
+                    window.location.href = "/Purchase/RequestForQuotationsDocumentView?DocNo=" + Code;
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    }
+
+	function UpdateBidDetails() {
+		var docNo='@Model.Code'
+        var bidOpeningDate = $('#bidOpeningDate').val();
+        var bidOpeningTime = $('#bidOpeningTime').val();
+		var submissionEndDate = $('#submissionEndDate').val();
+		var submissionEndTime = $('#submissionEndTime').val();
+		var bidScoringTemplate = $('#bidScoringTemplate').val();
+		var bidOpeningCommittee = $('#bidOpeningCommittee').val();
+		var bidEvaluationCommittee = $('#bidEvaluationCommittee').val();
+        var tenderValidityDuration = $('#tenderValidityDuration').val();
+        var Specification = $('#Specification').val();
+        var Target_Bidder_Group = $('#Target_Bidder_Group').val();
+        var Bid_Submission_Method = $('#Bid_Submission_Method').val();
+        var Description = $('#Description').val();
+        var Procurement_Type = $('#Procurement_Type').val();
+        var Sealed_Bids = $('#Sealed_Bids').val();
+        var Tender_Validity_Duration = $('#Tender_Validity_Duration').val();
+        var Bid_Opening_Venue = $('#Bid_Opening_Venue').val();
+        var Tender_Box_Location_Code = $('#Tender_Box_Location_Code').val();
+        /* var PreBid_Meeting_Required = $('#PreBid_Meeting_Required').val();*/
+        var PreBid_Meeting_Required = $('#PreBid_Meeting_Required').prop('checked');
+        var PreBid_Meeting_Venue = $('#PreBid_Meeting_Venue').val();
+        var PreBid_Meeting_Date = $('#PreBid_Meeting_Date').val();
+        var Requires_Technical_Evaluation = $('#Requires_Technical_Evaluation').val();
+
+      /*  var dateObj = new Date(PreBid_Meeting_Date_un);
+        var PreBid_Meeting_Date = ("0" + dateObj.getDate()).slice(-2) + "-" +
+            ("0" + (dateObj.getMonth() + 1)).slice(-2) + "-" +
+            dateObj.getFullYear();
+        console.log(PreBid_Meeting_Date); // Output in dd-mm-yyyy format*/
+
+        var PreBid_Meeting_Time = $('#PreBid_Meeting_Time').val();
+
+        if (!Specification) {
+            Swal.fire('Validation Error', 'Specification is required.', 'warning').then(function () {
+                $('#bidOpeningDate').focus();
+            });
+            return;
+        }
+
+		if (!bidOpeningDate) {
+			Swal.fire('Validation Error', 'Bid Opening Date is required.', 'warning').then(function () {
+				$('#bidOpeningDate').focus();
+			});
+			return;
+		}
+
+		if (!bidOpeningTime) {
+			Swal.fire('Validation Error', 'Bid Opening Time is required.', 'warning').then(function () {
+				$('#bidOpeningTime').focus();
+			});
+			return;
+		}
+
+		if (!submissionEndDate) {
+			Swal.fire('Validation Error', 'Submission End Date is required.', 'warning').then(function () {
+				$('#submissionEndDate').focus();
+			});
+			return;
+		}
+
+		if (!submissionEndTime) {
+			Swal.fire('Validation Error', 'Submission End Time is required.', 'warning').then(function () {
+				$('#submissionEndTime').focus();
+			});
+			return;
+		}
+
+		if (!bidScoringTemplate) {
+			Swal.fire('Validation Error', 'Bid Scoring Template is required.', 'warning').then(function () {
+				$('#bidScoringTemplate').focus();
+			});
+			return;
+		}
+
+		/*if (!bidOpeningCommittee) {
+			Swal.fire('Validation Error', 'Bid Opening Committee is required.', 'warning').then(function () {
+				$('#bidOpeningCommittee').focus();
+			});
+			return;
+		}*/
+
+		/*if (!bidEvaluationCommittee) {
+			Swal.fire('Validation Error', 'Bid Evaluation Committee is required.', 'warning').then(function () {
+				$('#bidEvaluationCommittee').focus();
+			});
+			return;
+        }*/
+
+        if (!Target_Bidder_Group) {
+            Swal.fire('Validation Error', 'Target Bidder Group is required.', 'warning').then(function () {
+                $('#Target_Bidder_Group').focus();
+            });
+            return;
+        }
+
+        if (!Bid_Submission_Method) {
+            Swal.fire('Validation Error', 'Bid Submission Method is required.', 'warning').then(function () {
+                $('#Bid_Submission_Method').focus();
+            });
+            return;
+        }
+
+
+        if (!Description) {
+            Swal.fire('Validation Error', 'Description is required.', 'warning').then(function () {
+                $('#Description').focus();
+            });
+            return;
+        }
+
+        if (!Procurement_Type) {
+            Swal.fire('Validation Error', 'Procurement Type is required.', 'warning').then(function () {
+                $('#Procurement_Type').focus();
+            });
+            return;
+        }
+
+        if (!Tender_Validity_Duration) {
+            Swal.fire('Validation Error', 'Tender Validity Duration is required.', 'warning').then(function () {
+                $('#Tender_Validity_Duration').focus();
+            });
+            return;
+        }
+
+
+        if (!Bid_Opening_Venue) {
+            Swal.fire('Validation Error', 'Bid Opening Venue is required.', 'warning').then(function () {
+                $('#Bid_Opening_Venue').focus();
+            });
+            return;
+        }
+
+
+       /* if (!Tender_Box_Location_Code) {
+            Swal.fire('Validation Error', 'Tender Box Location Code is required.', 'warning').then(function () {
+                $('#Bid_Opening_Venue').focus();
+            });
+            return;
+        }
+*/
+
+		ShowProgress();
+
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({
+				Code:docNo,
+				Bid_Opening_Date: bidOpeningDate,
+				Bid_Opening_Time: bidOpeningTime,
+				Submission_End_Date: submissionEndDate,
+				Submission_End_Time: submissionEndTime,
+				Bid_Scoring_Template: bidScoringTemplate,
+				Bid_Opening_Committe: bidOpeningCommittee,
+				Bid_Evaluation_Committe: bidEvaluationCommittee,
+                Tender_Validity_Duration: tenderValidityDuration,
+                Target_Bidder_Group: Target_Bidder_Group,
+                Bid_Submission_Method: Bid_Submission_Method,
+                Description: Description,
+                Procurement_Type: Procurement_Type,
+                Tender_Validity_Duration: Tender_Validity_Duration,
+                Bid_Opening_Venue: Bid_Opening_Venue,
+                Sealed_Bids: Sealed_Bids,
+                Tender_Box_Location_Code: Tender_Box_Location_Code,
+                PreBid_Meeting_Required: PreBid_Meeting_Required,
+                PreBid_Meeting_Venue: PreBid_Meeting_Venue,
+                PreBid_Meeting_Date: PreBid_Meeting_Date,
+                PreBid_Meeting_Time: PreBid_Meeting_Time,
+                Specification: Specification,
+                Requires_Technical_Evaluation: Requires_Technical_Evaluation
+
+
+			}),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/Purchase/UpdateBidDetails',
+			success: function (response) {
+				HideProgress();
+				if (response.success) {
+					Swal.fire('Success', 'Bid details updated successfully.', 'success');
+					window.location = "/Purchase/RequestForQuotationsDocumentView?DocNo=" + docNo;
+
+				} else {
+					Swal.fire('Error', response.message, 'error');
+				}
+			},
+			error: function (xhr, status, error) {
+				HideProgress();
+				Swal.fire('Error', 'An error occurred: ' + error, 'error');
+			}
+		});
+	}
+
+    var SendDocForApproval = function (DocNo) {
+		//var table = document.querySelector('tbody');
+
+		//if (!table || table.rows.length === 0 || (table.rows.length === 1 && table.rows[0].cells[0].innerText === "No Records Found")) {
+		//	Swal.fire('Error', 'No records found. Please ensure there are items before sending for approval.', 'error');
+		//	return;
+		//}
+
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/Purchase/SendRFQForApproval',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+					Swal.fire('Success', data.message, 'success');
+					window.location = "/Purchase/RequestForQuotationsDocumentView?DocNo=" + DocNo;
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+
+
+	var CancelDocApprovalRequest = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset=utf-8",
+			processData: false,
+			url: '/Purchase/CancelRFQForApproval',
+			success: function (data) {
+				HideProgress();
+				if (data.success === true) {
+					window.location = "/Purchase/RequestForQuotationsDocumentView?DocNo=" + DocNo;
+				} else {
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err.responseText, 'warning');
+			}
+		});
+	};
+
+	var ViewApprovalTrail = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo, RecID: "RFQ: " + DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DocumentApprovalTrail',
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModalLinks").modal("hide");
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+    }
+
+
+    var GetCommitteeList = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo}),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/GetCommitteeList',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GetRequiredDocuments = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/RequiredDocumentsList',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GetTenderSecurities = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/IFSSecurityList',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+    var GetRFQResponsesList = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/RFQResponsesList',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var GetTenderDocumentSources = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/TenderDocumentSourcesList',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    var SendRFQ = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/SendRFQ',
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                    window.location.reload();
+                } else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    var PublishInvitation = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/PublishInvitation',
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    Swal.fire('Success', "RFQ Publish successful", 'success');
+                    window.location.href=data.message;
+                } else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    document.getElementById('sealedBidsToggle').addEventListener('change', function () {
+        let textBox = document.querySelector('[name="Sealed_Bids"]');
+        textBox.value = this.checked ? "True" : "False";
+    });
+
+
+    function populateOpeningDate(selectedValue) {
+        document.getElementById('bidOpeningDate').value = selectedValue
+        //alert(selectedValue)
+    }
+
+
+
+    function populateOpeningTime(submissionEndTime) {
+        if (submissionEndTime) {
+            let endTime = submissionEndTime.split(":");
+            let endHour = parseInt(endTime[0]);
+            let endMinute = parseInt(endTime[1]);
+
+            // Adjust hour properly (wrap around if endHour is 00)
+            let openingHour = (endHour === 0) ? 23 : endHour ;
+            let openingMinute = endMinute;
+
+            // Format time to ensure two digits
+            openingHour = openingHour < 10 ? "0" + openingHour : openingHour;
+            openingMinute = openingMinute < 10 ? "0" + openingMinute : openingMinute;
+
+            document.getElementById("bidOpeningTime").value = openingHour + ":" + openingMinute;
+        }
+    }
+
+
+    function handleTenderBoxLocationCode(selectedValue) {
+        var divTenderBoxLocationCode = document.getElementById('divTenderBoxLocationCode');
+        if (selectedValue === '2') {
+            divTenderBoxLocationCode.setAttribute('hidden', '')
+        }
+        else {
+            divTenderBoxLocationCode.removeAttribute('hidden')
+        }
+    }
+
+    function handlePreBidMeeting(checkbox) {
+        if (checkbox.checked) {
+            $("#PreBid_Meeting_Venue_div").removeAttr('hidden');
+            $("#PreBid_Meeting_Date_div").removeAttr('hidden');
+            $("#PreBid_Meeting_Time_div").removeAttr('hidden');
+        } else {
+            $("#PreBid_Meeting_Venue_div").attr('hidden', true);
+            $("#PreBid_Meeting_Date_div").attr('hidden', true);
+            $("#PreBid_Meeting_Time_div").attr('hidden', true);
+        }
+    }
+
+    function handlePreBidMeeting2(selectedValue) {
+        if (selectedValue) {
+            $("#PreBid_Meeting_Venue_div").removeAttr('hidden');
+            $("#PreBid_Meeting_Date_div").removeAttr('hidden');
+            $("#PreBid_Meeting_Time_div").removeAttr('hidden');
+        } else {
+            $("#PreBid_Meeting_Venue_div").attr('hidden', true);
+            $("#PreBid_Meeting_Date_div").attr('hidden', true);
+            $("#PreBid_Meeting_Time_div").attr('hidden', true);
+        }
+    }
+
+
+
+
+
+        //attachments
+        var GetDocumentAttachments = function () {
+           var DocNo = `@Model.Code`;
+           var status = '@Model.Status';
+           $.ajax({
+                async: true,
+                type: "POST",
+                datatype: "json",
+                contentType: "application/json; charset = utf-8",
+                processData: false,
+                      data: JSON.stringify({ DocNo: DocNo, documentStatus: status }),
+                      url: "/Common/EdmsDocumentAttachmentList",
+               success: function (data) {
+                   HideProgress();
+	                $("#divAttachDocs").html(data);
+                },
+               error: function () {
+                   HideProgress();
+	                Swal.fire("There is some problem to process your request. Please try after some time");
+                }
+           });
+        };
+
+        var AddAttachment = function () {
+            $("#labelF").text("File Upload");
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "GET",
+                datatype: "html",
+                url: '/Common/FileUploadForm',
+                success: function (data) {
+                    $("#modalBody").html(data);
+                    HideProgress();
+                    $("#myModal").modal("show");
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err, 'warning');
+                }
+            });
+        };
+
+        var SaveAttachmentFile = function () {
+            var DocNo = `@Model.Code`;
+            var filename; var base64String; var filetype;
+            var files = document.getElementById('AttachmentFile').files;
+            if (files.length) {
+            var file = files[0];
+                    if (file.size > 50000000) {
+                        Swal.fire('Warning', 'Please only files less than 50MB allowed. Thanks!!', 'warning');
+                    }
+            else {
+	            var blob = file.slice();
+	            filetype = file.type;
+	            filename = file.name;
+	            var reader = new FileReader();
+	            reader.onloadend = function (evt) {
+		            if (evt.target.readyState == FileReader.DONE) {
+			            var cont = evt.target.result
+			            base64String = getB64Str(cont);
+			            ShowProgress();
+			            $.ajax({
+				            type: "POST",
+				            url: "/Common/SaveAttachedFile",
+                                    data: JSON.stringify({ DocNo: DocNo, base64Upload: base64String, fileName: filename, Extn: filetype, TableID: 77352, module: "SCM", documentType:"rfq"}),
+				            contentType: "application/json; charset=utf-8",
+				            dataType: "json",
+				            success: function (data) {
+					            if (data.success) {
+						            HideProgress();
+						            $("#myModal").modal("hide");
+						            Swal.fire('Success', data.message, 'success');
+                                            GetDocumentAttachments();
+					            }
+					            else {
+                                            GetDocumentAttachments();
+						            Swal.fire('Warning', data.message, 'warning');
+						            HideProgress();
+					            }
+				            },
+				            error: function (err) {
+					            HideProgress();
+					            Swal.fire('Warning', err, 'warning');
+				            }
+			            });
+		            }
+	            };
+	            reader.readAsArrayBuffer(blob);
+            }
+            }
+        };
+
+        function getB64Str(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+
+        var DeleteAttachment = function (docId, line) {
+            ShowProgress();
+            $.ajax({
+                async: true,
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    documentId: docId,
+                    lineNo: line
+                }),
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                url: '/Common/RemoveFileAsync',
+                success: function (data) {
+                    HideProgress();
+                    if (data.success === true) {
+                        Swal.fire('Success', data.message, 'success');
+                        GetDocumentAttachments();
+                    } else {
+                        Swal.fire('Error', data.message, 'error');
+                        GetDocumentAttachments();
+                    }
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Warning', err.responseText, 'warning');
+                }
+            });
+        };
+
+
+        var ViewAttachment = function (moduleCheck, docNo, docId) {
+            $.ajaxSetup({ cache: false });
+            ShowProgress();
+            var viewer = $("#modalAttachmentBody");
+            viewer.empty();
+
+            $.ajax({
+                url: '/Common/GetEdmsDocuments',
+                type: "GET",
+                datatype: "json",
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: {
+                    module: moduleCheck,
+                    documentNo: docNo,
+                    documentType: "User request",
+                    documentId: docId
+                },
+                success: function (data) {
+                    if (data.success) {
+                        if (data.base64) {
+                            var mimeType = data.mimeType || 'application/pdf';
+
+                            if (mimeType.startsWith('application/pdf')) {
+
+                                var byteCharacters = atob(data.base64);
+                                var byteNumbers = new Array(byteCharacters.length);
+                                for (var i = 0; i < byteCharacters.length; i++) {
+                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                }
+                                var byteArray = new Uint8Array(byteNumbers);
+                                var blob = new Blob([byteArray], { type: mimeType });
+                                var blobUrl = URL.createObjectURL(blob);
+
+
+                                viewer.html('<iframe src="' + blobUrl + '" style="width:100%; height:500px;" frameborder="0"></iframe>');
+                            } else if (mimeType.startsWith('image/')) {
+
+                                viewer.html('<img src="data:' + mimeType + ';base64,' + data.base64 + '" style="width:100%;"/>');
+                            } else {
+                                var blob = b64toBlob(data.base64, mimeType);
+                                var url = window.URL.createObjectURL(blob);
+                                window.open(url, '_blank');
+                            }
+                            $("#myModalAttachment").modal("show");
+                        } else {
+
+                            window.location = '/Common/AttachmentDownload?fileName=' + data.message;
+                            Swal.fire('Success', 'Document Downloaded successfully', 'success');
+                        }
+                    } else {
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                    HideProgress();
+                },
+                error: function (err) {
+                    HideProgress();
+                    Swal.fire('Error', err.responseText || 'An error occurred', 'error');
+                }
+            });
+        };
+
+
+        function b64toBlob(base64, contentType) {
+            var byteCharacters = atob(base64);
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+                var slice = byteCharacters.slice(offset, offset + 512);
+
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            return new Blob(byteArrays, { type: contentType });
+    }
+
+
+
+    var LoadInvitedBidersJson = function (DocNo) {
+        var status = '@Model.Status';
+        var description = '@Model.Description';
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            dataType: "json",
+            url: "/Purchase/InvitedBidersJSon",
+            data: { DocNo: DocNo, status: status, description: description },
+            success: function (data) {
+                var dropdown = $("#vendorDropdown2");
+                dropdown.empty();
+                dropdown.append('<option value="">-- Select Bidder --</option>');
+
+                if (data && data.length > 0) {
+                    $.each(data, function (index, item) {
+                        dropdown.append('<option value="' + item.Vendor_No + '">' + item.Vendor_Name +' (' + item.Vendor_No + ')' + '</option>');
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire("There is some problem processing your request. Please try again later.");
+            }
+        });
+    };
+
+
+
+
+    function SelectVendorToPreviewRFQ(DocNo) {
+        LoadInvitedBidersJson(DocNo)
+        $("#vendorListPopup").modal("show");
+    }
+
+
+    var PreviewRFQ = function (DocNo) {
+        var DocNo = '@Model.Code';
+        var VendorNo = document.getElementById('vendorDropdown2').value;
+         ShowProgress();
+         $.ajax({
+             async: true,
+             type: "POST",
+             datatype: "json",
+             data: JSON.stringify({ DocNo: DocNo, VendorNo: VendorNo }),
+             contentType: "application/json; charset=utf-8",
+             processData: false,
+             url: '/Purchase/PreviewRFQ',
+             success: function (data) {
+                 if (data.success) {
+                     $("#vendorListPopup").modal("hide");
+                     $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                     $("#myModalUnits").modal("show");
+                     HideProgress();
+                 } else {
+                     /*$("#vendorListPopup").modal("hide");*/
+                     Swal.fire('Error', data.message, 'error');
+                     HideProgress();
+
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Warning', err, 'warning');
+             }
+         });
+    }
+
+    var NewIFSTenderCommittee = function () {
+      /*  $('labelF')*/
+        
+        var Code = '@Model.Code';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ Code: Code }),
+            contentType: "application/json; charset = utf-8",
+            url: "/Purchase/NewIFSTenderCommittee",
+
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+
+    function SubmitIFSCommittee() {
+        var isValid = true;
+
+        var appointmentEffectiveDate = $("#appointmentEffectiveDate").val();
+        if (!appointmentEffectiveDate) {
+            Swal.fire('Warning', 'Appointment Effective Date is required.', 'warning');
+            isValid = false;
+        }
+
+        var committeeType = $("#Committee_Type").val();
+        if (!committeeType) {
+            Swal.fire('Warning', 'Please select a Committee Type.', 'warning');
+            isValid = false;
+        }
+
+        var ifsCode = $("#IFS_Code").val();
+        if (!ifsCode) {
+            Swal.fire('Warning', 'Please select an IFS Code.', 'warning');
+            isValid = false;
+        }
+
+        var appointingAuthority = $("#Appointing_Authority").val();
+        if (!appointingAuthority) {
+            Swal.fire('Warning', 'Appointing Authority is required.', 'warning');
+            isValid = false;
+        }
+
+        var duration = 1 //$("#Duration").val();
+        if (!duration) {
+            Swal.fire('Warning', 'Duration is required.', 'warning');
+            isValid = false;
+        }
+
+        var raisedBy = $("#Raised_By").val();
+        var Description = $("#Description2").val();
+
+
+        if (!isValid) {
+            return;
+        }
+
+        var appointmentRequest = {
+            IFS_Code: ifsCode,
+            Committee_Type: committeeType,
+            Appointment_Effective_Date: appointmentEffectiveDate,
+            Appointing_Authority: appointingAuthority,
+            Duration: duration,
+            RaisedBy: raisedBy,
+            Description: Description
+        };
+
+        ShowProgress();
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/SubmitAppointmentRequest",
+            data: JSON.stringify(appointmentRequest),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                HideProgress();
+                if (data.success) {
+                    window.location = data.message;
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', err.responseText, 'error');
+            }
+        });
+    }
+
+
+
+</script>
+

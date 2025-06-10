@@ -1,0 +1,353 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ProcurementTask>
+
+@{
+    var DocumentStatus = ViewBag.DocumentStatus as string;
+    var procurementPlanID = ViewBag.procurementPlanID;
+    var Plan_No = ViewBag.Plan_No;
+    var planningCategory = ViewBag.planningCategory;
+    var AdminUnit = ViewBag.AdminUnit;
+}
+
+
+
+
+<div class="table-responsive">
+    <table class="datatable table table-stripped" id="datatable-buttons">
+        <thead style="background-color:black;color:white">
+            <tr>
+                @*  <th>Procurement Plan ID</th> *@
+                @* <th>Entry Number</th> *@
+                @* <th>Planning Category</th> *@
+                @* <th>Document Type</th> *@
+                <th>Item Type</th>
+                <th>Item Number</th>
+                <th >Description</th>
+                <th>Procurement Type</th>
+                <th>Solicitation Type</th>
+                <th>Procurement Method</th>
+                <th>Alternative Procurement Methods</th>
+                @* <th>Preference Reservation Code</th> *@
+                @*<th>Funding Source ID</th>*@
+                <th>Requisition Product Group</th>
+                @* <th>Procurement Use</th> *@
+                @* <th>Invitation Notice Type</th> *@
+                @* <th>Planning Date</th> *@
+                <th>Quantity</th>
+                <th>Unit Cost</th>
+                <th>Line Budget Cost</th>
+                <th>Total Actual Costs</th>
+                <th>Total PRN Commitments</th>
+                @* <th>Available Procurement Budget</th> *@
+                @* <th>Global Dimension 1 Code</th> *@
+                @* <th>Global Dimension 2 Code</th> *@
+                <th hidden>Vote</th>
+                <th hidden>Sub-Program</th>
+                <th hidden>Class</th>
+                <th hidden>Funding Source</th>
+
+                <th>Procurement Start Date</th>
+                <th>Procurement End Date</th>
+                <th>Procurement Duration (Days)</th>
+
+                <th>Q1 Quantity</th>
+                <th>Q1 Amount</th>
+                <th>Q1 Budget</th>
+                <th>Q2 Quantity</th>
+                <th>Q2 Amount</th>
+                <th>Q2 Budget</th>
+                <th>Q3 Quantity</th>
+                <th>Q3 Amount</th>
+                <th>Q3 Budget</th>
+                <th>Q4 Quantity</th>
+                <th>Q4 Amount</th>
+                <th>Q4 Budget</th>
+                @* <th>Work Plan Project ID</th> *@
+                @* <th>Work Plan Task Number</th> *@
+                @* <th>Activity Number</th> *@
+                @* <th>Sub-Activity Number</th> *@
+                <th>AGPO Percent</th>
+                <th>AGPO Amount</th>
+                <th>PWD Percent</th>
+                <th>PWD Amount</th>
+                <th>Women Percent</th>
+                <th>Women Amount</th>
+                <th>Youth Percent</th>
+                <th>Youth Amount</th>
+                <th>Citizen Contractors Percent</th>
+                <th style="min-width: 200px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                           @* <td>
+                                @Html.TextBoxFor(modelItem => item.ProcurementPlanID, new { @class = "form-control", @disabled = "disabled", @id = "ProcurementPlanID_" + item.EntryNo })
+                            </td>*@
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.ItemType, new { @class = "form-control", @disabled = "disabled", @id = "ItemType_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.ItemNo, new { @class = "form-control", @disabled = "disabled", @id = "ItemNo_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Description, new { @class = "form-control", @disabled = "disabled", @id = "Description_" + item.EntryNo })
+                            </td>
+                            <td>
+
+                                @if (ViewBag.ProcurementTypeList != null && ViewBag.ProcurementTypeList.Count > 0)
+                                {
+                                    @Html.DropDownListFor(m => item.ProcurementType, new SelectList(ViewBag.ProcurementTypeList, "Value", "Text", item.ProcurementType), "--Select Procurement Type--", new { id = "ProcurementType_" + item.EntryNo, @class = "form-control" })
+                                }
+                            </td>
+                            <td>
+                                @if (ViewBag.SolicitationTypeList != null && ViewBag.SolicitationTypeList.Count > 0)
+                                {
+                                    @Html.DropDownListFor(m => item.SolicitationType, new SelectList(ViewBag.SolicitationTypeList, "Value", "Text", item.SolicitationType), "--Select Solicitation Method--", new { id = "SolicitationType_" + item.EntryNo, @class = "form-control" })
+                                }
+                            </td>
+                            <td>
+                                @*@Html.TextBoxFor(modelItem => item.ProcurementMethod, new { @class = "form-control", @disabled = "disabled", @id = "ProcurementMethod_" + item.EntryNo })*@
+                                @if (ViewBag.ProcurementMethods != null && ViewBag.ProcurementMethods.Count > 0)
+                                {
+                                    @Html.DropDownListFor(
+                                        m => item.ProcurementMethod,
+                                        new SelectList(
+                                            ViewBag.ProcurementMethods, // List of items
+                                            "Value",                   // DataValueField
+                                            "Text",                    // DataTextField
+                                            item.ProcurementMethod     // SelectedValue
+                                        ),
+                                        "--Select Procurement Method--", // Placeholder option
+                                        new { id = $"ProcurementMethod_{item.EntryNo}", @class = "form-control" }
+                                    )
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No procurement methods available</span>
+                                }
+                            </td>
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.AlternativeProcurementMethods, new { @class = "form-control", @id = "AlternativeProcurementMethods_" + item.EntryNo })
+                            </td>
+
+                            <td>
+                              @*  @Html.TextBoxFor(modelItem => item.RequisitionProductGroup, new { @class = "form-control", @disabled = "disabled", @id = "RequisitionProductGroup_" + item.EntryNo })*@
+                                @if (ViewBag.ProcurementTypeList != null && ViewBag.ProcurementTypeList.Count > 0)
+                                {
+                                    @Html.DropDownListFor(m => item.ProcurementType, new SelectList(ViewBag.ProcurementTypeList, "Value", "Text", item.ProcurementType), "--Select Procurement Type--", new { id = "RequisitionProductGroup_" + item.EntryNo, @class = "form-control", @disabled = "disabled", })
+                                }
+                            </td>
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Quantity, new { @class = "form-control", @disabled = "disabled", @id = "Quantity_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.UnitCost, new { @class = "form-control", @disabled = "disabled", @id = "UnitCost_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.LineBudgetCost, new { @class = "form-control", @disabled = "disabled", @id = "LineBudgetCost_" + item.EntryNo })
+                            </td>
+
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.TotalActualCosts, new { @class = "form-control", @disabled = "disabled", @id = "TotalActualCosts_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.TotalPRNCommitments, new { @class = "form-control", @disabled = "disabled", @id = "TotalPRNCommitments_" + item.EntryNo })
+                            </td>
+
+                            @*Dimensions*@
+                            <td hidden>
+                                @Html.TextBoxFor(modelItem => item.ShortcutDimension3Code, new { @class = "form-control", @disabled = "disabled", @id = "ShortcutDimension3Code_" + item.EntryNo })
+                            </td>
+
+                            <td hidden>
+                                @Html.TextBoxFor(modelItem => item.ShortcutDimension4Code, new { @class = "form-control", @disabled = "disabled", @id = "ShortcutDimension4Code_" + item.EntryNo })
+                            </td>
+                            <td hidden>
+                                @Html.TextBoxFor(modelItem => item.ShortcutDimension5Code, new { @class = "form-control", @disabled = "disabled", @id = "ShortcutDimension5Code_" + item.EntryNo })
+                            </td>
+                            <td hidden>
+                                @Html.TextBoxFor(modelItem => item.ShortcutDimension6Code, new { @class = "form-control", @disabled = "disabled", @id = "ShortcutDimension6Code_" + item.EntryNo })
+                            </td>
+
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.ProcurementStartDate, new { @class = "form-control", @disabled = "disabled", @id = "ProcurementStartDate_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.ProcurementEndDate, new { @class = "form-control", @disabled = "disabled", @id = "ProcurementEndDate_" + item.EntryNo })
+                            </td>
+
+
+
+
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.ProcurementDurationDays, new { @class = "form-control", @disabled = "disabled", @id = "ProcurementDurationDays_" + item.EntryNo })
+                            </td>
+
+
+
+
+
+
+
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q1Quantity, new { @class = "form-control", @disabled = "disabled", @id = "Q1Quantity_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q1Amount, new { @class = "form-control", @disabled = "disabled", @id = "Q1Amount_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q1Budget, new { @class = "form-control", @disabled = "disabled", @id = "Q1BudgetI" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q2Quantity, new { @class = "form-control", @disabled = "disabled", @id = "Q2Quantity_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q2Amount, new { @class = "form-control", @disabled = "disabled", @id = "Q2Amount_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q2Budget, new { @class = "form-control", @disabled = "disabled", @id = "Q2Budget_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q3Quantity, new { @class = "form-control", @disabled = "disabled", @id = "Q3Quantity_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q3Amount, new { @class = "form-control", @disabled = "disabled", @id = "Q3Amount_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q3Budget, new { @class = "form-control", @disabled = "disabled", @id = "Q3Budget_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q4Quantity, new { @class = "form-control", @disabled = "disabled", @id = "Q4Quantity_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q4Amount, new { @class = "form-control", @disabled = "disabled", @id = "Q4Amount_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.Q4Budget, new { @class = "form-control", @disabled = "disabled", @id = "Q4Budget_" + item.EntryNo })
+                            </td>
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.AGPOPercent, new { @class = "form-control", @disabled = "disabled", @id = "AGPOPercent_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.AGPOAmount, new { @class = "form-control", @disabled = "disabled", @id = "AGPOAmount_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @* @Html.TextBoxFor(modelItem => item.PWDPercent, new { @class = "form-control", id = "pwd", onkeypress = "functionx(event);" })*@
+                                @Html.TextBoxFor(modelItem => item.PWDPercent, new { @class = "form-control", id = "PWDPercent_" + item.EntryNo })
+
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.PWDAmount, new { @class = "form-control", @disabled = "disabled", id = "PWDAmount_" + item.EntryNo, })
+                            </td>
+                            <td>
+                                @* @Html.TextBoxFor(modelItem => item.WomenPercent, new { @class = "form-control", id = "women", onkeypress = "functionx(event);" })*@
+                                @Html.TextBoxFor(modelItem => item.WomenPercent, new { @class = "form-control", id = "WomenPercent_" + item.EntryNo, })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.WomenAmount, new { @class = "form-control", @disabled = "disabled", id = "WomenAmount_" + item.EntryNo, })
+                            </td>
+                            <td>
+                                @* @Html.TextBoxFor(modelItem => item.YouthPercent, new { @class = "form-control", id = "youth", onkeypress = "functionx(event);" })*@
+                                @Html.TextBoxFor(modelItem => item.YouthPercent, new { @class = "form-control", id = "YouthPercent_" + item.EntryNo, })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => item.YouthAmount, new { @class = "form-control", @disabled = "disabled", @id = "YouthAmount_" + item.EntryNo })
+                            </td>
+                            <td>
+                                @*@Html.TextBoxFor(modelItem => item.CitizenContractorsPercent, new { @class = "form-control", id = "citizen", onkeypress = "functionx(event);" })*@
+                                @Html.TextBoxFor(modelItem => item.CitizenContractorsPercent, new { @class = "form-control", id = "CitizenContractorsPercent_" + item.EntryNo, })
+                            </td>
+                            <td >
+                                @Html.DisplayFor(modelItem => item.ActionTaken, new { @class = "form-control", id = "Status_" + item.ActionTaken, })
+                                @{
+                                    if (item.DocumentStatus == "Open")
+                                    {
+                                        <div style="text-align:right">
+                                            <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Update Line" onclick="UpdateTasks(@item.EntryNo, @item.PlanningCategory);" />
+                                        </div>
+                                    }
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+        </tbody>
+    </table>
+   @* <div style="text-align:right">
+        <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="addLine" value="Add Line" onclick="CreateProcplanLines('@procurementPlanID', '@Plan_No', '@planningCategory');" />
+    </div>*@
+
+</div>
+<script>
+    $("#ddlType,#ddlSol,#ddlMethod").select2({
+        width: '100%',
+        placeholder: 'Search...'
+    });
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function validatePercentages() {
+        let pwdPercent = parseFloat(document.getElementById('pwd').value) || 0;
+        let womenPercent = parseFloat(document.getElementById('women').value) || 0;
+        let youthPercent = parseFloat(document.getElementById('youth').value) || 0;
+        let citizenPercent = parseFloat(document.getElementById('citizen').value) || 0;
+
+        let sumOthers = pwdPercent + womenPercent + youthPercent;
+        let totalSum = sumOthers + citizenPercent;
+
+        if (totalSum > 100) {
+            Swal.fire('Error', 'The total percentage cannot exceed 100%', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    // Attach the validate function to the relevant events
+    document.getElementById('pwd').oninput = validatePercentages;
+    document.getElementById('women').oninput = validatePercentages;
+    document.getElementById('youth').oninput = validatePercentages;
+    document.getElementById('citizen').oninput = validatePercentages;
+</script>

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.RequiredDocuments>
+@{
+    var DocNo= ViewBag.DocNo;
+
+}
+<div class="mb-5">
+    <h4>Required Documents (Doc No: @DocNo)</h4>
+    <hr />
+</div>
+<div class="table-responsive">
+    <table id="RequiredDocuments" class="table table-bordered dt-responsive nowrap">
+        <thead style="background-color: black; color: white">
+            <tr>
+                <th> Document No </th>
+                <th> Procurement Document Type ID </th>
+                <th>Description </th>
+                <th>Track Certificate Expiry </th>
+                <th>Requirement Type </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Procurement_Document_Type_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Track_Certificate_Expiry)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requirement_Type)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align: right">
+    <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="AddDocument(`@DocNo`);">
+        <i class="fa fa-plus" aria-hidden="true"></i> Add Document
+    </button>
+</div>
+
+<script>
+    var table = $("#RequiredDocuments").DataTable({
+        lengthChange: true,
+        order: [[1, 'desc']],
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+
+
+    function AddDocument(DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo}),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Purchase/NewDocument',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModalLinks").modal("hide");
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>
+

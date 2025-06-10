@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.DirectProcurementsList>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table table-bordered table-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead style="background-color:black;color:white">
+    <tr>
+
+        <th>
+            Action
+        </th>
+        <th>
+            Code
+        </th>
+        <th>
+            Tender Name
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            PRN No
+        </th>
+        <th>
+            Awarded Bidder No
+        </th>
+        <th>
+            Awarded Bidder Name
+        </th>
+        <th>
+            RFQ Sent
+        </th>
+        <th>
+            Procurement Method
+        </th>
+        <th>
+            Awarded Quote No
+        </th>
+        <th>
+            Awarded Bidder Sum
+        </th>
+        <th>
+            External Document No
+        </th>
+        <th>
+            Tender Summary
+        </th>
+        <th>
+            Procurement Category ID
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <input type="button" onclick="ViewDoc('@item.Code');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tender_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PRN_No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Awarded_Bidder_No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Awarded_Bidder_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RFQ_Sent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Procurement_Method)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Awarded_Quote_No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Awarded_Bidder_Sum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.External_Document_No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tender_Summary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Procurement_Category_ID)
+            </td>
+
+        </tr>
+    }
+    </tbody>
+</table>

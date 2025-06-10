@@ -1,0 +1,114 @@
+﻿@model Latest_Staff_Portal.ViewModel.CurrentSkillsAssessment
+
+<style>
+    .ui-front {
+        z-index: 2000 !important;
+    }
+</style>
+<div class="bg-soft-dark" style="color:black">
+    <div class="row">
+        <div class="col-md-12">
+            <span style="font-weight: bold">
+                Major Tasks </span>
+                <input type="text" class="form-control" id="txtMajorTasks" placeholder="Major Tasks" />
+</div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <span style="font-weight: bold">
+                Existing Training Needs </span>
+                <input type="text" class="form-control" id="txtTrainingNeeds" placeholder="Existing Training Needs" />
+</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">
+                Training Required </span>
+                <input type="checkbox" class="form-control" id="txtTrainingRequired" />
+</div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">
+                Training Mode </span>
+                <select id="ddlTrainingMode" name="ddlTrainingMode" class="form-control">
+                    <option value="">----</option>
+                    <option value="0">On Job</option>
+                    <option value="1">Full Time</option>
+                    <option value="2">Part Time</option>
+                    <option value="3">Virtual</option>
+                    <option value="4">Hybrid</option>
+                </select>
+</div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">
+                Start Date</span>
+                <input type="date" class="form-control" id="txtStartDate" />
+</div>
+        <div class="col-md-6">
+            <span style="font-weight: bold">Institution</span>
+            @Html.DropDownListFor(m => m.Institution_No, new SelectList(Model.ListOfInstitution, "Value", "Text", Model.Institution_No), "--Select Institution--", new { id = "ddlInstitution", @class = "form-control select2" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span style="font-weight: bold">Source</span>
+            <select id="DdlSource" name="DdlSource" class="form-control">
+                <option value="">----</option>
+                <option value="0">ANUPEAisal</option>
+                <option value="3">Career Development</option>
+                <option value="1">Goverment Directive</option> -
+                <option value="2">Other</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div align="center">
+        <input type="button" class="btn btn-primary waves-effect waves-light" value="Add Current Skills" onclick="SubmitAssessmentSkills();" />
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#ddlInstitution").select2({
+        //    width: '100%'
+        //});
+        $('#myModal').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                $('.select2').select2({
+                    dropdownParent: $('#myModal')
+                });
+            }, 200);
+        });
+    });
+
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+</script>

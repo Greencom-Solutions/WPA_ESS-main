@@ -1,0 +1,916 @@
+﻿@model Latest_Staff_Portal.ViewModel.ProcurementPlan
+
+
+@{
+    ViewBag.Title = "FunctionalProcurementPlan";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="FunctionalProcurementPlanLink();">Functional Procurement Plans</a>
+                </li>
+                <li class="breadcrumb-item active">Dept Procurement Plan Card (@Model.Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+<div class="card">
+
+    <div class="card-body">
+
+
+
+        <div style="text-align:right; margin-bottom: 20px">
+            @{
+                if (@Model.ApprovalStatus == "Pending Approval")
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ViewApprovalTrail('@Model.Code');">
+                        <i class="fa fa-route" aria-hidden="true"></i> Approval Trail
+                    </button>
+
+                }
+            }
+
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ReportType();">
+                <i class="fa fa-file-alt" aria-hidden="true"></i> Generate Report
+            </button>
+
+            @* <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="GenerateProcurementPlanReport('@Model.Code');">
+                    <i class="fa fa-print" aria-hidden="true"></i> Print Report
+                </button>*@
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("PJ No:", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Financial Budget ID:", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.FinancialBudgetID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Corporate Strategic Plan ID:", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ConsolidatedProcurementPlan, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Financial Budget ID:", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.FinancialBudgetID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Year Code:", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.FinancialYearCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Date:", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.DocumentDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("From ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("To ", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Location", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDimension1Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Administrative unit Name", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Admin_Unit_Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6" hidden>
+                <div class="form-group">
+                    @Html.Label("Vote", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.GlobalDimension3Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Total Budgeted Amount", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.TotalBudgetedSpend, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Total Goods Amount", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.TotalBudgetGoods, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Total Services Amount", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.TotalBudgetServices, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Total Works Amount", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.TotalActualWorks, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Approval Status", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.ApprovalStatus, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+                </div>
+            </div>
+
+
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Label("Description", new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        <hr style="border:1px solid black" />
+        <hr />
+        <div id="divProcurementPlanLines"></div>
+        <hr style="border:1px solid black" />
+        <b id="textHead"></b>
+        <hr />
+        <div id="divEntries"></div>
+        @{
+            if (Model.ApprovalStatus == "Open")
+            {
+                <div align="center">
+                    <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.Code) For Approval" onclick="sendProcurementPlanForApproval('@Model.Code');" />
+                </div>
+            }
+            if (Model.ApprovalStatus == "Pending Approval")
+            {
+                <div align="center">
+                    <input type="button" class="btn btn-primary waves-effect waves-light" value="Cancel Approval Request" onclick="cancelProcurementPlanApproval('@Model.Code');" />
+                </div>
+            }
+        }
+
+
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" ke aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="lblTitl"> </label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Report Type////////////////////////////*@
+<div class="modal fade" id="myReportTModal" data-toggle="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">Report Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyReportT">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*/////////////////////Report////////////////////////////*@
+<div id="myModalUnits" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Functional Procurement Plan Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <iframe src="" frameborder="0" width="100%" height="600px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadPurchaseDocumentLines(`@Model.Code`, `@Model.ApprovalStatus`,`@Model.StartDate`,`@Model.EndDate`);
+        var status = `@Model.ApprovalStatus`;
+        $("#divEntries").hide();
+        $("#entries").hide();
+        var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+        if (Successmsg != "") {
+            Swal.fire('Success', Successmsg, 'success', true);
+            $.ajax({
+                type: "POST",
+                url: "/Common/NullibySessions"
+            });
+        }
+    });
+    var LoadPurchaseDocumentLines = function (DocNo, Status, StartDate, EndDate) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, Status: Status, StartDate: StartDate, EndDate: EndDate }),
+			url: "/Purchase/ProcurementPlanLines",
+            success: function (data) {
+				$("#divProcurementPlanLines").html(data);
+                HideProgress();
+                GetDocumentAttachments();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+
+    var ViewDoc = function (DocNo) {
+        ShowProgress();
+        window.location = "/Purchase/FunctionalProcurementPlanDocument?docNo=" + DocNo;
+    }
+    var ViewPlanEntries = function (procNo,planning,Status, StartDate, EndDate) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ procurementNo: procNo, planningCategory: planning, Status: Status, StartDate: StartDate, EndDate: EndDate  }),
+            url: "/Purchase/ProcurementTask",
+            success: function (data) {
+                $("#divEntries").html(data);
+                HideProgress();
+                $("#entries").show();
+                $("#textHead").text("Procurement Plan Entries For " + (planning));
+                $("#divEntries").show();
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var GetDocumentAttachments = function () {
+        ShowProgress();
+        var DocNo = `@Model.Code`;
+        var Status = `@Model.ApprovalStatus`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            data: JSON.stringify({ DocNo: DocNo, TableID: 38, Status: Status}),
+            url: "/Common/DocumentAttachments",
+            success: function (data) {
+                HideProgress();
+				$("#divAttachments").html(data);
+            },
+            error: function () {
+                HideProgress();
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+	};
+	var AddPlanLine = function () {
+        ShowProgress();
+        $("#lblTitl").text("Add Procurement Plan Line");
+        var DocNo = `@Model.Code`;
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+           // processData: false,
+            url: '/Purchase/NewProcurementPlanLine',
+            data: JSON.stringify({ DocNo: DocNo }),
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var AddPlanEntry = function (procurementLine,lineCategory) {
+        ShowProgress();
+        $("#lblTitl").text("Add Procurement Plan Entry");
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset = utf-8",
+            url: '/Purchase/NewProcurementPlanEntry',
+            data: JSON.stringify({ planLine: procurementLine, category: lineCategory }),
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+
+    function CreateProcplanLines(procurementPlanID, Plan_No, PlanningCategory) {
+        // Update modal title
+        $("#labelF").text("New Procurement Plan Entry");
+
+        // Show progress indicator
+        ShowProgress();
+
+        // AJAX request
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",
+            url: '/Purchase/NewProcurementPlanAmmendmentEntry',
+            data: JSON.stringify({ ProcurementPlanID: procurementPlanID, RevisedPlanNo: Plan_No, PlanningCategory: PlanningCategory }), // Send parameters
+            success: function (data) {
+                // Load response into modal body
+                $("#modalBody").html(data);
+                HideProgress();
+                // Show modal
+                $("#myModal").modal("show");
+            },
+            error: function (xhr) {
+                HideProgress();
+                // Display meaningful error
+                Swal.fire('Warning', xhr.responseText || "An error occurred while processing your request.", 'warning');
+            }
+        });
+    }
+
+    var UpdateTasks = function (entryNo, PlanningCategory) {
+        // Collect data from the form
+
+
+        var formData = {
+            docNo: '@Model.Code',
+              @*docType: '@Model.Type',*@
+            PlanningCategory: PlanningCategory,
+            ProcurementPlanID: '@Model.Code',
+
+            EntryNo: entryNo,
+            PlanItemType: $('#ItemType_' + entryNo).val(),
+            ItemNo: $('#ItemNo_' + entryNo).val(),
+            Description: $('#Description_' + entryNo).val(),
+            ProcurementType: $('#ProcurementType_' + entryNo).val(),
+            SolicitationType: $('#SolicitationType_' + entryNo).val(),
+            ProcurementMethod: $('#ProcurementMethod_' + entryNo).val(),
+            AlternativeProcurementMethods: $('#AlternativeProcurementMethods_' + entryNo).val(),
+            /* Funding_Source_ID: $('#Funding_Source_ID_' + entryNo).val(),*/
+            RequisitionProductGroup: $('#RequisitionProductGroup_' + entryNo).val(),
+            Quantity: $('#Quantity_' + entryNo).val(),
+            UnitCost: $('#UnitCost_' + entryNo).val(),
+            LineBudgetCost: $("#LineBudgetCost_" + entryNo).val(),
+            ShortcutDimension3Code: $('#ShortcutDimension3Code_' + entryNo).val(),
+            ShortcutDimension4Code: $('#ShortcutDimension4Code_' + entryNo).val(),
+            ShortcutDimension5Code: $('#ShortcutDimension5Code_' + entryNo).val(),
+            ShortcutDimension6Code: $('#ShortcutDimension6Code_' + entryNo).val(),
+            Q1Quantity: $('#Q1Quantity_' + entryNo).val(),
+            Q1Amount: $('#Q1Amount_' + entryNo).val(),
+
+            Q2Quantity: $('#Q2Quantity_' + entryNo).val(),
+            Q2Amount: $('#Q2Amount_' + entryNo).val(),
+
+            Q3Quantity: $('#Q3Quantity_' + entryNo).val(),
+            Q3Amount: $('#Q3Amount_' + entryNo).val(),
+
+            Q4Quantity: $('#Q4Quantity_' + entryNo).val(),
+            Q4Amount: $('#Q4Amount_' + entryNo).val(),
+            Q4Budget: $('#Q4Budget_' + entryNo).val(),
+
+            AGPOPercent: $('#AGPOPercent_' + entryNo).val(),
+            AGPOAmount: $('#AGPOAmount_' + entryNo).val(),
+            PWDPercent: $('#PWDPercent_' + entryNo).val(),
+            PWDAmount: $('#PWDAmount_' + entryNo).val(),
+            WomenPercent: $('#WomenPercent_' + entryNo).val(),
+            WomenAmount: $('#WomenAmount_' + entryNo).val(),
+            YouthPercent: $('#YouthPercent_' + entryNo).val(),
+            YouthAmount: $('#YouthAmount_' + entryNo).val(),
+            CitizenContractorsPercent: $('#CitizenContractorsPercent_' + entryNo).val(),
+
+        };
+
+        //mandatory fields validation
+        var isValid = true;
+
+        if (!formData.ProcurementType) {
+            Swal.fire('Warning', 'Select Procurement Type', 'warning');
+            isValid = false;
+        }
+        if (!formData.SolicitationType) {
+            Swal.fire('Warning', 'Select Solicitation Type', 'warning');
+            isValid = false;
+        }
+        if (!formData.ProcurementMethod) {
+            Swal.fire('Warning', 'Select Procurement Method', 'warning');
+            isValid = false;
+        }
+     /*   if (!formData.AlternativeProcurementMethods) {
+            Swal.fire('Warning', 'Enter Alternative Procurement Method', 'warning');
+            isValid = false;
+        }*/
+
+
+        //percentages validation
+        var NewAGPOPercentValue = Number(formData.YouthPercent) + Number(formData.WomenPercent) + Number(formData.PWDPercent);
+        formData.AGPOPercent = NewAGPOPercentValue;
+        var TotalPercentageValidation = Number(formData.CitizenContractorsPercent) + Number(formData.AGPOPercent);
+
+        // Total Percentage Validation checks
+        if (TotalPercentageValidation!=100) {
+            Swal.fire('Warning', 'AGPO + Citizen distribution should be equal to 100', 'warning');
+            isValid = false;
+        }
+
+        // Exit if validation fails
+        if (!isValid) {
+            return;
+        }
+
+        switch (formData.Procurement_Method) {
+            case "Open Tender":
+                formData.Procurement_Method = 1;
+                break;
+
+            case "RFQ":
+                formData.Procurement_Method = 2;
+                break;
+
+            case "RFP":
+                formData.Procurement_Method = 3;
+                break;
+
+            case "Two Stage Tender":
+                formData.Procurement_Method = 4;
+                break;
+
+
+            case "Design Competition Tender":
+                formData.Procurement_Method = 5;
+                break;
+
+            case "Restricted Tender":
+                formData.Procurement_Method = 6;
+                break;
+
+
+            case "Direct Procurement":
+                formData.Procurement_Method = 7;
+                break;
+
+            case "Low Value Procurement":
+                formData.Procurement_Method = 8;
+                break;
+
+            case "Force Account":
+                formData.Procurement_Method = 9;
+                break;
+
+            case "Framework Agreement":
+                formData.Procurement_Method = 10;
+                break;
+
+            case "Reverse Auction":
+                formData.Procurement_Method = 11;
+                break;
+
+            default:
+                formData.Procurement_Method = 0;
+                break
+        }
+
+
+        // Prepare data object
+        var createPlanEntry = formData;
+
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify(createPlanEntry),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/SubmitUpdatedTask',
+            success: function (response) {
+                HideProgress();
+                if (response.success) {
+                    Swal.fire('Success', 'Record successfully submitted.', 'success');
+                    ViewDoc(response.message);
+                    //window.location.reload;
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred: ' + error, 'error');
+            }
+        });
+
+    };
+    var SubmitItemLine = function () {
+    var DocNo = `@Model.Code`;
+    var itemno = $("#ddProcPlanItemNo").children("option:selected").val();
+
+    if (itemno === "") {
+        Swal.fire('Warning', "Select Procurement Category", 'warning');
+        return;
+    } else {
+        ShowProgress();
+
+        var formData = {
+            DocNo: DocNo,
+            ProcurementPlanID: itemno,
+            ProcurementPlanItemNo: itemno
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/SubmitProcurementLine",
+            data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    LoadPurchaseDocumentLines(`@Model.Code`, `@Model.ApprovalStatus`);
+                    $("#txtNetAmount").val(data.NetAmout);
+                    $("#myModal").modal("hide");
+                    Swal.fire('Success', data.message, 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Error', 'An error occurred while processing your request.', 'error');
+            }
+        });
+    }
+    };
+
+    var ReportType = function () {
+        ShowProgress();
+        $.ajax({
+            url: '/Purchase/ReportType',
+            datatype: "json",
+            type: "POST",
+            contentType: "application/json; charset = utf-8",
+            success: function (data) {
+                $("#modalBodyReportT").html(data);
+                HideProgress();
+                $("#myReportTModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var GetReportByType = function () {
+        var documentNo = '@Model.Code';
+        var reportType = $("#ddlType").children("option:selected").val();
+        ShowProgress();
+
+        $.ajax({
+            async: true,
+            datatype: "json",
+            type: "POST",
+            data: JSON.stringify({ documentNumber: documentNo, reportType: reportType }),
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            url: '/Purchase/GetProcurementPlanReportByType',
+            success: function (data) {
+                HideProgress();
+
+                if (data.success) {
+                    if (reportType === "1") {
+                        try {
+                            const byteCharacters = atob(data.message);
+                            const byteArray = new Uint8Array([...byteCharacters].map(char => char.charCodeAt(0)));
+                            const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                            const link = document.createElement('a');
+                            const url = URL.createObjectURL(blob);
+
+                            link.href = url;
+                            link.download = `${documentNo}_Functional_Procurement_Plan.xlsx`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+
+                            URL.revokeObjectURL(url); // Free up memory
+
+                            $("#myReportTModal").modal("hide");
+                        } catch (error) {
+                            console.error("Error processing file:", error);
+                            alert("Failed to generate the report. Please try again.");
+                        }
+                    } else {
+                        $("#myReportTModal").modal("hide");
+                        $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                        $("#myModalUnits").modal("show");
+                        HideProgress();
+                    }
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    var GenerateProcurementPlanReport = function (DocNo) {
+        var DocNo = '@Model.Code';
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/GenerateProcurementPlanReport',
+            success: function (data) {
+                if (data.success) {
+                    $('iframe').attr('src', "data:application/pdf;base64," + data.message);
+                    $("#myModalUnits").modal("show");
+                    HideProgress();
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+    function sendProcurementPlanForApproval(docNo) {
+
+        var attCount = $('#documentAttachments tbody tr').length;
+        var rowCount = $('#divProcurementPlanLines tbody tr').length;
+
+
+        if ($('#divProcurementPlanLines tbody tr td[colspan="8"]').length > 0) {
+            rowCount = 0;
+        }
+
+
+        if (rowCount === 0) {
+            Swal.fire('Warning', 'Add Procurement Plan Line.', 'warning');
+            return false;
+        }
+        ShowProgress();
+
+        $.ajax({
+            url: "/Purchase/sendProcurementPlanForApproval", // URL to the server-side method
+            type: 'POST', // HTTP method
+            data: JSON.stringify({ DocNo: docNo }), // Data to be sent to the server
+            contentType: 'application/json; charset=utf-8', // Content type
+            success: function (response) {
+                // Hide the progress indicator
+                HideProgress();
+
+                if (response.success) {
+                    // Show success message and redirect to the specified URL
+                    Swal.fire('Success', 'Request submitted successfully', 'success').then(function () {
+                        window.location.href = response.message;
+                    });
+                } else {
+                    // Show error message
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                // Hide the progress indicator
+                HideProgress();
+
+                // Show error message on request failure
+                Swal.fire('Error', 'An error occurred ' + error, 'error');
+            }
+        });
+    }
+
+    function cancelProcurementPlanApproval(docNo) {
+        ShowProgress();
+
+        $.ajax({
+            url: "/Purchase/CancelProcurementPlanApproval", // URL to the server-side method
+            type: 'POST', // HTTP method
+            data: JSON.stringify({ DocNo: docNo }), // Data to be sent to the server
+            contentType: 'application/json; charset=utf-8', // Content type
+            success: function (response) {
+                // Hide the progress indicator
+                HideProgress();
+
+
+                if (response.success) {
+                    // Show success message and redirect to the specified URL
+                    Swal.fire('Success', 'Request submitted successfully', 'success').then(function () {
+                        /*window.location.reload;*/
+                        window.location.href = "FunctionalProcurementPlanDocument?docNo=" + response.message
+                    });
+                } else {
+                    // Show error message
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function (xhr, status, error) {
+                // Hide the progress indicator
+                HideProgress();
+
+                // Show error message on request failure
+                Swal.fire('Error', 'An error occurred ' + error, 'error');
+            }
+        });
+    }
+
+    var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Functional Procurement Plan: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+               /* $("#myModalLinks").modal("hide");*/
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+
+</script>

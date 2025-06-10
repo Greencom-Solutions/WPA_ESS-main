@@ -1,0 +1,148 @@
+﻿@model Latest_Staff_Portal.ViewModel.TrainingApplications
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Training Plan", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.TrainingPlanNo, new SelectList(Model.ListOfTrainingPlan, "Value", "Text", Model.TrainingPlanNo), "--Select Training Plan--", new { id = "ddlTrainingPlan", @class = "form-control", onchange = "getCourseList()" })
+                @Html.ValidationMessageFor(model => model.TrainingPlanNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Course", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.CourseTitle, new SelectList(Model.ListOfCourses, "Value", "Text", Model.CourseTitle), "--Select Course--", new { id = "ddlCourses", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CourseTitle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("From Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="dtFrom" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("To Date", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="dtTo" onkeydown="return false;" autocomplete="off"/>
+                <div class="a"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Directorate/Department", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.EmployeeDepartment, new SelectList(Model.ListOfDepartment, "Value", "Text", Model.EmployeeDepartment), "--Select Directorate--", new { id = "ddlDim2", @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.ValidationMessageFor(model => model.EmployeeDepartment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Provider", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.Provider, new SelectList(Model.ListOfTrainers, "Value", "Text", Model.Provider), "--Select Trainer--", new { id = "ddlTrainer", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Provider, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Training Region", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                <select id="ddlCategory" name="ddlCategory" class="form-control">
+                    <option value="">----</option>
+                    <option value="0">Local</option>
+                    <option value="1">Overseas</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Training Venue", new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.DropDownListFor(m => m.TrainingVenueRegionCode, new SelectList(Model.ListOfTrainingVeneu, "Value", "Text", Model.TrainingVenueRegionCode), "--Select Training Veneu--", new { id = "ddlTrainingVenue", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TrainingVenueRegionCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+
+</div>
+<hr/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitTrainingRequest();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dtFrom,#dtTo').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-0:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $("#dtFrom,#dtTo").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#ddlDim2,#ddlDim1,#ddlDim3,#ddlCourse,#ddlTrainer").select2({
+            width: '100%'
+        });
+        //document.getElementById("ddlDim2").disabled = true;
+        //document.getElementById("ddlDim1").disabled = true;
+        //document.getElementById("ddlDim3").disabled = true;
+    });
+
+    function getCourseList() {
+        var selectedValue = document.getElementById("ddlTrainingPlan").value;
+
+        $.ajax({
+            url: '/Training/GetCourses', // Replace ControllerName with your actual controller name
+            type: 'GET',
+            data: { trPlanNo: selectedValue },
+            success: function (response) {
+                var ddlCourses = $('#ddlCourses');
+                ddlCourses.empty().append($('<option>', {
+                    value: '',
+                    text: '--Select Course--'
+                }));
+
+                $.each(response, function (index, course) {
+                    ddlCourses.append($('<option>', {
+                        value: course.Value,
+                        text: course.Text
+                    }));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching courses: " + error);
+            }
+        });
+    }</script>

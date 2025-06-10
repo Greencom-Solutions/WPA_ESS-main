@@ -1,0 +1,128 @@
+﻿@model Latest_Staff_Portal.ViewModel.ExpensePRNLine
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("GL Account:", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.GLAccount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtGLAccount" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Line No:", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.LineNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtLineNo" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Procurement Type:", new { @class = "control-label col-md-12", @for = "ddlProcType" })
+                <select class="form-control" id="ddlProcType" onchange="ShowRequiredDiv()">
+                    <option value="">--Select Procurement Type--</option>
+                    <option value="0">Goods</option>
+                    <option value="1">Service</option>
+                    <option value="3">Assets</option>
+                    <option value="2">Works</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Procurement Plan Entry Number:", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.ProcPlanEntryNo, Model.ListOfProcurementPlanNos, "-- Select Procurement Plan  --", new { @class = "form-control", id = "ddlProcPlanEntryNo"})
+                @*@Html.DropDownListFor(model => model.ProcPlanEntryNo, Model.ListOfProcurementPlanNos, "-- Select Procurement Plan  --", new { @class = "form-control", id = "ddlProcPlanEntryNo", onchange = "getItems()" })*@
+                @Html.ValidationMessageFor(model => model.ProcPlanEntryNo, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Item:", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.Item, Model.ListOfProcurementItems, "-- Select Item --",new { @class = "form-control", id = "txtItem", onchange = "getItemsEntryNo(this.value)" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Entry Number:", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.EntryNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtEntryNumber" })
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Quantity:", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", id = "txtQuantity" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Unit Cost:", new { @class = "control-label col-md-12" })
+                @Html.TextBoxFor(m => m.Rate, new { @class = "form-control", id = "txtUnitCost" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Technical Specifications:", new { @class = "control-label col-md-12" })
+                @Html.TextAreaFor(m => m.ExpenseDescription, new { @class = "form-control", id = "txtExpenseDescription" })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr style="border:1px solid black" />
+
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitPurchaseline();" />
+</div>
+
+<script type="text/javascript">
+
+    function getItems() {
+        var selectedValue = $("#ddlProcPlanEntryNo").val();
+
+        var glAccount = $("#txtGLAccount").val();
+
+        ShowProgress();
+
+        $.ajax({
+            url: "/Purchase/GetItems",
+            type: 'GET',
+            data: { pPlanId: selectedValue, glAccount: glAccount },
+            success: function (response) {
+                if (response.success !== false) {
+                    $("#txtItem").val(response.Item);
+                    $("#txtEntryNumber").val(response.EntryNo);
+                    $("#txtUnitCost").val(response.UnitCost);
+
+
+
+                    $("#txtItem, #txtEntryNumber, #txtUnitCost").trigger('change');
+                } else {
+                    console.error(response.message);
+                }
+                HideProgress();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching dimensions:", error);
+                HideProgress();
+            }
+        });
+
+    }
+
+
+    function getItemsEntryNo(entryNo) {
+        $("#txtEntryNumber").val(entryNo);
+    }
+</script>

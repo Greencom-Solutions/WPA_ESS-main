@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseQuote>
+
+<div class="mb-3">
+    <h4>RFQ Responses</h4>
+    <hr />
+</div>
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>No </th>
+                <th>Buy From Vendor No</th>
+                <th>Buy From Vendor Name </th>
+                <th>Location Code</th>
+                <th>Assigned User ID </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>          
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Buy_from_Vendor_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Buy_from_Vendor_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Assigned_User_ID)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+
+</script>

@@ -1,0 +1,159 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.SafariTeam2>
+
+@{
+    ViewBag.Title = "ImprestMemoDocumentLines";
+}
+
+<div class="table-responsive">
+    <table id="ImpLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+@*                <th>Imprest Memo No</th>
+                <th>Line No</th>*@
+                <th>Destination Town</th>
+               @* <th>Type</th>
+                <th>Type of Expense</th>*@
+                <th>Payroll No</th>
+                <th>G/L Account</th>
+               @* <th>Task No</th>*@
+                <th>Name</th>
+                <th>Unit of Measure</th>
+                <th>Currency Code</th>
+                <th>No Of Days</th>
+                <th>Rate</th>
+                <th>Total Daily Subsistence Allowance</th>
+               @* <th>Transport Costs</th>*@
+                <th>Total Entitlement</th>
+                <th>Outstanding Amount</th>
+               @* <th>Tasks to Carry Out</th>
+                <th>Expected Output</th>
+                <th>Delivery</th>*@
+                <th>Project Lead</th>
+                <th>Regions Name</th>
+                <th>Department Name</th>
+               @* <th>Revenue Name</th>
+                <th>Dimension4 Code</th>
+                <th>Dimension5 Code</th>
+                <th>Dimension6 Code</th>
+                <th>Dimension7 Code</th>
+                <th>Dimension8 Code</th>*@
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Imprest_Memo_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Line_No)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Work_Type)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type_of_Expense)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.G_L_Account)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Task_No)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit_of_Measure)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Currency_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_Period)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Direct_Unit_Cost)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Entitlement)
+                    </td>
+                  @*  <td>
+                        @Html.DisplayFor(modelItem => item.Transport_Costs)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Entitlement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Outstanding_Amount)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Tasks_to_Carry_Out)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Expected_Output)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Delivery)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Project_Lead)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dimension1Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dimension2Code)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Dimension3Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dimension4Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dimension5Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dimension6Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dimension7Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dimension8Code)
+                    </td>*@
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="text-align:right; margin-top: 20px">
+    <button class="btn btn-primary action-buttons2" onclick="AddImprestMemoLines();">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
+    </button>
+</div>
+
+
+
+
+<script>
+    $("#ImpLines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>

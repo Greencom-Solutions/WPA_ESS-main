@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ContractPaymentDetailsLines>
+<p>
+    <button type="button" class="btn btn-primary waves-effect waves-light" onclick="AddPaymentDetails('@ViewBag.LineLineNo', '@ViewBag.PRN', '@ViewBag.ContractNoToPay');">
+        Create
+    </button>
+</p>
+
+<div class="table-responsive">
+    <table id="PurchaseRequisitionLine1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>
+                    @Html.DisplayName("Document No")
+                </th>
+                <th>
+                    @Html.DisplayName("Contract No")
+                </th>
+                <th>
+                    @Html.DisplayName("Item Line No")
+                </th>
+                <th>
+                    @Html.DisplayName("Item No")
+                </th>
+                <th>
+                    @Html.DisplayName("Description")
+                </th>
+                <th>
+                    @Html.DisplayName("Quantity")
+                </th>
+                <th>
+                    @Html.DisplayName("Unit Price")
+                </th>
+                <th>
+                    @Html.DisplayName("Amount")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Document_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Contract_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item_Line_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unit_Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

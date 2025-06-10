@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PoolCommittee>
+
+
+<table id="datatable-buttons" class="table table-bordered table-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead style="background-color:black;color:white">
+        <tr>
+            <th>Action</th>
+            <th>Document No</th>
+            <th>Description</th>
+            <th>Document Date</th>
+            <th>Appointment Effective Date</th>
+            <th>Appointing Authority</th>
+            <th>Name</th>
+            <th>Staff ID</th>
+            <th>Designation</th>
+            <th>Global Dimension 1 Code</th>
+            <th>Global Dimension 1 Name</th>
+            <th>Global Dimension 2 Code</th>
+            <th>Global Dimension 2 Name</th>
+            <th>Status</th>
+            <th>Created By</th>
+            <th>Created Date</th>
+            <th>Created Time</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="button" onclick="ViewDoc('@item.Document_No');" style="background: #162f25; color: whitesmoke; border-radius:10px" value="Select" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Document_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Document_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Appointment_Effective_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Appointing_Authority)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Staff_Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Designation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Global_Dimension_1_Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Global_Dimension_1_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Global_Dimension_2_Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Global_Dimension_2_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created_By)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created_Time)
+                </td>
+               
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<script>
+	function ViewDoc(encryptedDocNo) {
+		ShowProgress();
+		// Use the encrypted document number in the URL
+		window.location = "/Purchase/PoolCommitteeDocumentView?DocNo=" + encodeURIComponent(encryptedDocNo);
+	}
+
+	$("#datatable-buttons").DataTable({
+		lengthChange: true,
+		lengthMenu: [5, 10, 25, 50, 100]
+    });
+
+
+
+
+</script>
+

@@ -1,0 +1,352 @@
+﻿@{
+    ViewBag.Title = "PurchaseRequisitionList";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+	.selectedTableRow {
+		background-color: #74788d;
+		color: white;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="ProcurementLink();">Procurement</a>
+                </li>
+                <li class="breadcrumb-item active">Purchase Requisition</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <hr/>
+
+ 
+    <hr/>
+    <div id="divPurchaseRegList"></div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal Links////////////////////////////*@
+<div class="modal fade" id="myModalLinks" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Actions</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyLinks">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		LoadPurchaseRequisition();
+	});
+	var LoadPurchaseRequisition = function () {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "GET",
+			dataType: 'HTML',
+			contentType: false,
+			processData: false,
+			url: "/Purchase/PurchaseRequisitionListPartialView",
+			success: function (data) {
+				$("#divPurchaseRegList").html(data);
+				HideProgress();
+			},
+			error: function () {
+				HideProgress();
+				alert("There is some problem to process your request. Please try after some time");
+			}
+		});
+	}
+	var PurchaseRequisition = function () {
+		$("#labelF").text("New Requisition Form");
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Purchase/NewPurchaseRequest',
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+
+
+	var SubmitPurchaseRequisition = function () {
+		var Dim1 = $("#ddlDim1").children("option:selected").val();
+		var Dim2 = $("#ddlDim2").children("option:selected").val();
+		var Dim3 = $("#ddlDim3").children("option:selected").val();
+		var Dim4 = $("#ddlDim4").children("option:selected").val();
+		var Dim5 = $("#ddlDim5").children("option:selected").val();
+		var Dim6 = $("#ddlDim6").children("option:selected").val();
+		var Dim7 = $("#ddlDim7").children("option:selected").val();
+		var RespC = $("#ddlRespC").children("option:selected").val();
+		var Remarks = $("#txtRemarks").val().replace(/(\r\n|\n|\r)/gm, " ");
+		var RequisitionType = $("#ddlRequisitionType").children("option:selected").val();
+
+		if (Dim1 == "") {
+			Swal.fire('Warning', "Select Donor", 'warning');
+			return;
+		}
+		else if (Dim2 == "") {
+			Swal.fire('Warning', "Select Project", 'warning');
+			return;
+		}
+		else if (Dim3 == "") {
+			Swal.fire('Warning', "Select Program", 'warning');
+			return;
+		}
+		else if (Dim4 == "") {
+			Swal.fire('Warning', "Select Activity", 'warning');
+			return;
+		}
+		else if (Dim5 == "") {
+			Swal.fire('Warning', "Select County", 'warning');
+			return;
+		}
+		else if ((Dim6 == "") && (Dim1 == "CDC")) {
+			Swal.fire('Warning', "Select Major Cost Category", 'warning');
+			return;
+		}
+		else if (RequisitionType == "") {
+			Swal.fire('Warning', "Select Requisition Type", 'warning');
+			return;
+		}
+		else if (RespC == "") {
+			Swal.fire('Warning', "Select Responsibility Centre", 'warning');
+			return;
+		}
+		else if (Remarks == "") {
+			Swal.fire('Warning', "Enter Reason for the purchase", 'warning');
+			return;
+		}
+		else if (Remarks.length > 100) {
+			Swal.fire('Warning', "Your Reason should have a maximum of 100 characters", 'warning');
+			return;
+		}
+		else {
+			var PRVHeader = {};
+			var DocD = {};
+			DocD.Dim1 = Dim1;
+			DocD.Dim2 = Dim2;
+			DocD.Dim3 = Dim3;
+			DocD.Dim4 = Dim4;
+			DocD.Dim5 = Dim5;
+			DocD.Dim6 = Dim6;
+			DocD.Dim7 = Dim7;
+			DocD.RespC = RespC;
+			DocD.RequisitionType = RequisitionType;
+			PRVHeader.Comment = Remarks;
+			PRVHeader.RequisitionType = RequisitionType;
+			DocD.Remarks = Remarks;
+			DocD.Comment = Remarks;
+			PRVHeader.DocD = DocD;
+			ShowProgress();
+
+			//Send the JSON array to Controller using AJAX.
+			$.ajax({
+				type: "POST",
+				url: "/Purchase/SubmitPurchaseRequisition",
+				//data: data,
+				data: JSON.stringify({ prvHeader: PRVHeader }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+					if (data.success) {
+						window.location = data.message;
+					}
+					else {
+						Swal.fire('Warning', data.message, 'warning');
+						HideProgress();
+					}
+				},
+				error: function (err) {
+					HideProgress();
+					Swal.fire('Warning', err, 'warning');
+				}
+			});
+		}
+	};
+	var ViewDoc = function (DocNo) {
+		ShowProgress();
+		window.location = "/Purchase/PurchaseDocumentView?DocNo="+DocNo;
+	}
+	var SendDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Purchase/SendPurchaseAppForApproval',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+					LoadPurchaseRequisition();
+					$("#myModalLinks").modal("hide");
+					Swal.fire('Success', data.message, 'success');
+				}
+				else {
+					HideProgress();
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var DelegateDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DelegateApproval',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+					LoadPurchaseRequisition();
+					$("#myModalLinks").modal("hide");
+					Swal.fire('Success', data.message, 'success');
+				}
+				else {
+					HideProgress();
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var CancelDocForApproval = function (DocNo) {
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Purchase/CancelPurchaseAppForApproval',
+			success: function (data) {
+				if (data.success == true) {
+					HideProgress();
+					LoadPurchaseRequisition();
+					$("#myModalLinks").modal("hide");
+					Swal.fire('Success', data.message, 'success');
+				}
+				else {
+					HideProgress();
+					Swal.fire('Error', data.message, 'error');
+				}
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+
+	}
+	var ViewApprovalTrail = function (DocNo) {
+		$("#labelF").text("Document Approval Trail");
+		ShowProgress();
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ DocNo: DocNo, RecID: "Purchase Header: Quote," + DocNo }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DocumentApprovalTrail',
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModalLinks").modal("hide");
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+	var ViewDocComments = function (documentNumber) {
+		$("#labelF").text("Document Comments");
+		ShowProgress();
+		var RecordID = "Purchase Header: Quote," + DocNo;
+		$.ajax({
+			async: true,
+			type: "POST",
+			datatype: "json",
+			data: JSON.stringify({ docNo: documentNumber }),
+			contentType: "application/json; charset = utf-8",
+			processData: false,
+			url: '/Common/DocumentApprovalComments',
+			success: function (data) {
+				$("#modalBody").html(data);
+				HideProgress();
+				$("#myModalLinks").modal("hide");
+				$("#myModal").modal("show");
+			},
+			error: function (err) {
+				HideProgress();
+				Swal.fire('Warning', err, 'warning');
+			}
+		});
+	}
+</script>

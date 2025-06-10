@@ -1,0 +1,113 @@
+﻿@*@model IEnumerable<Latest_Staff_Portal.ViewModel.FrameworkContractLinesList>*@
+@model Latest_Staff_Portal.ViewModel.FrameworkContractLinesList
+
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered table-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Standard Purchase Code</th>
+                <th>Line No</th>
+                <th>Type</th>
+                <th>Filtered Type Field</th>
+                <th>No</th>
+                <th>Variant Code</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit of Measure Code</th>
+                <th>Amount Excl VAT</th>
+                <th>Shortcut Dimension 1 Code</th>
+                <th>Shortcut Dimension 2 Code</th>
+                <th>Shortcut Dimension 3 Code</th>
+                <th>Shortcut Dimension 4 Code</th>
+                <th>Shortcut Dimension 5 Code</th>
+                <th>Shortcut Dimension 6 Code</th>
+                <th>Shortcut Dimension 7 Code</th>
+                <th>Item Category</th>
+                <th>Shortcut Dimension 8 Code</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @if (Model.ListOfFrameworkContractLines != null && Model.ListOfFrameworkContractLines.Any())
+            {
+                foreach (var item in Model.ListOfFrameworkContractLines)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Standard_Purchase_Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Line_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FilteredTypeField)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Variant_Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Unit_of_Measure_Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount_Excl_VAT)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shortcut_Dimension_1_Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Shortcut_Dimension_2_Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimCode_x005B_3_x005D_)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimCode_x005B_4_x005D_)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimCode_x005B_5_x005D_)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimCode_x005B_6_x005D_)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimCode_x005B_7_x005D_)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item_Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortcutDimCode_x005B_8_x005D_)
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });
+</script>

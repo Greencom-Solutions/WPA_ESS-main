@@ -1,0 +1,237 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.FleetRequests>
+
+
+<div class="table-responsive">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Requisition No</th>
+                <th>Requested By</th>
+                <th>Requested By Name</th>
+                <th>Position</th>
+                @*<th>Approved Imprest Memo</th>*@
+                <th>Commencement</th>
+                <th>Destination</th>
+                <th>Route Description</th>
+                <th>Date of Request</th>
+                <th>Time Requested</th>
+                <th>Time Out</th>
+                <th>Time In</th>
+                <th>Journey Route</th>
+                <th>Opening Odometer</th>
+                <th>Closing Odometer</th>
+                <th>Days Requested</th>
+               @* <th>Hours Requested</th>*@
+                <th>Trip End Date</th>
+                <th>Trip End Time</th>
+                <th>Status</th>
+                <th>Responsibility Center</th>
+                <th>Work Ticket No</th>
+               @* <th>User ID</th>*@
+               @* <th>HOD</th>*@
+                <th>Added On</th>
+                <th>Date of Request</th>
+                <th>Vehicle Allocated</th>
+                <th>Allocated By</th>
+                <th>Driver Allocated</th>
+                <th>Driver Name</th>
+                <th>Subject</th>
+                <th>Comments</th>
+               @* <th>Fuel Request Code</th>
+                <th>Reason for Reopening</th>
+                <th>Reg No</th>
+                <th>Model</th>
+                <th>Officer Taking Over</th>
+                <th>Immediate Former</th>
+                <th>Spare Wheel</th>
+                <th>Wheel Spammer</th>
+                <th>Hydraulic Jack</th>
+                <th>Radio</th>
+                <th>Wheel Caps</th>
+                <th>Side Mirrors</th>
+                <th>Fuel Card No</th>
+                <th>Floor Mats</th>
+                <th>Body Condition</th>
+                <th>Current Mileage</th>
+                <th>Tyre Condition</th>
+                <th>Logbook</th>
+                <th>Observations</th>*@
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input class="btn btn-primary btn-sm action-buttons2"  type="button" onclick="ViewDoc('@item.Transport_Requisition_No');"  value="Select" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transport_Requisition_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requested_By)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requested_By_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Position)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Approved_Imprest_Memo)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.From)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Destination)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Route_Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_of_Trip)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_Requested)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_out)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time_In)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Journey_Route)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Opening_Odometer_Reading)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Closing_Odometer_Reading)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.No_of_Days_Requested)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Number_of_Hours_Requested)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trip_End_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trip_End_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Responsibility_Center)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Work_Ticket_No)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.User_Id)
+                    </td>*@
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.HOD)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Added_On)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_of_Request)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vehicle_Allocated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vehicle_Allocated_by)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver_Allocated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Driver_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                   @* <td>
+                        @Html.DisplayFor(modelItem => item.Fuel_Request_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reason_for_Reopening)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reg_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Officer_Taking_Over)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Immediate_Former)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Spare_Wheel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wheel_Spammer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hydraulic_Jack)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Radio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wheel_Caps)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Side_Mirrors)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fuel_Card_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Floor_Mats)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Body_Condition)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Current_Mileage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tyre_Condition)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Logbook)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observations)
+                    </td>
+                   *@
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>$("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+    });</script>

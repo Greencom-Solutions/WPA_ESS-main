@@ -1,0 +1,168 @@
+﻿@model Latest_Staff_Portal.ViewModel.RequestForQuotationsLines
+
+<style>
+    .form-group {
+        margin-bottom: 10px; /* Adjust margin between fields if needed */
+    }
+
+    .form-control {
+        flex-grow: 1; /* Make the input field take up available space */
+    }
+
+    .ml-2 {
+        margin-left: 10px; /* Space between input and remove button */
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Standard Purchase Code", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.DropDownListFor(m => m.No, Model.ListOfItems, "--Select Option--", new { @class = "form-control", @id = "Outcome", onchange = "GetStrategicObjectives(this.value, this.options[this.selectedIndex].text)" })
+            @Html.ValidationMessageFor(model => model.Standard_Purchase_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Filtered Type Field", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.FilteredTypeField, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FilteredTypeField, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Variant", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Variant_Code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Variant_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Quantity", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Unit of Measure", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Unit_of_Measure_Code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Unit_of_Measure_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Amount Excl VAT", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Amount_Excl_VAT, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Amount_Excl_VAT, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Shortcut Dimension 1 Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Shortcut_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Shortcut Dimension 2Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Shortcut_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("ShortcutDimCode x005B 3 x005D", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.ShortcutDimCode_x005B_3_x005D_, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShortcutDimCode_x005B_3_x005D_, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("ShortcutDimCode_x005B_4_x005D_", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.ShortcutDimCode_x005B_4_x005D_, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShortcutDimCode_x005B_4_x005D_, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("ShortcutDimCode_x005B_5_x005D_", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.ShortcutDimCode_x005B_5_x005D_, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShortcutDimCode_x005B_5_x005D_, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("ShortcutDimCode_x005B_6_x005D_", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.ShortcutDimCode_x005B_6_x005D_, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShortcutDimCode_x005B_6_x005D_, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("ShortcutDimCode_x005B_7_x005D_", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.ShortcutDimCode_x005B_7_x005D_, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShortcutDimCode_x005B_7_x005D_, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Item Category", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Item_Category, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Item_Category, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("ShortcutDimCode_x005B_8_x005D_", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.ShortcutDimCode_x005B_8_x005D_, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShortcutDimCode_x005B_8_x005D_, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitPMMULine();" />
+</div>

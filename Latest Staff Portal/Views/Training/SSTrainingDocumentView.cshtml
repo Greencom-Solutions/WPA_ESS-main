@@ -1,0 +1,136 @@
+﻿@model Latest_Staff_Portal.ViewModel.SelfSponsoredTrainingApplication
+
+@{
+    ViewBag.Title = "SSTrainingDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="GoBackToTrainingList();">My Training List</a></li>
+                <li class="breadcrumb-item active">Training Document (@Model.Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4>@Model.Code Self-Sponsored Training Application</h4>
+        </div>
+    <div class="card-body">
+
+        <!-- Additional Fields -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Course Title", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Course_Title, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Training Responsibility", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Training_Responsibility, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <!-- More Fields -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Duration", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Duration, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Row of Fields -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Start Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Start_DateTime, new { @class = "form-control", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("End Date", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.End_DateTime, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Training Type", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.Training_Type, new { @class = "form-control", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Training_Category", htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(m => m.End_DateTime, new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content bg-white">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attachment</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Load necessary data or initialize functions
+    });
+
+    function SendForApproval(docNo) {
+        // Logic to send the document for approval
+    }
+
+    function GoBackToTrainingList() {
+        // Logic to navigate back to the training list
+    }
+</script>

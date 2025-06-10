@@ -1,0 +1,201 @@
+﻿@model Latest_Staff_Portal.ViewModel.IFSTenderCommitteeCard
+<div class="text-center"><h4>New Procurement Committee</h4><hr /></div>
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Raised By", new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Raised_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.Raised_By, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Name", new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Geographical Location", new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Administrative Unit", new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.AdminUnit, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.AdminUnit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Document Date", new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Document_Date, new { htmlAttributes = new { @class = "form-control", id = "documentDate", @readonly = "readonly", style = "background-color:#dedebd" } })
+                @Html.ValidationMessageFor(model => model.Document_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Appointment Effective Date", new { @class = "control-label col-md-2" })
+                <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="appointmentEffectiveDate" onkeydown="return false;" autocomplete="off" />
+                <div class="a"></div>
+            </div>
+        </div>
+        @{
+            var attributes = new Dictionary<string, object>
+            {
+                { "class", "form-control" },
+                { "id", "Committee_Type" },
+                { "onchange", "GetDescription()" }
+            };
+
+            if (Model.Committee_Type == "INSPECTION")
+            {
+                attributes.Add("disabled", "disabled");
+            }
+        }
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Committee Type", new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(
+                    model => model.Committee_Type,
+                    Model.ListOfCommitteeTypes,
+                    "--select Committee Type--",
+                    attributes
+                )
+                @Html.ValidationMessageFor(model => model.Committee_Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Procurement Committee Code", new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(model => model.IFS_Code, Model.ListOfIFSCodes, "--Select ITB Code--", new { @class = "form-control", id = "IFS_Code", onchange = "GetDescription()" })
+                @Html.ValidationMessageFor(model => model.IFS_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Description", new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", id = "Description2", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Appointing Authority", new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Appointing_Authority, new { htmlAttributes = new { @class = "form-control", id = "Appointing_Authority", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                @Html.ValidationMessageFor(model => model.Appointing_Authority, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Tender Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Tender_Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tender_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+        @*<div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Duration", new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        @*<div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Pj No", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Staff_Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color:#dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Staff_Id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Designation", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+    </div>
+</div>
+
+<hr />
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Request" onclick="SubmitIFSCommittee();" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#appointmentEffectiveDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy'
+        });
+        $("#appointmentEffectiveDate").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+        $("#Workplan, #ActivityCode, #GlobalDimension2Code, #ddlPrnType, #PRNType, #LocationCode, #ProductRequisitionGroup, #ProcurementPlanCategory").select2({
+            width: '100%'
+        });
+        var today = new Date();
+        var day = ("0" + today.getDate()).slice(-2);
+        var month = ("0" + (today.getMonth() + 1)).slice(-2);
+        var todayFormatted = today.getFullYear() + "-" + month + "-" + day;
+        $('#documentDate, #appointmentEffectiveDate').val(todayFormatted);
+    });
+
+    function GetDescription() {
+        var selectedValue = $("#IFS_Code").val();
+        var committeeType = $("#Committee_Type").val();
+
+        if (!committeeType) {
+            Swal.fire("Warning", "Select Committe Type", "warning");
+            $("#IFS_Code").val("");
+            return;
+        }
+
+        var Description = selectedValue + "_Tender " + committeeType.toLowerCase() + " Committee"
+        $("#Description2").val(Description);
+
+        if (selectedValue) {
+            ShowProgress();
+
+            $.ajax({
+                url: "/Purchase/GetAppointingAuthority",
+                type: 'POST',
+                dataType: "json",
+                data: JSON.stringify({ ifsCode: selectedValue }),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (response.success !== false) {
+                        $("#Appointing_Authority").val(response.Appointing_Authority);
+                        $("#Appointing_Authority").trigger('change');
+                    } else {
+                        console.error(response);
+                    }
+                    HideProgress();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching Appointing Authority:", error);
+                    HideProgress();
+                }
+            });
+        }
+
+    }
+</script>

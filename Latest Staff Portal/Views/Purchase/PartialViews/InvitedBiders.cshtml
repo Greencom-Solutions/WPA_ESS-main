@@ -1,0 +1,62 @@
+﻿@model Latest_Staff_Portal.ViewModel.RecurringPurchaseLinesList
+
+@{ 
+    var Document_Status= ViewBag.Document_Status;
+    var description = ViewBag.description;
+}
+
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color: black; color: white;">
+        <tr>
+            <th>Vendor No</th>
+            <th>Code</th>
+            <th>Vendor Name</th>
+            <th>Vendor Phone No</th>
+            <th>Primary Email</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model.ListOfBiders != null && Model.ListOfBiders.Any())
+        {
+            foreach (var item in Model.ListOfBiders)
+            {
+                <tr>
+                    <td>@item.Vendor_No</td>
+                    <td>@item.Code</td>
+                    <td>@item.Vendor_Name</td>
+                    <td>@item.Vendor_Phone_No</td>
+                    <td>@item.Primary_Email</td>
+                    <td>@description</td>
+                    <td>@item.Category</td>
+                    <td>
+                        @if (Document_Status == "Open")
+                        {
+                            <button class="btn btn-danger  btn-sm ml-3" data-toggle="tooltip" data-placement="top" title="Delete" onclick="RemoveItem('@item.Code', '@item.Vendor_No');">Delete</button>
+                        }
+
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td style="color: red;">No Records Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+@if (Model.Status == "Open")
+{
+    <div style="text-align:right">
+        <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" onclick="NewBider();">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Bider
+        </button>
+    </div>
+}

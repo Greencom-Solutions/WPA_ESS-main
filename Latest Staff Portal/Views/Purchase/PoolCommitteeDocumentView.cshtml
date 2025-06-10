@@ -1,0 +1,668 @@
+﻿@model Latest_Staff_Portal.ViewModel.PoolCommittee
+
+
+@{
+    ViewBag.Title = "IFSTenderCommitteeDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 1px;
+        font-size: 12px;
+    }
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" onclick="PoolCommitteeLink();">Pool Committee List</a></li>
+                <li class="breadcrumb-item active">Pool Committee Document (@Model.Document_No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Pool Committee</h4>
+
+        <div style="text-align:right">
+
+            @{
+
+                if (Model.Status == "Open")
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="SendDocForApproval('@Model.Document_No');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Send (@Model.Document_No) For Approval
+                    </button>
+
+                }
+
+                if (Model.Status == "Pending Approval")
+                {
+                    <button style="background: red; border: none; color:whitesmoke; border-radius:10px" onclick="CancelDocApprovalRequest(`@Model.Document_No`);">
+                        <i class="fa fa-close" aria-hidden="true"></i> Cancel (@Model.Document_No) Approval Request
+                    </button>
+
+                }
+
+                if (Model.Status == "Released")
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="NotifyCommitteeMembers('@Model.Document_No');">
+                        <i class="fa fa-check" aria-hidden="true"></i> Appoint and Notify Appointees
+                    </button>
+                }
+            }
+            <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ViewApprovalTrail('@Model.Document_No');">
+                <i class="fa fa-list" aria-hidden="true"></i> Approval Trail
+            </button>
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Document Date", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Document_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Document_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Appointment Effective Date", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Appointment_Effective_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Appointment_Effective_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Appointing Authority", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Appointing_Authority, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Appointing_Authority, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Staff ID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Staff_Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Staff_Id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Designation", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Global_Dimension_1_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Global_Dimension_1_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Admin Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Global_Dimension_2_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Global_Dimension_2_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Created_By, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Created_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created Date", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Created_Date, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Created_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created Time", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Created_Time, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+                    @Html.ValidationMessageFor(model => model.Created_Time, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        @{
+            if (Model.Status == "Open")
+            {
+                <div align="center" id="enableFieldsBtn">
+                    <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" id="enableFields" />
+                </div>
+            }
+        }
+        <div align="center" id="updateHeaderBtn" hidden>
+            <div class="d-flex flex-row gap-2"></div>
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" id="updateHeader" />
+            <input type="button" class="btn btn-danger " value="Cancel" id="cancelUpdateHeader" />
+        </div>
+
+        <div>
+            <div>
+                <hr style="border:1px solid black" />
+                <b>Pool Committee Lines</b>
+                <hr />
+                <div id="divPoolCommitteeLines"></div>
+                <hr style="border:1px solid black" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title"><label id="labelF"></label></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+     $(document).ready(function () {
+         LoadPoolCommitteeLines(`@Model.Document_No`);
+
+
+         var Successmsg = '@Request.RequestContext.HttpContext.Session["SuccessMsg"]';
+         if (Successmsg != "") {
+             Swal.fire('Success', Successmsg, 'success', true);
+             $.ajax({
+                 type: "POST",
+                 url: "/Common/NullibySessions"
+             });
+         }
+
+         $('#Appointment_Effective_Date').html("dd/mm/yyyy");
+         $('#Appointment_Effective_Date').datepicker({
+             changeMonth: true,
+             changeYear: true,
+             autoclose: true,
+             yearRange: '-0:+2',
+             showOtherMonths: true,
+             dateFormat: 'dd/mm/yy',
+             minDate: 0
+         });
+         $(window).resize(function () {
+             $('#Appointment_Effective_Date').datepicker('hide');
+             $('#Appointment_Effective_Date').blur();
+         });
+
+     });
+    var LoadPoolCommitteeLines = function (DocNo) {
+         var status = '@Model.Status';
+         ShowProgress();
+         $.ajax({
+             async: true,
+             type: "POST",
+             datatype: "html",
+             contentType: "application/json; charset = utf-8",
+             processData: false,
+             data: JSON.stringify({ DocNo: DocNo, status: status }),
+             url: "/Purchase/PoolCommitteeLines",
+             success: function (data) {
+                 $("#divPoolCommitteeLines").html(data);
+                 HideProgress();
+                 //GetDocumentAttachments();
+             },
+             error: function () {
+                 HideProgress();
+                 Swal.fire("There is some problem to process your request. Please try after some time");
+             }
+         });
+     };
+
+
+     var HandleDescription = function (selectedValue) {
+         var committeeType = document.getElementById("Committee_Type").value;
+         var dropdown = document.getElementById("IFS_Code");
+         var description = document.getElementById("Description");
+         var Tender_Name = document.getElementById("Tender_Name");
+
+         var selectedText = dropdown.options[dropdown.selectedIndex].text;
+         /* alert(committeeType);*/
+
+         let parts = selectedText.split("-");
+         var IFS_Code= parts[0];
+         var Name = parts[1];
+
+
+         switch (committeeType) {
+             case "OPENING":
+                 description.value = IFS_Code + "_Tender Opening Committee"
+
+                 break;
+             case "EVALUATION":
+                 description.value = IFS_Code + "_Tender Evaluation Committee"
+                 break;
+             case "NEGOTIATE":
+                 description.value = IFS_Code + "_Tender Negotiation Committee"
+                 break;
+             case "INSPECTION":
+                 description.value = IFS_Code + "_Tender Inspection Committee"
+                 break;
+             case "DISPOSAL":
+                 description.value = IFS_Code + "_Tender Disposal Committee"
+                 break;
+             case "POOL":
+                 description.value = IFS_Code + "_Tender Pool Committee"
+                 break;
+
+             default:
+                 Name = IFS_Code + "_Tender Committee"
+         }
+
+         Tender_Name.value = Name;
+     }
+
+     document.getElementById("enableFields").addEventListener("click", function () {
+         let inputs = document.querySelectorAll(".form-control");
+         document.getElementById('enableFieldsBtn').setAttribute("hidden", "");
+         document.getElementById('updateHeaderBtn').removeAttribute("hidden")
+         Global_Dimension_2_Code
+         inputs.forEach(function (input) {
+             // Skip fields for "Document_No" and "Approval_Status"
+             if (input.name !== "Document_No" && input.name !== "Status" && input.name !== "Document_Date" && input.name !== "Created_By" && input.name !== "Name" && input.name !== "Designation" && input.name !== "Global_Dimension_1_Name" && input.name !== "Global_Dimension_2_Code" && input.name !== "Staff_Id" && input.name !== "Created_Date" && input.name !== "Created_Time") {
+                 input.removeAttribute("readonly");
+                 input.style.backgroundColor = "#ffffff";
+             }
+         });
+
+     });
+
+     document.getElementById("cancelUpdateHeader").addEventListener("click", function () {
+
+         document.getElementById('updateHeaderBtn').setAttribute("hidden", "");
+         document.getElementById('enableFieldsBtn').removeAttribute("hidden");
+
+         let inputs2 = document.querySelectorAll(".form-control");
+
+         inputs2.forEach(function (input2) {
+             input2.setAttribute("readonly", true);
+             input2.style.backgroundColor = "#dedebd";
+         });
+
+     });
+
+     document.getElementById("updateHeader").addEventListener("click", function () {
+         var Document_No = $("#Document_No").val();  
+         var Description = $("#Description").val();
+         var Appointment_Effective_Date = $("#Appointment_Effective_Date").val();
+      
+         var isValid = true;
+
+         if (!Document_No) {
+             Swal.fire('Warning', 'Document No is required.', 'warning');
+             isValid = false;
+         }
+         if (!Description) {
+             Swal.fire('Warning', 'Description is required.', 'warning');
+             isValid = false;
+         }
+        
+         if (!Appointment_Effective_Date) {
+             Swal.fire('Warning', 'Appointment Effective Date is required.', 'warning');
+             isValid = false;
+         }
+
+
+         if (!isValid) {
+             return;
+         }
+
+
+         ShowProgress();
+
+         $.ajax({
+             async: true,
+             type: "POST",
+             dataType: "html",
+             url: '/Purchase/updatePoolCommitteeHeader',
+             data: {
+                 Document_No: Document_No,
+                 Description: Description,
+                 Appointment_Effective_Date: Appointment_Effective_Date,
+       
+             },
+             success: function (data) {
+                 HideProgress();
+
+                 Swal.fire('Success', "Record successfully Updated", 'success');
+                 window.location = "/Purchase/PoolCommitteeDocumentView?DocNo=" + Document_No;
+
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Warning', err.responseText, 'warning');
+             }
+         });
+
+     });
+
+
+     function RemoveItem(DocNo, LnNo) {
+         ShowProgress();
+         $.ajax({
+             async: true,
+             type: "POST",
+             dataType: "json",
+             data: JSON.stringify({ DocNo: DocNo, LnNo: LnNo}),
+             contentType: "application/json; charset=utf-8",
+             processData: false,
+             url: '/Purchase/DeletePoolCommitteeMember',
+             success: function (data) {
+                 HideProgress();
+                 if (data.success === true) {
+                     Swal.fire('Success', "Record Successfully Deleted", 'success');
+                     window.location = "/Purchase/PoolCommitteeDocumentView?DocNo=" + DocNo;
+                 } else {
+                     Swal.fire('Error', data.message, 'error');
+                 }
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Warning', err.responseText, 'warning');
+             }
+         });
+     };
+
+     var AddPoolCommitteeLine = function () {
+         var docNo = '@Model.Document_No';
+      
+         $("#labelF").text("New Pool Committee Line");
+         ShowProgress();
+
+         $.ajax({
+             async: true,
+             type: "GET",
+             dataType: "html",
+             url: '/Purchase/NewPoolCommitteeLine',
+             data: {
+                 docNo: docNo,
+             },
+             success: function (data) {
+                 $("#modalBody").html(data);
+                 HideProgress();
+                 $("#myModal").modal("show");
+             },
+             error: function (err) {
+                 HideProgress();
+                 Swal.fire('Warning', err.responseText, 'warning');
+             }
+         });
+     };
+
+
+
+    function submitMember() {
+        var isValid = true;
+
+        var documentNo = $("#Document_No").val();
+       if (!documentNo) {
+        Swal.fire('Warning', 'Document No is required.', 'warning');
+        isValid = false;
+       }
+
+
+        var memberNo = $("#Member_No").val();
+       if (!memberNo) {
+        Swal.fire('Warning', 'Member No is required.', 'warning');
+        isValid = false;
+       }
+
+       var role = $("#role").val();
+        if (!role) {
+            role = "0";
+      /*  Swal.fire('Warning', 'Role is required.', 'warning');
+        isValid = false;*/
+       }
+
+       if (!isValid) {
+        return;
+       }
+
+   var newMember = {
+    Document_No: documentNo,
+    Member_No: memberNo,
+    Role: role
+   };
+
+   ShowProgress();
+
+   $.ajax({
+    type: "POST",
+       url: "/Purchase/SubmitPoolCommiteeMember",
+    data: JSON.stringify(newMember),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (data) {
+	    HideProgress();
+        if (data.success) {
+            Swal.fire('Success', data.message, 'success');
+		    window.location = "/Purchase/PoolCommitteeDocumentView?DocNo=" + documentNo;
+	    } else {
+		    Swal.fire('Error', data.message, 'error');
+	    }
+    },
+    error: function (err) {
+	    HideProgress();
+	    Swal.fire('Error', err.responseText, 'error');
+    }
+   });
+  }
+    function PoolCommitteeLink() {
+         ShowProgress();
+         window.location = "/Purchase/PoolCommittee";
+  }
+
+   var SendDocForApproval = function (DocNo) {
+       ShowProgress();
+       $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/SendPoolCommitteeApproval',
+            success: function (data) {
+	            HideProgress();
+	            if (data.success === true) {
+		            Swal.fire('Success', data.message, 'success');
+		            window.location = "/Purchase/PoolCommitteeDocumentView?DocNo=" + DocNo;
+	            } else {
+		            Swal.fire('Error', data.message, 'error');
+	            }
+            },
+            error: function (err) {
+	            HideProgress();
+	            Swal.fire('Warning', err.responseText, 'warning');
+            }
+       });
+  };
+
+
+  function CancelDocApprovalRequest(DocNo) {
+       ShowProgress();
+       $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+           url: '/Purchase/CancelPoolCommitteeApproval',
+            success: function (data) {
+	            HideProgress();
+	            if (data.success === true) {
+		            window.location = "/Purchase/PoolCommitteeDocumentView?DocNo=" + DocNo;
+	            } else {
+		            Swal.fire('Error', data.message, 'error');
+	            }
+            },
+            error: function (err) {
+	            HideProgress();
+	            Swal.fire('Warning', err.responseText, 'warning');
+            }
+       });
+  };
+
+  function NotifyCommitteeMembers(DocNo) {
+        ShowProgress();
+
+       $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+	            docNo: DocNo
+            }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/NotifyCommitteeMembers',
+            success: function (data) {
+	            HideProgress();
+	            if (data.success === true) {
+		            Swal.fire('Success', 'Committee members have been notified successfully.', 'success');
+	            } else {
+		            Swal.fire('Error', data.message, 'error');
+	            }
+            },
+            error: function (err) {
+	            HideProgress();
+	            Swal.fire('Warning', 'An error occurred while notifying committee members: ' + err.responseText, 'warning');
+            }
+       });
+  };
+
+  function ViewApprovalTrail (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Functional Procurement Plan: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                /* $("#myModalLinks").modal("hide");*/
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+  }
+
+</script>

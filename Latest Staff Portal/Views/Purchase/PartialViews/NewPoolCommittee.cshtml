@@ -1,0 +1,134 @@
+﻿@model Latest_Staff_Portal.ViewModel.PoolCommittee
+
+
+<div class="row">
+   
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" , @id= "Description" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+  @*  <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Document_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Document_Date, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Document_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Appointment_Effective_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="Appointment_Effective_Date" onkeydown="return false;" autocomplete="off" />
+            @*@Html.EditorFor(model => model.Appointment_Effective_Date, new { htmlAttributes = new { @class = "form-control", @id = "Appointment_Effective_Date" } })*@
+            @Html.ValidationMessageFor(model => model.Appointment_Effective_Date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            @Html.Label("Appointing_Authority", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Appointing_Authority, new { htmlAttributes = new { @class = "form-control", @id = "Appointing_Authority", @readonly = "readonly", @style = "background-color: #dedebd" } })
+            @Html.ValidationMessageFor(model => model.Appointing_Authority, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   @* <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Staff_Id, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Staff_Id, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Staff_Id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Designation, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Global_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #dedebd" } })
+            @Html.ValidationMessageFor(model => model.Global_Dimension_1_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+ 
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Admin Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.EditorFor(model => model.Global_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control" , @readonly="readonly", @style="background-color: #dedebd"} })
+            @Html.ValidationMessageFor(model => model.Global_Dimension_2_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   
+</div>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit Record" onclick="SubmitPoolCommittee();" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var commType="POOL"
+        GetAppointingOfficer(commType);
+        $('#Appointment_Effective_Date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true,
+            yearRange: '-1:+2',
+            showOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            minDate: 0
+        });
+        $("#Appointment_Effective_Date").focus(function () {
+            $("#ui-datepicker-div").position({
+                my: "left top",
+                at: "left bottom",
+                of: $(this)
+            });
+        });
+     
+    });
+
+
+    var GetAppointingOfficer = function (commType) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ commType: commType }),
+            contentType: "application/json; charset=utf-8",
+            processData: false,
+            url: '/Purchase/GetAppointingOfficer',
+            success: function (data) {
+                $("#Appointing_Authority").val(data.Appointing_Officer);
+                HideProgress();
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText || "An error occurred", 'warning');
+            }
+        });
+    }
+
+
+
+
+
+</script>

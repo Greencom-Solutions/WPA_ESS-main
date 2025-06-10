@@ -1,0 +1,873 @@
+@model Latest_Staff_Portal.ViewModel.InvitationToTender
+
+@{
+    ViewBag.Title = "InvitationToTenderDocumentView";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+<style>
+	thead {
+		background-color: black;
+		color: white;
+	}
+
+	hr {
+		margin: 4px;
+	}
+
+	.BtnPadding {
+		padding: 1px;
+		font-size: 12px;
+	}
+</style>
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="InvitationToTenderLink();">Purchase Requisitions</a>
+                </li>
+                <li class="breadcrumb-item active">Invitation To Tender(@Model.Code)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+<hr/>
+<div style="text-align:right" id="HideEditButton">
+    @*@{
+			if (@Model.Status == "Open")
+			{
+				<div style="text-align:right" id="HideEditButton">
+					<input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" id="btnEdit" value="Edit Header" onclick="EditDocument();" />
+				</div>
+			}
+		}*@
+
+
+    <hr/>
+</div>
+<div class="card-body">
+<h2>General</h2>
+
+<hr/>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <span style="font-weight: bold">CODE</span>
+            @*<select class="form-control" id="ddlPrnType">
+						<option value="">--Select PRN Type--</option>
+						<option value="1">Standard</option>
+						<option value="2">Project Works</option>
+					</select>*@
+            @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Tender Validity Expiry Date ", new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Tender_Validity_Expiry_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<input type="text" class="form-control" placeholder="dd/mm/yyyy" id="txtDate" onkeydown="return false;" autocomplete="off" />
+					<div class='a'></div>*@
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Invitation Notice Type:", new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Invitation_Notice_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*@Html.DropDownListFor(model => model.Location_Code, Model.ListOfLocations, "--select Donor--", new { @class = "form-control", @id = "ddlLocationCode" })
+					@Html.ValidationMessageFor(model => model.Location_Code, "", new { @class = "text-danger" })*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <span style="font-weight: bold">Language Code</span>
+            @Html.TextBoxFor(m => m.Language_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<select class="form-control" id="ddlPrnType">
+						<option value="">--Select Product Product Group--</option>
+						<option value="1">Goods</option>
+						<option value="2">Services</option>
+						<option value="3">Workks</option>
+						<option value="4">Assets</option>
+					</select>*@
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Tender Name", new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Tender_Name, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*@Html.DropDownListFor(model => model.Shortcut_Dimension_1_Code, Model.ListOfDim1, "--select Geographical Code--", new { @class = "form-control", @id = "ddlDim1" })
+					@Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Mandatory Special Group Reserved", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Mandatory_Special_Group_Reserv, true, new { @class = "form-check-input", disabled = "disabled" })
+                @Html.Label("Yes", new { @class = "form-check-label" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Mandatory_Special_Group_Reserv, false, new { @class = "form-check-input", disabled = "disabled" })
+                @Html.Label("No", new { @class = "form-check-label" })
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Tender Summary", new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Tender_Summary, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*@Html.DropDownListFor(model => model.PP_Planning_Category, Model.ListOfPlanningCategories, "--select County--", new { @class = "form-control", @id = "ddlPlanningCategory", @onchange = "GetDimension5Name()" })
+					@Html.ValidationMessageFor(model => model.PP_Planning_Category, "", new { @class = "text-danger" })*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <span style="font-weight: bold">Bid/Tender Security Required</span>
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Bid_Tender_Security_Required, true, new { @class = "form-check-input", disabled = "disabled", id = "securityYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "securityYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Bid_Tender_Security_Required, false, new { @class = "form-check-input", disabled = "disabled", id = "securityNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "securityNo" })
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("External Document No", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.External_Document_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Security", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Bid_Security_Amount_LCY, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("External Document No", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Global_Dimension_1_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Security Validity Duration", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Bid_Security_Validity_Duration, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Location Code", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Location_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Insurance Cover Required", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Insurance_Cover_Required, true, new { @class = "form-check-input", disabled = "disabled", id = "insuranceYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "insuranceYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Insurance_Cover_Required, false, new { @class = "form-check-input", disabled = "disabled", id = "insuranceNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "insuranceNo" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Procurement Type", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Procurement_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Performance Security Required", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Performance_Security_Required, true, new { @class = "form-check-input", disabled = "disabled", id = "insuranceYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "insuranceYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Performance_Security_Required, false, new { @class = "form-check-input", disabled = "disabled", id = "insuranceNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "insuranceNo" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Requisition Product Group", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Requisition_Product_Group, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Performance Security % (Of Bid Sum)", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Performance_Security_Percent, true, new { @class = "form-check-input", disabled = "disabled", id = "insuranceYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "insuranceYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Performance_Security_Percent, false, new { @class = "form-check-input", disabled = "disabled", id = "insuranceNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "insuranceNo" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Procurement Category ID", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Procurement_Category_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Advance Payment Security Required", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Advance_Payment_Security_Req, true, new { @class = "form-check-input", disabled = "disabled", id = "insuranceYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "insuranceYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Advance_Payment_Security_Req, false, new { @class = "form-check-input", disabled = "disabled", id = "insuranceNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "insuranceNo" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Solicitation Type", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Solicitation_Type, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Advance Amount Limit % (Of Bid Sum)", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Advance_Amount_Limit_Percent, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Selection Method", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Bid_Selection_Method, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Appointer of Bid Arbitrator", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Appointer_of_Bid_Arbitrator, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Scoring Template", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Bid_Scoring_Template, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Status", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Scoring Template", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Bid_Scoring_Template, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Published", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Published, true, new { @class = "form-check-input", disabled = "disabled", id = "insuranceYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "insuranceYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Published, false, new { @class = "form-check-input", disabled = "disabled", id = "insuranceNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "insuranceNo" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Enforce Mandatory Pre-bid Visit/Meeting", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Enforce_Mandatory_Pre_bid_Visi, true, new { @class = "form-check-input", disabled = "disabled", id = "insuranceYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "insuranceYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Enforce_Mandatory_Pre_bid_Visi, false, new { @class = "form-check-input", disabled = "disabled", id = "insuranceNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "insuranceNo" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Bid Submission Method", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Bid_Submission_Method, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Mandatory Pre-bid Visit Date", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Mandatory_Pre_bid_Visit_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Cancel Reason Code", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Cancel_Reason_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Prebid Meeting Address", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Prebid_Meeting_Address, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Cancellation Secrete Code", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Cancellation_Secret_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Sealed Bids", new { @class = "control-label col-md-12" })
+
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Sealed_Bids, true, new { @class = "form-check-input", disabled = "disabled", id = "insuranceYes" })
+                @Html.Label("Yes", new { @class = "form-check-label", @for = "insuranceYes" })
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.Sealed_Bids, false, new { @class = "form-check-input", disabled = "disabled", id = "insuranceNo" })
+                @Html.Label("No", new { @class = "form-check-label", @for = "insuranceNo" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.Label("Created Date/Time", new { @class = "control-label col-md-12" })
+            @Html.TextAreaFor(m => m.Created_Date_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+            @*<textarea class="form-control" id="txtDescription"></textarea>*@
+        </div>
+    </div>
+
+</div>
+
+<div class="row"
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Label("Tender Validity Duration", new { @class = "control-label col-md-12" })
+        @Html.TextAreaFor(m => m.Tender_Validity_Duration, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+        @*<textarea class="form-control" id="txtDescription"></textarea>*@
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        @Html.Label("Created By", new { @class = "control-label col-md-12" })
+        @Html.TextAreaFor(m => m.Created_by, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+
+        @*<textarea class="form-control" id="txtDescription"></textarea>*@
+    </div>
+</div>
+
+</div>
+
+<h2>Submission Details</h2>
+<hr/>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Submission_Start_Date, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Submission_Start_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Submission_Start_Time, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Submission_Start_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 2 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Submission_End_Date, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Submission_End_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Submission_End_Time, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Submission_End_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Bid_Opening_Date, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Bid_Opening_Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Bid_Opening_Time, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Bid_Opening_Time, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 4 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Bid_Opening_Venue, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Bid_Opening_Venue, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Procuring_Entity_Name_Contact, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Procuring_Entity_Name_Contact, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 5 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Address, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Address, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Address_2, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Address_2, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 6 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Post_Code, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Post_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.City, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.City, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 7 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Country_Region_Code, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Country_Region_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Phone_No, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Phone_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 8 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.E_Mail, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.E_Mail, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Tender_Box_Location_Code, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Tender_Box_Location_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 9 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Primary_Tender_Submission, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Primary_Tender_Submission, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Primary_Engineer_Contact, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Primary_Engineer_Contact, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+
+<!-- Row 15 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PP_Total_Budget, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.PP_Total_Budget, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PP_Total_Actual_Costs, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.PP_Total_Actual_Costs, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+<!-- Row 16 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PP_Total_Commitments, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.PP_Total_Commitments, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PP_Total_Available_Budget, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.PP_Total_Available_Budget, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 17 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PP_Preference_Reservation_Code, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.PP_Preference_Reservation_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Financial_Year_Code, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Financial_Year_Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+
+<h2>Budget Control Checks</h2>
+<!-- Row 10 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Requesting_Region, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Requesting_Region, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Requesting_Directorate, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Requesting_Directorate, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+
+<!-- Row 11 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Requesting_Department, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Requesting_Department, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Procurement_Plan_ID, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Procurement_Plan_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 12 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Procurement_Plan_Entry_No, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Procurement_Plan_Entry_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Job, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Job, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 13 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Job_Task_No, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Job_Task_No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PP_Planning_Category, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.PP_Planning_Category, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+<!-- Row 14 -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Document_Status, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.Document_Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PP_Funding_Source_ID, new { @class = "control-label col-md-12" })
+            @Html.TextBoxFor(m => m.PP_Funding_Source_ID, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+        </div>
+    </div>
+</div>
+
+
+<hr/>
+<div align="center" id="DivUpdateButton">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdatePurchaseHeader();"/>
+</div>
+<div id="DivPurchaseRegLines">
+    <hr style="border:1px solid black"/>
+    <b>Purchase Lines</b>
+    <hr/>
+    <div id="divPurchaseLines"></div>
+    <hr style="border:1px solid black"/>
+    @*<div class="row">
+				<div class="col-md-12">
+					<b>Attachments</b>
+					<div id="divAttachDocs"></div>
+				</div>
+			</div>*@
+    @*<hr style="border:1px solid black" />*@
+
+</div>
+</div>
+
+@*	@{
+		if (Model.Status == "Open")
+		{
+			<div align="center">
+				<input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.Code) For Approval" onclick="SendDocForApproval('@Model.Code');" />
+			</div>
+		}
+	}*@
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <label id="labelF"></label>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Modal View Doc////////////////////////////*@
+<div class="modal fade" id="myModalAttachment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Attachment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAttachmentBody" style="width:100%;height:450px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*//////////////////////Document Rejection Modal////////////////////////////*@
+<div class="modal fade" id="myModalComments" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h4 class="modal-title">Rejection Comments</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalCommentBody">
+                <div id="divDocComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets/js/ShowProgression.js"></script>
+<script src="~/assets/js/pdfobject.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+
+
+	});
+	var InvitationToTenderLink = function () {
+		ShowProgress();
+		window.location = "/Purchase/InvitationToTenderList";
+	}
+	
+</script>

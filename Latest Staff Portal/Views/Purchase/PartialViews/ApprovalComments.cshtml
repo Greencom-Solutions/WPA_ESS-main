@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.CommentSheet>
+
+<div class="table-responsive">
+    <table id="comments" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                @* <th>Document Type</th>*@
+                @*<th>No</th>*@
+                @* <th>Document Line No</th>
+                    <th>Line No</th>*@
+                <th>Date</th>
+                <th>Comment</th>
+                @* <th>Code</th>
+                    <th></th>*@
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Document_Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Document_Line_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Line_No)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comment)
+                    </td>
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var table = $("#comments").DataTable({
+        lengthChange: true,
+        order: [[1, 'desc']],
+        lengthMenu: [5, 10, 25, 50, 100],
+        "bDestroy": true
+    });
+</script>
+

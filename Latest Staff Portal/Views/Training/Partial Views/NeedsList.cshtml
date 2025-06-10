@@ -1,0 +1,69 @@
+﻿@model Latest_Staff_Portal.ViewModel.NeedsRequestList
+<div class="table-responsive">
+    <table class="table table-centered table-nowrap" id="ParticipantLines">
+        <thead style="background-color:black;color:white" >
+        <tr>
+            <th>Course ID</th>
+            <th>Purpose</th>
+            <th>Source</th>
+            <th>Comments</th>
+
+            <th style="text-align:center" class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfNeedsRequest != null && Model.ListOfNeedsRequest.Count() > 0)
+            {
+                foreach (var item in Model.ListOfNeedsRequest)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course_ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Source)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comments)
+                        </td>
+
+                        <td style="text-align:center" class="tdAction">
+                            <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItem('@item.LineNo');">
+                                <i class="mdi mdi-close font-size-16"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<div align="right" class="HideLineButton">
+    <input type="button" value="Add Need" class="btn btn-danger BtnPadding" onclick="AddParticipantLines();"/>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

@@ -1,0 +1,418 @@
+﻿@model Latest_Staff_Portal.ViewModel.ConsolidatedTrainingNeeds
+
+@{
+    ViewBag.Title = "ConsolidatedTrainingNeeds";
+    Layout = "~/Views/Shared/Sitemaster.cshtml";
+}
+
+<style>
+    thead {
+        background-color: black;
+        color: white;
+    }
+
+    hr {
+        margin: 4px;
+    }
+
+    .BtnPadding {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .scrollable-modal-body {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#" onclick="ConsolidatedTrainingNeeds();">Consolidated Training Needs</a>
+                </li>
+                <li class="breadcrumb-item active">(@Model.No)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="card">
+    <div class="card-body">
+
+        <div style="text-align:right">
+
+            @{
+                if (Model.Status == "Open")
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="UpdateNeeds('@Model.No','@Model.FinancialYear');">
+                        <i class="fa fa-route" aria-hidden="true"></i> Update
+                    </button>
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="SubmitNeeds('@Model.No');">
+                        <i class="fa fa-superpowers" aria-hidden="true"></i> Submit
+                    </button>
+                    <button style="background: #162f25; color: whitesmoke; border-radius: 10px" onclick="EditDocument();">
+                        <i class="fa fa-history" aria-hidden="true"></i> Edit
+                    </button>
+                }
+                if (Model.Status == "Pending Approval")
+                {
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ViewApprovalTrail('@Model.No');">
+                        <i class="fa fa-route" aria-hidden="true"></i> Approval Trail
+                    </button>
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="CancelDocForApproval('@Model.No');">
+                        <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Review Request
+                    </button>
+                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="ViewDocComments('@Model.No');">
+                        <i class="fa fa-list-ol" aria-hidden="true"></i>  Comments
+                    </button>
+                }
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.No, htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(model => model.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FinancialYear, htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(model => model.FinancialYear, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", @id = "financial" })
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.TextBoxFor(model => model.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                </div>
+            </div>
+        </div>
+        @if (Model.Status == "Open")
+        {
+            <div align="center">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdateNeedsHeader('@Model.No');" />
+            </div>
+        }
+
+        <hr style="border:1px solid black" />
+        <b>Consolidated Needs Lines</b>
+        <div id="divConsolidatedLines"></div>
+        @if (Model.Status == "Pending Committee Verdict")
+        {
+            <div align="center">
+                <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
+            </div>
+        }
+    </div>
+</div>
+@*//////////////////////Modal////////////////////////////*@
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <!-- Add the 'modal-lg' class for a larger modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">
+                    <label id="labelF"></label>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content goes here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadConsolidatedLines(`@Model.No`,'@Model.Status');
+        });
+    var LoadConsolidatedLines = function (DocNo, status) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ docNo: DocNo, Status: status }),
+            url: "/Training/ConsolidatedNeedsLines",
+            success: function (data) {
+                HideProgress();
+                $("#divConsolidatedLines").html(data);
+            },
+            error: function () {
+
+                HideProgress();
+
+                Swal.fire("There is some problem to process your request. Please try after some time");
+            }
+        });
+    };
+    var UpdateNeeds = function (docNumber,financial) {
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Training/GetDutyStationTrainingNeeds",
+            data: JSON.stringify({ docNo: docNumber, financialYear: financial }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    LoadConsolidatedLines(`@Model.No`,'@Model.Status');
+                    Swal.fire('Success', data.message, 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+     var SubmitNeeds = function (docNumber) {
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Training/SubmitConsolidatedNeeds",
+            data: JSON.stringify({ docNo: docNumber }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    ConsolidatedTrainingNeeds();
+                    Swal.fire('Success', data.message, 'success');
+                } else {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err.responseText, 'warning');
+            }
+        });
+    };
+    var EditDocument = function () {
+        $("#financial").css("background-color", "white");
+        $("#financial").attr("readonly", false);
+    }
+    var UpdateNeedsHeader = function (docNumber) {
+        var financial = $("#financial").val();
+        ShowProgress();
+        $.ajax({
+            type: "POST",
+            url: "/Training/ModifyConsolidatedHeader",
+            data: JSON.stringify({ docNo: docNumber, financialYear: financial }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                    var form = $('<form>', {
+                        action: '/Training/ConsolidatedTrainingNeedsDocument',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: docNumber
+                    }));
+                    form.appendTo('body').submit();
+                }
+                else
+                {
+                    Swal.fire('Warning', data.message, 'warning');
+                    HideProgress();
+                }
+        },
+        error: function (err) {
+            HideProgress();
+            Swal.fire('Warning', err.responseText, 'warning');
+        }
+    });
+};
+
+    function EditItem(courseId) {
+        var row = $("tr[data-course-id='" + courseId + "']");
+        var verdictSelect = row.find(".verdict-edit");
+        var commentsInput = row.find(".comments-edit");
+
+        verdictSelect.prop("disabled", false);
+        commentsInput.prop("readonly", false).focus();
+
+        var button = row.find(".update-btn");
+        button.text("Save").removeClass("btn-warning").addClass("btn-primary").attr("onclick", "SaveItem('" + courseId + "')");
+    }
+
+    function SaveItem(courseId) {
+        var documentNumber = '@Model.No';
+        var row = $("tr[data-course-id='" + courseId + "']");
+        var verdictSelect = row.find(".verdict-edit");
+        var commentsInput = row.find(".comments-edit");
+
+        var newVerdict = verdictSelect.val();
+        var newComments = commentsInput.val();
+
+        $.ajax({
+            url: '/Training/UpdateConsolidatedLines',
+            type: 'POST',
+            data: JSON.stringify({ docNo: documentNumber, courseId: courseId, verdict: newVerdict, comments: newComments }),
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.success) {
+                    verdictSelect.prop("disabled", true);
+                    commentsInput.prop("readonly", true);
+
+                    var button = row.find(".update-btn");
+                    button.text("Update").removeClass("btn-primary").addClass("btn-warning").attr("onclick", "EditItem('" + courseId + "')");
+
+                    Swal.fire('Success', data.message, 'success');
+                    LoadConsolidatedLines(`@Model.No`,'@Model.Status');
+
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                Swal.fire('Error', 'An error occurred while updating.', 'error');
+            }
+        });
+    }
+        var ViewApprovalTrail = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo, RecID: "Annual Strategy Workplan: " + DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalTrail',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+     var SendDocForApproval = function () {
+     var DocNo = `@Model.No`;
+     var financial = '@Model.FinancialYear';
+     ShowProgress();
+     $.ajax({
+         async: true,
+         type: "POST",
+         datatype: "json",
+         data: JSON.stringify({ docNo: DocNo, financialYear: financial }),
+         contentType: "application/json; charset = utf-8",
+         processData: false,
+         url: '/Training/SendConsolidatedForApproval',
+         success: function (data) {
+             if (data.success == true) {
+                 HideProgress();
+                 Swal.fire('Success', data.message, 'success');
+                 var form = $('<form>', {
+                     action: '/Training/ConsolidatedTrainingNeedsDocument',
+                     method: 'POST'
+                 }).append($('<input>', {
+                     type: 'hidden',
+                     name: 'DocNo',
+                     value: DocNo
+                 }));
+                 form.appendTo('body').submit();
+             }
+             else {
+                 HideProgress();
+                 Swal.fire('Error', data.message, 'error');
+             }
+         },
+         error: function (err) {
+             HideProgress();
+             Swal.fire('Warning', err, 'warning');
+         }
+     });
+ }
+    var CancelDocForApproval = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Training/CancelConsolidatedApproval',
+            success: function (data) {
+                if (data.success == true) {
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                    var form = $('<form>', {
+                        action: '/Training/ConsolidatedTrainingNeedsDocument',
+                        method: 'POST'
+                    }).append($('<input>', {
+                        type: 'hidden',
+                        name: 'DocNo',
+                        value: DocNo
+                    }));
+                    form.appendTo('body').submit();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Error', data.message, 'error');
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    };
+    var ViewDocComments = function (documentNumber) {
+        $("#labelF").text("Document Comments");
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ docNo: documentNumber }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/DocumentApprovalComments',
+            success: function (data) {
+                $("#modalBody").html(data);
+                HideProgress();
+                $("#myModal").modal("show");
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
+</script>
+

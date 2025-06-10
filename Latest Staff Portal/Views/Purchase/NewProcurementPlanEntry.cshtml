@@ -1,0 +1,320 @@
+﻿@model Latest_Staff_Portal.ViewModel.LocationList
+<style>
+    .ui-front {
+        z-index: 2000 !important;
+    }
+
+    .ui-autocomplete {
+        /* these sets the height and width */
+        max-height: 200px;
+        max-width: 236px;
+        /* these make it scroll for anything outside */
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+</style>
+<div class="bg-soft-dark" style="color:black">
+    <div class="col-md-12" id="procurementLine" runat="server">
+        <label id="labelSearch">Procurement Line No</label>
+        @Model.Code
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-12" id="Div2">
+            <span style="font-weight: bold">Item Type</span>
+            <select class="form-control" id="PRVType" name="PRVType" onchange="ShowRequiredDiv('@ViewBag.Category')">
+                <option value="">--Select Type--</option>
+                <option value="2">Item</option>
+                <option value="4">Asset</option>
+            </select>
+        </div>
+
+    </div>
+    <hr/>
+    <div id="DivItSearchForm">
+        <div class="row" id="DivService">
+            <div class="col-md-6">
+                <label id="labelSearch">Search Item</label>
+                <select class="form-control" id="ddlSearchItem" name="ddlSearchItem" onchange="ShowCostValues()"></select>
+            </div>
+            <div class="col-md-6">
+                Unit Amount
+                <input type="text" class="form-control" id="txtAmount" onkeypress="return functionDecimal(event,this.value)"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span style="font-weight: bold">Procurement Method</span>
+                <select class="form-control" id="method">
+                    <option value="">--Select Type--</option>
+                    <option value="1">Open Tender</option>
+                    <option value="2">RFQ</option>
+                    <option value="3">RFP</option>
+                    <option value="4">Two-Stage Tender</option>
+                    <option value="5">Design Competition Tender</option>
+                    <option value="6">Restricted Tender</option>
+                    <option value="7">Direct Procurement</option>
+                    <option value="8">Low Value Procurement</option>
+                    <option value="9">Force Account</option>
+                    <option value="10">Framework Agreement</option>
+                    <option value="10">Reverse Auction</option>
+                </select>
+            </div>
+            <div class="col-md-6" id="divLocation">
+                Preference/Reservation
+                @Html.DropDownListFor(model => model.Code, Model.ListOfLocations, "--select Location--", new { @class = "form-control", id = "ddlLocation" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span style="font-weight: bold">Procurement Use</span>
+                <select class="form-control" id="USE">
+                    <option value="">--Select Type--</option>
+                    <option value="0">Standard (Internal Use)</option>
+                    <option value="1">Project-Specific Use</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <span style="font-weight: bold">Invitation Notice Type</span>
+                <select class="form-control" id="notice">
+                    <option value="">--Select Type--</option>
+                    <option value="1">Single Stage Tender</option>
+                    <option value="2">Two Stage Tender</option>
+                    <option value="3">RFQ</option>
+                    <option value="4">Low Value Procurement</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Procurement Types
+                @Html.DropDownListFor(model => model.Code, Model.ListOfProcurementTypes, "--select Procurement Type--", new { @class = "form-control", id = "ddlType" })
+            </div>
+            <div class="col-md-6">
+                Solicitation Type
+                @Html.DropDownListFor(model => model.Code, Model.ListOfSolicitationType, "--select Solicitation Type--", new { @class = "form-control", id = "ddlSolicitatino" })
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Vendor Category
+                @Html.DropDownListFor(model => model.Code, Model.ListOfVendorCategory, "--select Vendor Category--", new { @class = "form-control", id = "ddlVendor" })
+            </div>
+            <div class="col-md-6">
+                Funding Sources
+                @Html.DropDownListFor(model => model.Code, Model.ListOfFundingSource, "--select Funding Source--", new { @class = "form-control", id = "ddlFunding" })
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Quarter One Unit Amount
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtAmountQ1" onkeypress="return functionDecimal(event,this.value)"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Quarter One Quantity
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtQuantityQ1" onkeypress="return functionx(event)"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Quarter Two Unit Amount
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtAmountQ2" onkeypress="return functionDecimal(event,this.value)"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Quarter Two Quantity
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtQuantityQ2" onkeypress="return functionx(event)"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Quarter Three Unit Amount
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtAmountQ3" onkeypress="return functionDecimal(event,this.value)"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Quarter Three Quantity
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtQuantityQ3" onkeypress="return functionx(event)"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Quarter Four Unit Amount
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtAmountQ4" onkeypress="return functionDecimal(event,this.value)"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Quarter Four Quantity
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txtQuantityQ4" onkeypress="return functionx(event)"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                AGPO %
+                <div class="form-group">
+                    <input type="text" class="form-control" id="agpo" onkeypress="return functionDecimal(event,this.value)"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                PWD %
+                <div class="form-group">
+                    <input type="text" class="form-control" id="pwd" onkeypress="return functionx(event)"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Women %
+                <div class="form-group">
+                    <input type="text" class="form-control" id="women" onkeypress="return functionDecimal(event,this.value)"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Youth %
+                <div class="form-group">
+                    <input type="text" class="form-control" id="youth" onkeypress="return functionx(event)"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                Citizen %
+                <div class="form-group">
+                    <input type="text" class="form-control" id="citizen" onkeypress="return functionDecimal(event,this.value)"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                Description(50 Characters)
+                <textarea id="txtDescription" class="form-control" maxlength="50"></textarea>
+            </div>
+        </div>
+        <hr/>
+        <div align="center">
+            <input type="button" class="btn btn-primary waves-effect waves-light" value="Add Line" onclick="AddLineItem();"/>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#DivItSearchForm").hide();
+        $("#ddlLocation,#ddlSearchItem").select2({
+            width: '100%',
+            placeholder: 'Search...'
+        });
+    });
+    var ShowRequiredDiv = function (category) {
+        var PRVType = $("#PRVType").children("option:selected").val();
+        if (PRVType == "") {
+            $("#DivItSearchForm").hide();
+        }
+        else {
+            ShowProgress();
+            var url;
+            if (PRVType == "2") {
+                $("#labelSearch").text("Search Item");
+                $("#divLocation").show();
+                url = "/Common/GetItems";
+            }
+            else {
+                $("#labelSearch").text("Search Fixed Asset");
+                $("#divLocation").hide();
+                url = "/Common/GetFixedAssets";
+            }
+            $("#ddlSearchItem option").remove();
+            $('#ddlSearchItem').empty().append('<option selected="selected" value="">----</option>');
+            $.getJSON(url, { procurementCategory: category },
+                function (data) {
+                    if (data.success == true) {
+                        HideProgress();
+                        $('#ddlSearchItem').empty().append('<option selected="selected" value="">----</option>');
+                        $.each(data.DropDownData.ListOfddlData, function () {
+                            $("#ddlSearchItem").append($("<option></option>").val(this['Value']).html(this['Text']));
+                        });
+
+                        $("#DivItSearchForm").show();
+                    }
+                    else {
+                        HideProgress();
+                        Swal.fire('Warning', data.message, 'warning');
+                    }
+                });
+        }
+        $("#IdSearchItem").val('');
+        $("#txtAmount").val('');
+        $("#txtQuantity").val('');
+        $('#ddlLocation').val('');
+        $("#txtDescription").val('');
+    }
+    function functionDecimal(evt, val) {
+        try {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+
+            if (charCode == 46) {
+                if (!(val.indexOf(".") > -1)) {
+                    return true;
+                }
+                else {
+                    Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                }
+            }
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                Swal.fire('Warning', 'Kindly ensure to specify decimals only', 'warning');
+                return false;
+            }
+            return true;
+        } catch (w) {
+            Swal.fire(w);
+        }
+    }
+    function functionx(evt) {
+        if (evt.charCode > 31 && (evt.charCode < 48 || evt.charCode > 57)) {
+            Swal.fire("Error", "Please enter only numeric characters in the text box", "error");
+            return false;
+        }
+    }
+    var ShowCostValues = function () {
+        var PRVType = $("#PRVType").children("option:selected").val();
+        var ItemNo = $("#ddlSearchItem").children("option:selected").val();
+        if (PRVType == "") {
+            $("#DivItSearchForm").hide();
+        }
+        else {
+            ShowProgress();
+            var url;
+            if (PRVType == "2") {
+                $("#labelSearch").text("Search Item");
+                url = "/Common/GetUnitCost";
+                $.getJSON("/Common/GetUnitCost", { ItemNo: ItemNo },
+                    function (data) {
+                        $("#txtAmount").val(data);
+                        HideProgress();
+                    });
+            }
+
+            else {
+                HideProgress();
+                return;
+            }
+
+        }
+
+
+
+    }</script>

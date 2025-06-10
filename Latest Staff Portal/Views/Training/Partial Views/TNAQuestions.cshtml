@@ -1,0 +1,67 @@
+﻿@model Latest_Staff_Portal.ViewModel.TNAQuestionsList
+
+<div class="table-responsive">
+    <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+
+        <tr>
+            <th>#</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th style="text-align:center" class="tdAction">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model.ListOfTNAQuestions != null && Model.ListOfTNAQuestions.Count() > 0)
+            {
+                foreach (var item in Model.ListOfTNAQuestions)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LineNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Question)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(modelItem => item.Answer, new { @class = "form-control", id = "txtAnswers" })
+
+                        </td>
+
+                        <td style="text-align:center" class="tdAction">
+                            <a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick="RemoveItem('@item.LineNo');">
+                                <i class="mdi mdi-close font-size-16"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="color:red">
+                        No Records Found
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+@*<div align="right" class="HideLineButton">
+    <input type="button" value="Add Current Skills" class="btn btn-danger BtnPadding" onclick="AddAssessmentSkills();"/>
+</div>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

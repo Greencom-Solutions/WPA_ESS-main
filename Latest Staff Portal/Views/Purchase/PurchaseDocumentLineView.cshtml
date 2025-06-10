@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseRequisitionLine>
+
+<div class="table-responsive">
+    <table id="PurchaseRequisitionLine1" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Technical Specifications</th>
+                <th>Quantity</th>
+                <th>Unit Cost</th>
+                <th>Amount</th>
+                <th>Budget</th>
+                <th>Charge Account</th>
+                <th>Total Available Budget</th>
+                <th>Women(%)</th>
+                <th>Women Amount</th>
+                <th>Youth(%)</th>
+                <th>Youth Amount</th>
+                <th>AGPO(%)</th>
+                <th>AGPO Amount</th>
+                <th>PWD(%)</th>
+                <th>PWD Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Type</td>
+                    <td>@item.Description</td>
+                    <td>@item.TechnicalSpecifications</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitCostLCY</td>
+                    <td>@item.Amount</td>
+                    <td>@item.Budget</td>
+                    <td>@item.Budget_Line</td>
+                    <td>@item.PPTotalAvailableBudget</td>
+                    <th>@item.Women_Percent</th>
+                    <td>@item.Women_Amount</td>
+                    <td>@item.Youth_Percent</td>
+                    <td>@item.Youth_Amount</td>
+                    <td>@item.AGPO_Percent</td>
+                    <td>@item.AGPO_Amount</td>
+                    <td>@item.PWD_Percent</td>
+                    <td>@item.PWD_Amount</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td style="color:red">
+                    No Records Found
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<hr/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var status = '@Model.FirstOrDefault()?.Status';
+        if (status == "Open") {
+            $(".tdAction").show();
+            $(".HideLineButton").show();
+        }
+        else {
+            $(".tdAction").hide();
+            $(".HideLineButton").hide();
+        }
+    });
+</script>

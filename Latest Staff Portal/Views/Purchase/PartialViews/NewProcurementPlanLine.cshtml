@@ -1,0 +1,21 @@
+﻿@model Latest_Staff_Portal.ViewModel.PurchaseRequisitionLine
+
+
+<div class="card-body">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.Label("Procurement Plan Item No:", new { @class = "control-label col-md-12" })
+                @Html.DropDownListFor(model => model.ProcurementPlanID, Model.ListOfProcurementCategories, "--Select Procurement Category--", new { @class = "form-control", id = "ddProcPlanItemNo" })
+                @Html.ValidationMessageFor(model => model.ProcurementPlanID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<hr style="border:1px solid black"/>
+<div align="center">
+    <input type="button" class="btn btn-primary waves-effect waves-light" value="Submit" onclick="SubmitItemLine();"/>
+</div>

@@ -1,0 +1,117 @@
+﻿@model  IEnumerable<Latest_Staff_Portal.ViewModel.PurchaseInvoiceLines>
+<div class="pre-scrollable">
+    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+            <tr>
+                <th>
+                    @Html.DisplayName("Type")
+                </th>
+                <th>
+                    @Html.DisplayName("No")
+                </th>
+                <th>
+                    @Html.DisplayName("Description")
+                </th>
+                <th>
+                    @Html.DisplayName("Location Code")
+                </th>
+                <th>
+                    @Html.DisplayName("Quantity")
+                </th>
+                <th>
+                    @Html.DisplayName("Unit of Measure Code")
+                </th>
+                <th>
+                    @Html.DisplayName("Direct Unit Cost (Excl VAT)")
+                </th>
+                <th>
+                    @Html.DisplayName("Line Discount %")
+                </th>
+                <th>
+                    @Html.DisplayName("Amount Including VAT")
+                </th>
+                <th>
+                    @Html.DisplayName("Geographical Location")
+                </th>
+                <th>
+                    @Html.DisplayName("Administrative Unit")
+                </th>
+                <th>
+                    @Html.DisplayName("Vote")
+                </th>
+                <th>
+                    @Html.DisplayName("Sub Programme")
+                </th>
+                <th>
+                    @Html.DisplayName("Class")
+                </th>
+                <th>
+                    @Html.DisplayName("Funding Source")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LocationCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitOfMeasureCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DirectUnitCost)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LineDiscountPercent)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AmountIncludingVAT)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShortcutDimension1Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShortcutDimension2Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShortcutDimCode3)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShortcutDimCode4)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShortcutDimCode5)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShortcutDimCode6)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+</script>

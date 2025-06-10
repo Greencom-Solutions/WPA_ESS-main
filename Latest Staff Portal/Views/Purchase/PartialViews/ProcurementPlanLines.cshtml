@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ProcurementPlanLine>
+<div class="table-responsive">
+    <table id="procurementLines" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead style="background-color:black;color:white">
+        <tr>
+            <th>PP_Line_No</th>
+            <th>Procurement_Plan_ID</th>
+            <th>Document_Type</th>
+            <th>Planning_Category</th>
+            <th>Description</th>
+            <th>Total_Quantity</th>
+            <th>Total_Budgeted_Cost</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.PPLineNo</td>
+                        <td>@item.ProcurementPlanID</td>
+                        <td>@item.DocumentType</td>
+                        <td>@item.PlanningCategory</td>
+                        <td>@item.Description</td>
+                        <td>@item.TotalQuantity</td>
+                        <td>@item.TotalBudgetedCost</td>
+                        <td>
+                            @* <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Add Plan Entry" onclick="AddPlanEntry('@item.ProcurementPlanID','@item.PlanningCategory');" /> *@
+                            <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" value="View Plan Entries" onclick="ViewPlanEntries('@item.ProcurementPlanID','@item.PlanningCategory','@item.Status', '@item.StartDate', '@item.EndDate');"/>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+        </tbody>
+    </table>
+</div>
+<hr/>
+@*<div align="right">
+    <input type="button" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Add Procurement Plan Line" onclick="AddddPlanLine();"/>
+</div>*@
+<script>
+    $("#procurementLines").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+
+</script>
