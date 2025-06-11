@@ -1066,7 +1066,7 @@ namespace Latest_Staff_Portal.Controllers
                         Text = x.Text,
                         Value = x.Value
                     }).ToList();
-                expenseRequisition.ListOfDim3 = DimensionValues(3).Select(x =>
+                /*expenseRequisition.ListOfDim3 = DimensionValues(3).Select(x =>
                     new SelectListItem
                     {
                         Text = x.Text,
@@ -1089,7 +1089,7 @@ namespace Latest_Staff_Portal.Controllers
                     {
                         Text = x.Text,
                         Value = x.Value
-                    }).ToList();
+                    }).ToList();*/
                 return PartialView("~/Views/ExpenseRequisition/PartialViews/NewExpenseRequisitionLine.cshtml",
                     expenseRequisition);
             }

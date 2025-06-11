@@ -20,14 +20,15 @@
         padding: 7px;
         font-size: 12px;
     }
+
     .select2-container.custom-select .select2-selection {
         background-color: #dedebd !important;
         border: 1px solid #ccc;
     }
+
     .select2-container.custom-select .select2-selection--single {
         background-color: #dedebd !important;
     }
-
 </style>
 <div class="page-header">
     <div class="row">
@@ -42,34 +43,29 @@
 <div class="card">
     <p hidden id="GlobalDimension1Code">@Model.GlobalDimension1Code</p>
     <p hidden id="GlobalDimension2Code">@Model.GlobalDimension2Code</p>
-    <div class="card-body">
+    <div class="card-header">
         <div style="text-align:right">
-            <button class="btn btn-primary action-buttons" onclick="GenerateExpenseRequisitionReport('@Model.No');">
+            <button class="btn btn-primary action-buttons2" onclick="GenerateExpenseRequisitionReport('@Model.No');">
                 <i class="fa fa-print" aria-hidden="true"></i> Print Report
             </button>
             @if (Model.ApprovalStatus == "Pending Approval")
             {
-                <button class="btn btn-primary action-buttons" onclick="ViewApprovalTrail('@Model.No');">
+                <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.No');">
                     <i class="fa fa-route" aria-hidden="true"></i> Approval Trail
                 </button>
-                <button class="btn btn-primary action-buttons" onclick="CancelDocApprovalRequest('@Model.No');">
+                <button class="btn btn-primary action-buttons2" onclick="CancelDocApprovalRequest('@Model.No');">
                     <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Approval Request
                 </button>
 
             }
-            <button class="btn btn-primary action-buttons" onclick="ViewDocComments('@Model.No');">
+            <button class="btn btn-primary action-buttons2" onclick="ViewDocComments('@Model.No');">
                 <i class="fa fa-list-ol" aria-hidden="true"></i>  Comments
             </button>
-            @{
-                if (Model.ApprovalStatus == "Open")
-                {
 
-                    <button class="btn btn-primary action-buttons" onclick="EditDocument();">
-                        <i class="fa fa-history" aria-hidden="true"></i> Edit Header
-                    </button>
-                }
-            }
         </div>
+    </div>
+    <div class="card-body">
+
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -277,11 +273,11 @@
                                 @if (ViewBag.Activities != null && ViewBag.Activities.Count > 0)
                                 {
                                     @Html.DropDownListFor(
-                                        m => m.PPPlanCategory, 
-                                        new SelectList(ViewBag.Activities, "Value", "Text", Model.RequiresImprest), 
-                                        "--Select--", 
-                                        new { @id = "ppPlanCategory", @class = "form-control select2 custom-select", @readonly = "readonly" }
-                                    )
+                                             m => m.PPPlanCategory,
+                                             new SelectList(ViewBag.Activities, "Value", "Text", Model.RequiresImprest),
+                                             "--Select--",
+                                             new { @id = "ppPlanCategory", @class = "form-control select2 custom-select", @readonly = "readonly" }
+                                         )
 
                                 }
                             </div>
@@ -293,7 +289,7 @@
         @if (Model.ApprovalStatus == "Open")
         {
             <div align="center">
-                <input type="button" class="btn btn-primary waves-effect waves-light" value="Update Header" onclick="UpdateExpenseRequisition();" />
+                <input type="button" class="btn btn-primary action-buttons" value="Update Header" onclick="UpdateExpenseRequisition();" />
             </div>
         }
         <div id="divDepositLiness">
@@ -310,13 +306,14 @@
                 if (Model.ApprovalStatus == "Open")
                 {
                     <div align="center">
-                        <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
+                        <input type="button" class="btn btn-primary action-buttons" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
                     </div>
                 }
             }
             <hr />
         </div>
     </div>
+
 
 </div>
 @*//////////////////////Modal////////////////////////////*@
@@ -325,14 +322,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title mt-0" id="myModalLabel"><label id="labelF"></label></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" id="modalBody">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -342,7 +339,7 @@
         <div class="modal-content bg-white">
             <div class="modal-header">
                 <h4 class="modal-title">Update Expense Line</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -368,7 +365,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="UpdateLine();">Update Line</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -379,7 +376,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalCheck">Expense Requisition</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -395,7 +392,7 @@
         <div class="modal-content bg-white">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalAttachmentLabel">View Attachment</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
 
@@ -404,7 +401,7 @@
                 <iframe id="iframe" style="width:100%;height:75vh;"></iframe>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger waves-effect" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
