@@ -401,7 +401,7 @@ namespace Latest_Staff_Portal.Controllers
                     {
                         var dropdownList = new DropdownList
                         {
-                            Text = (string)config["Name"] +"-" + (string)config["Code"],
+                            Text = (string)config["Name"],
                             Value = (string)config["Code"]
                         };
                         Dim1List.Add(dropdownList);
@@ -428,7 +428,7 @@ namespace Latest_Staff_Portal.Controllers
                     {
                         var dropdownList = new DropdownList
                         {
-                            Text = (string)config["Name"] + "-" + (string)config["Code"],
+                            Text = (string)config["Name"],
                             Value = (string)config["Code"]
                         };
                         Dim1List.Add(dropdownList);
@@ -571,6 +571,7 @@ namespace Latest_Staff_Portal.Controllers
                     JsonRequestBehavior.AllowGet);
             }
         }
+
 
 
         public ActionResult NewImprestWarrantLine(string docNo)

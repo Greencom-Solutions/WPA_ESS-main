@@ -109,6 +109,7 @@ namespace Latest_Staff_Portal.Controllers
                     RedirectToAction("Login", "Login");
                 }
                 string staffNo = Session["Username"].ToString();
+                var employee = Session["EmployeeData"] as EmployeeView;
                 var impAccount = ImprestAccount();
                 if (impAccount != "")
                 {
@@ -116,8 +117,7 @@ namespace Latest_Staff_Portal.Controllers
                 }
                 #region Imprest Document List
                 var imprestList = new List<DropdownList>();
-                //var pageLine = "SafariImprest?$filter=AccountNo eq '" + staffNo + "' and Surrendered eq false and PaymentType eq 'Imprest' and Posted eq true&$format=json";
-                var pageLine = "SafariImprest?$filter=Requestor eq '" + staffNo + "'&$format=json";
+                var pageLine = "PostedSafariImprestWarranties?$filter=Created_By eq '" + employee.UserID + "'&$format=json";
                 var httpResponseLine = Credentials.GetOdataData(pageLine);
                 using (var streamReader = new StreamReader(httpResponseLine.GetResponseStream()))
                 {
@@ -196,7 +196,7 @@ namespace Latest_Staff_Portal.Controllers
                 var staffNo = Session["Username"].ToString();
                 var employee = Session["EmployeeData"] as EmployeeView;
                 var userId = employee?.UserID;
-                var documentNumber = Credentials.ObjNav.createImprestSurrender1(staffNo, imprestNumber, "", "");
+                var documentNumber = Credentials.ObjNav.createImprestSurrender(staffNo, imprestNumber, imprestNumber,"", "");
                 var successMessage = "Imprest Surrender Document, Document No: " + documentNumber + ", created Successfully";
                 return Json(new { DocNo = documentNumber, success = true, successMessage }, JsonRequestBehavior.AllowGet);
             }

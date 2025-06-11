@@ -172,7 +172,7 @@ namespace Latest_Staff_Portal.Controllers
                         {
                             Document_Type = (string)config["Document_Type"],
                             Document_No = (string)config["Document_No"],
-                            Line_No = (int)config["Line_No"],
+                            Line_No = (int?)config["Line_No"]??0,
                             Item_Category = (string)config["Item_Category"],
                             Service_Item_Code = (string)config["Service_Item_Code"],
                             Type = (string)config["Type"],
@@ -181,7 +181,7 @@ namespace Latest_Staff_Portal.Controllers
                             Location_Code = (string)config["Location_Code"],
                             Variant_Code = (string)config["Variant_Code"],
                             Unit_of_Measure_Code = (string)config["Unit_of_Measure_Code"],
-                            Quantity_In_Store = (int)config["Quantity_In_Store"],
+                            Quantity_In_Store = (int?)config["Quantity_In_Store"]??0,
                             Qty_Requested = (int)config["Qty_Requested"]
                         };
 
@@ -327,14 +327,11 @@ namespace Latest_Staff_Portal.Controllers
                 string Responsible_Employee_No = employeeView.No;
                 string UserID = employeeView.UserID;
 
-
                 string Location_Code = (string)newStoreRequisition.Location_Code;
                 string Request_Date = (string)newStoreRequisition.Order_Date;
                 string Shortcut_Dimension_1_Code = (string)newStoreRequisition.Shortcut_Dimension_1_Code;
                 string Shortcut_Dimension_2_Code = (string)newStoreRequisition.Shortcut_Dimension_2_Code;
                 string Description = (string)newStoreRequisition.Description;
-
-
 
                 string docNo = "";
 
@@ -567,8 +564,9 @@ namespace Latest_Staff_Portal.Controllers
             {
                 #region ItemsLookup
                 List<DropdownList> ItemsLookup = new List<DropdownList>();
-                /* string pageStrat = $"Strategies?$filter=Objective_ID eq '{Objective_ID}' and Strategic_Plan_ID eq '{Strategic_Plan_ID}'&$format=json";*/
-                string pageItems = $"Items?$filter=Procurement_Category eq '{Item_Category}' &$format=json";
+               
+                //string pageItems = $"Items?$filter=Item_Category_Code eq '{Item_Category}' &$format=json";
+                string pageItems = $"Items?$format=json";
 
                 HttpWebResponse httpResponseItems = Credentials.GetOdataData(pageItems);
                 using (var streamReader = new StreamReader(httpResponseItems.GetResponseStream()))

@@ -6,14 +6,14 @@
     <div class="col-md-6">
         <div class="form-group">
             @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
-            @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #ccc", @id= "Document_No" } })
+            @Html.EditorFor(model => model.Document_No, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @style = "background-color: #ccc", @id = "Document_No" } })
             @Html.ValidationMessageFor(model => model.Document_No, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
             @Html.Label("Item Category", htmlAttributes: new { @class = "control-label col-md-2" })
-            @Html.DropDownListFor(m => m.Item_Category, Model.ListOfPP_Planning_Category, "Select Option--", new { @class = "form-control", @id = "Item_Category", @onchange= "GetItems(this.value)" })  
+            @Html.DropDownListFor(m => m.Item_Category, Model.ListOfPP_Planning_Category, "Select Option--", new { @class = "form-control", @id = "Item_Category", @onchange = "GetItems(this.value)" })
             @Html.ValidationMessageFor(model => model.Item_Category, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -27,11 +27,11 @@
             @Html.ValidationMessageFor(model => model.Service_Item_Code, "", new { @class = "text-danger" })
         </div>
     </div>
- 
+
     <div class="col-md-6">
         <div class="form-group">
             @Html.Label("Qty Requested", htmlAttributes: new { @class = "control-label col-md-2" })
-            @Html.EditorFor(model => model.Qty_Requested, new { htmlAttributes = new { @class = "form-control" , @id= "Qty_Requested" } })
+            @Html.EditorFor(model => model.Qty_Requested, new { htmlAttributes = new { @class = "form-control", @id = "Qty_Requested" } })
             @Html.ValidationMessageFor(model => model.Qty_Requested, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -59,7 +59,7 @@
                 }
             });
         } else {
-            $("#Service_Item_Code").html('<option value="">-- Select Item --</option>'); 
+            $("#Service_Item_Code").html('<option value="">-- Select Item --</option>');
             HideProgress();
         }
     }

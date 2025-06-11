@@ -29,7 +29,7 @@
         <div class="form-group">
             @Html.Label("Payroll No", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Account_No, Model.ListOfPayroll, "Select Option", new { @class = "form-control", @id= "Account_No" })
+            @Html.DropDownListFor(model => model.Account_No, Model.ListOfPayroll, "Select Option", new { @class = "form-control", @id = "Account_No" })
             @Html.ValidationMessageFor(model => model.Account_No, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -38,7 +38,7 @@
         <div class="form-group">
             @Html.Label("Payee Bank Account", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.EditorFor(model => model.Payee_Bank_Account, new { htmlAttributes = new { @class = "form-control", @id= "Payee_Bank_Account" } })
+            @Html.EditorFor(model => model.Payee_Bank_Account, new { htmlAttributes = new { @class = "form-control", @id = "Payee_Bank_Account" } })
             @Html.ValidationMessageFor(model => model.Payee_Bank_Account, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -46,7 +46,7 @@
         <div class="form-group">
             @Html.Label("Payee Bank Code", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.EditorFor(model => model.Payee_Bank_Code, new { htmlAttributes = new { @class = "form-control", @id= "Payee_Bank_Code" } })
+            @Html.EditorFor(model => model.Payee_Bank_Code, new { htmlAttributes = new { @class = "form-control", @id = "Payee_Bank_Code" } })
             @Html.ValidationMessageFor(model => model.Payee_Bank_Code, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -63,7 +63,7 @@
         <div class="form-group">
             @Html.Label("Validated Bank Name", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.EditorFor(model => model.ValidatedBankName, new { htmlAttributes = new { @class = "form-control", @id= "ValidatedBankName" } })
+            @Html.EditorFor(model => model.ValidatedBankName, new { htmlAttributes = new { @class = "form-control", @id = "ValidatedBankName" } })
             @Html.ValidationMessageFor(model => model.ValidatedBankName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -71,7 +71,7 @@
         <div class="form-group">
             @Html.Label("Reference No", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.EditorFor(model => model.Reference_No, new { htmlAttributes = new { @class = "form-control", @id= "Reference_No" } })
+            @Html.EditorFor(model => model.Reference_No, new { htmlAttributes = new { @class = "form-control", @id = "Reference_No" } })
             @Html.ValidationMessageFor(model => model.Reference_No, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -79,7 +79,7 @@
         <div class="form-group">
             @Html.Label("Pay Mode", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Pay_Mode, Model.ListOfPayModes, "Select Option", new { @class = "form-control", @id= "Pay_Mode" })
+            @Html.DropDownListFor(model => model.Pay_Mode, Model.ListOfPayModes, "Select Option", new { @class = "form-control", @id = "Pay_Mode" })
             @Html.ValidationMessageFor(model => model.Pay_Mode, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -143,7 +143,7 @@
         <div class="form-group">
             @Html.Label("Payment Narration", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.EditorFor(model => model.Payment_Narration, new { htmlAttributes = new { @class = "form-control", @id= "Payment_Narration" } })
+            @Html.EditorFor(model => model.Payment_Narration, new { htmlAttributes = new { @class = "form-control", @id = "Payment_Narration" } })
             @Html.ValidationMessageFor(model => model.Payment_Narration, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -153,7 +153,7 @@
         <div class="form-group">
             @Html.Label("Strategic Plan", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Strategic_Plan, Model.ListOfStratPlans, "Select Option", new { @class = "form-control", @id= "Strategic_Plan" })
+            @Html.DropDownListFor(model => model.Strategic_Plan, Model.ListOfStratPlans, "Select Option", new { @class = "form-control", @id = "Strategic_Plan" })
             @Html.ValidationMessageFor(model => model.Strategic_Plan, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -161,7 +161,7 @@
         <div class="form-group">
             @Html.Label("Reporting_Year_Code", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Reporting_Year_Code, Model.ListOfImplYears, "Select Option", new { @class = "form-control", @id= "Reporting_Year_Code" })
+            @Html.DropDownListFor(model => model.Reporting_Year_Code, Model.ListOfImplYears, "Select Option", new { @class = "form-control", @id = "Reporting_Year_Code" })
             @Html.ValidationMessageFor(model => model.Reporting_Year_Code, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -169,7 +169,7 @@
         <div class="form-group">
             @Html.Label("Workplan", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Workplan_Code, Model.ListOfWPA, "Select Option", new { @class = "form-control", @id= "Workplan_Code" })
+            @Html.DropDownListFor(model => model.Workplan_Code, Model.ListOfWPA, "Select Option", new { @class = "form-control", @id = "Workplan_Code" })
             @Html.ValidationMessageFor(model => model.Workplan_Code, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -177,7 +177,7 @@
         <div class="form-group">
             @Html.Label("Activity", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Activity_Code, Model.ListOfWPA, "Select Option", new { @class = "form-control", @id= "Activity_Code" })
+            @Html.DropDownListFor(model => model.Activity_Code, Model.ListOfWPA, "Select Option", new { @class = "form-control", @id = "Activity_Code" })
             @Html.ValidationMessageFor(model => model.Activity_Code, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -185,7 +185,7 @@
         <div class="form-group">
             @Html.Label("Expenditure Requisition", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Expenditure_Requisition_Code, Model.ListOfExpREq, "Select Option", new { @class = "form-control", @id= "Expenditure_Requisition_Code" })
+            @Html.DropDownListFor(model => model.Expenditure_Requisition_Code, Model.ListOfExpREq, "Select Option", new { @class = "form-control", @id = "Expenditure_Requisition_Code" })
             @Html.ValidationMessageFor(model => model.Expenditure_Requisition_Code, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -193,7 +193,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Imprest_Memo_No, htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.EditorFor(model => model.Imprest_Memo_No, new { htmlAttributes = new { @class = "form-control", @id= "Imprest_Memo_No" } })
+            @Html.EditorFor(model => model.Imprest_Memo_No, new { htmlAttributes = new { @class = "form-control", @id = "Imprest_Memo_No" } })
             @Html.ValidationMessageFor(model => model.Imprest_Memo_No, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -201,7 +201,7 @@
         <div class="form-group">
             @Html.Label("Region", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Shortcut_Dimension_1_Code, Model.ListOfDim1, "Select Option", new { @class = "form-control", @id= "Shortcut_Dimension_1_Code" })
+            @Html.DropDownListFor(model => model.Shortcut_Dimension_1_Code, Model.ListOfDim1, "Select Option", new { @class = "form-control", @id = "Shortcut_Dimension_1_Code" })
             @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -210,7 +210,7 @@
         <div class="form-group">
             @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.DropDownListFor(model => model.Shortcut_Dimension_2_Code, Model.ListOfDim2, "Select Option", new { @class = "form-control", @id= "Shortcut_Dimension_2_Code" })
+            @Html.DropDownListFor(model => model.Shortcut_Dimension_2_Code, Model.ListOfDim2, "Select Option", new { @class = "form-control", @id = "Shortcut_Dimension_2_Code" })
             @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
         </div>
     </div>

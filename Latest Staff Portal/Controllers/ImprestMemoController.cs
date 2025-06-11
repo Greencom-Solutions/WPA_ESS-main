@@ -1068,7 +1068,7 @@ public class ImprestMemoController : Controller
                     ImpLines.Add(ImLine);
                 }
             }
-
+            ViewBag.Status = Status;
             return PartialView(ImpLines);
         }
         catch (Exception ex)
@@ -1391,6 +1391,20 @@ public class ImprestMemoController : Controller
                 "",
                 ""
              );
+
+/*
+            res = Credentials.ObjNav.addTeamMember(
+                StaffNo,
+                DocNo,
+                ImpLine.Work_Type,
+                ImpLine.Transport_Costs
+
+
+             );*/
+
+
+
+
             if (res!="")
             {
                 var DocNetAmount = GetImpDocNetAmount(DocNo);
@@ -1410,8 +1424,38 @@ public class ImprestMemoController : Controller
         }
     }
 
+    public JsonResult DeleteImprestMemoLine(string Work_Type, string DocNo, int LineNo)
+    {
+        try
+        {
 
-    
+            var UserID = Session["UserID"].ToString();
+            var StaffNo = Session["Username"].ToString();
+            var employeeView = Session["EmployeeData"] as EmployeeView;
+            bool res = false;
+            /*res = Credentials.ObjNav.removeImprestMemoLines(
+                LineNo,
+                DocNo
+             );*/
+            if (res)
+            {
+                var DocNetAmount = GetImpDocNetAmount(DocNo);
+                return Json(new { NetAmout = DocNetAmount, message = "ImprestMemo Line Deleted successfully", success = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var DocNetAmount = GetImpDocNetAmount(DocNo);
+                return Json(new { NetAmout = DocNetAmount, message = "Error Deleting record Added", success = false }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return Json(new { message = ex.Message.Replace("'", ""), success = false },
+                JsonRequestBehavior.AllowGet);
+        }
+    }
+
     public JsonResult SendImprestMemoAppForApproval(string DocNo)
     {
         try

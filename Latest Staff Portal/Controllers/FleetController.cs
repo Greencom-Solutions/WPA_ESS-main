@@ -754,6 +754,30 @@ namespace Latest_Staff_Portal.Controllers
 
                 var maintenanceRequisition = new MaintenanceRequest2();
 
+                #region VehicleRegNo
+                var VehiclesList = new List<DropdownList>();
+                var pageV = $"FleetVehiclesList?$format=json";
+                var httpResponseV = Credentials.GetOdataData(pageV);
+                using (var streamReader = new StreamReader(httpResponseV.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    var details = JObject.Parse(result);
+
+                    foreach (var jToken in details["value"])
+                    {
+                        var config1 = (JObject)jToken;
+                        var dropdownList = new DropdownList
+                        {
+                            Text = $"{(string)config1["Registration_No"]}",
+                            Value = (string)config1["Registration_No"]
+                        };
+                        VehiclesList.Add(dropdownList);
+                    }
+                }
+                #endregion
+
+
+
                 #region Employees
                 var EmpleyeeList = new List<DropdownList>();
                 var pageWp = $"EmployeeList?$format=json";
@@ -768,7 +792,7 @@ namespace Latest_Staff_Portal.Controllers
                         var config1 = (JObject)jToken;
                         var dropdownList = new DropdownList
                         {
-                            Text = $"{(string)config1["FullName"]} - {(string)config1["No"]}",
+                            Text = (string)config1["First_Name"] + " " + (string)config1["Last_Name"] + " (" + (string)config1["No"] + ")",
                             Value = (string)config1["No"]
                         };
                         EmpleyeeList.Add(dropdownList);
@@ -778,7 +802,7 @@ namespace Latest_Staff_Portal.Controllers
 
                 #region Vendors
                 var VendorsList = new List<DropdownList>();
-                var pageVendors = $"Vendors?$format=json";
+                var pageVendors = $"VendorList?$filter= Vendor_Type eq 'Fleet'&$format=json";
                 var httpResponseVendors = Credentials.GetOdataData(pageVendors);
                 using (var streamReader = new StreamReader(httpResponseVendors.GetResponseStream()))
                 {
@@ -812,13 +836,21 @@ namespace Latest_Staff_Portal.Controllers
                         var config1 = (JObject)jToken;
                         var dropdownList = new DropdownList
                         {
-                            Text = (string)config1["Service_Name"] +"-"+ (string)config1["Service_Code"],
+                            Text = (string)config1["Service_Name"] + "-" + (string)config1["Service_Code"],
                             Value = (string)config1["Service_Code"]
                         };
                         ServiceItemList.Add(dropdownList);
                     }
                 }
                 #endregion
+
+
+                maintenanceRequisition.ListOfVehicles = VehiclesList.Select(x =>
+                new SelectListItem
+                {
+                    Text = x.Text,
+                    Value = x.Value
+                }).ToList();
 
 
                 maintenanceRequisition.ListOfEmployees = EmpleyeeList.Select(x =>
@@ -843,7 +875,7 @@ namespace Latest_Staff_Portal.Controllers
                       Value = x.Value
                   }).ToList();
 
-               
+
 
                 return PartialView("~/Views/Fleet/PartialViews/NewMaintenanceRequisition.cshtml",
                     maintenanceRequisition);
@@ -873,7 +905,7 @@ namespace Latest_Staff_Portal.Controllers
                      1, //for service Type
                     maintenanceRequisition.Description,
                     "",
-                    maintenanceRequisition.Project_Number, //null
+                    "",//maintenanceRequisition.Project_Number, null
                     "",
                     maintenanceRequisition.Maintenance_Cost.ToString(),
                     maintenanceRequisition.Vendor_Dealer,

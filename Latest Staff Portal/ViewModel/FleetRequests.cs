@@ -90,6 +90,7 @@ namespace Latest_Staff_Portal.ViewModel
         public string Item_Return_Date { get; set; }
         public string Remarks_Comments { get; set; }
         public List<SelectListItem> ListOfItemCategories { get; set; }
+        
     }
 
 
@@ -131,6 +132,7 @@ namespace Latest_Staff_Portal.ViewModel
         public List<SelectListItem> ListOfEmployees { get; set; }
         public List<SelectListItem> ListOfVendors { get; set; }
         public List<SelectListItem> ListOfServiceItem { get; set; }
+        public List<SelectListItem> ListOfVehicles { get; set; }
     }
 
     public class MonthlyWorkTicketCard

@@ -10,26 +10,19 @@
         <div class="form-group">
             @Html.Label("Vehicle Reg No", htmlAttributes: new { @class = "control-label col-md-2" })
 
-            @Html.EditorFor(model => model.Vehicle_Reg_No, new { htmlAttributes = new { @class = "form-control", @id = "Vehicle_Reg_No" } })
+            @Html.DropDownListFor(model => model.Vehicle_Reg_No, Model.ListOfVehicles, "Select Option", new { @class = "form-control", @id = "Vehicle_Reg_No" })
             @Html.ValidationMessageFor(model => model.Vehicle_Reg_No, "", new { @class = "text-danger" })
         </div>
     </div>
 
-    @* <div class="form-group">
-            @Html.LabelFor(model => model.Cost_Center_Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Cost_Center_Name, new { htmlAttributes = new { @class = "form-control", @id="" } })
-                @Html.ValidationMessageFor(model => model.Cost_Center_Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    *@  <div class="col-md-6">
+  @*  <div class="col-md-6">
         <div class="form-group">
             @Html.Label("Region", htmlAttributes: new { @class = "control-label col-md-2" })
 
             @Html.EditorFor(model => model.Vehicle_Location, new { htmlAttributes = new { @class = "form-control", @id = "Vehicle_Location" } })
             @Html.ValidationMessageFor(model => model.Vehicle_Location, "", new { @class = "text-danger" })
         </div>
-    </div>
+    </div>*@
     <div class="col-md-6">
         <div class="form-group">
             @Html.Label("Odometer Reading", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -38,14 +31,14 @@
             @Html.ValidationMessageFor(model => model.Odometer_Reading, "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="col-md-6">
+  @*  <div class="col-md-6">
         <div class="form-group">
             @Html.Label("Requested By", htmlAttributes: new { @class = "control-label col-md-2" })
 
             @Html.DropDownListFor(model => model.Requested_By, Model.ListOfEmployees, "Select Option", new { @class = "form-control", @id = "Requested_By" })
             @Html.ValidationMessageFor(model => model.Requested_By, "", new { @class = "text-danger" })
         </div>
-    </div>
+    </div>*@
 
     @*<div class="col-md-6">
         <div class="form-group">
