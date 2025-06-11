@@ -45,6 +45,11 @@ public class PurchaseRequisition
     public string Procurement_Plan_ID { get; set; }
     public string PP_Planning_Category { get; set; }
     public List<SelectListItem> ListOfPlanningCategories { get; set; }
+    public List<SelectListItem> ListOfLocation_Code { get; set; }
+    public List<SelectListItem> ListOfPP_Planning_Category { get; set; }
+    public List<SelectListItem> ListOfBudgets { get; set; }
+    
+
     public string Job_Task_No { get; set; }
     public decimal PP_Total_Budget { get; set; }
     public decimal PP_Total_Commitments { get; set; }
