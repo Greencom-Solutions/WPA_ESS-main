@@ -9,7 +9,7 @@ namespace Latest_Staff_Portal.ViewModel
 {
 
     public class EmployeeExitVoucher
-    {    
+    {
         public string DocumentNo { get; set; }
         public string Description { get; set; }
         public string EmployeeNo { get; set; }
@@ -31,11 +31,13 @@ namespace Latest_Staff_Portal.ViewModel
         public int NoofHandOverNotes { get; set; }
         public int NoofOpenHandOverNotes { get; set; }
         public int NoofOpenHandClearedNotes { get; set; }
+        public List<SelectListItem> ListOfExitMethods { get; set; }
+        public List<SelectListItem> ListOfReasons { get; set; }
     }
 
     public class ExitPlanLines
     {
-       
+
         public string Exit_Header_No { get; set; }
         public string Document_Type { get; set; }
         public int LineNo { get; set; }

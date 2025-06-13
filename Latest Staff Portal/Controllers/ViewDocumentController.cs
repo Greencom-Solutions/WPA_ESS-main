@@ -26,7 +26,7 @@ namespace Latest_Staff_Portal.Controllers
             var yearCodes = new List<YearCodes>();
 
             //string page = "PrPayrollPeriods?$select=PeriodYear&$filter=Closed eq true&format=json";
-            var page = "Period?$select=Period&format=json";
+            var page = "PrPayrollPeriods?$select=PeriodYear&format=json";
 
             var httpResponse = Credentials.GetOdataData(page);
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -37,7 +37,7 @@ namespace Latest_Staff_Portal.Controllers
                 foreach (JObject config in details["value"])
                 {
                     var Years = new YearCodes();
-                    Years.YList = (string)config["Period"];
+                    Years.YList = (string)config["PeriodYear"];
                     yearCodes.Add(Years);
                 }
             }
@@ -51,7 +51,7 @@ namespace Latest_Staff_Portal.Controllers
                     {
                         Text = x.YList,
                         Value = x.YList
-                    }).ToList()
+                    }).OrderBy(x => Convert.ToInt32(x.Value)).DistinctBy(x => x.Value).ToList()
             };
             return View(ListYears);
         }
@@ -137,7 +137,7 @@ namespace Latest_Staff_Portal.Controllers
 
             var yearCodes = new List<YearCodes>();
 
-            var page = "prTransactionList?$select=Period_Year&format=json";
+            var page = "PREmployeeTransactions?$select=Period_Year&format=json";
 
             var httpResponse = Credentials.GetOdataData(page);
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -171,63 +171,35 @@ namespace Latest_Staff_Portal.Controllers
             try
             {
                 string StaffNo = Session["Username"].ToString();
+                string StaffIDNo = "WAPI ID"; // replace with actual logic
 
+                bool success = false;
                 string message = "";
-                string filename = "";
-                bool success = false, view = false;
 
-                string StaffIDNo = CommonClass.GetEmployeeIdNo(StaffNo);
-                if (StaffIDNo == "")
+
+                int Pmonth = string.IsNullOrEmpty(Month) ? 0 : Convert.ToInt32(Month);
+                int PYear = string.IsNullOrEmpty(Year) ? 0 : Convert.ToInt32(Year);
+
+                // This should return a Base64-encoded PDF string
+                message = Credentials.ObjNav.GeneratePaySlipReport2(StaffNo, Pmonth, PYear);
+                success = !string.IsNullOrWhiteSpace(message);
+                if (success)
                 {
-                    success = false;
-                    message = "Employee ID Number is not set. Contact HR";
+                    return Json(new { message, success }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    string _filename = (StaffNo).Replace(@"/", @"");
-
-                    int Pmonth = 0, PYear = 0;
-                    if (!string.IsNullOrEmpty(Month))
-                    {
-                        Pmonth = Convert.ToInt32(Month);
-                    }
-                    if (!string.IsNullOrEmpty(Year))
-                    {
-                        PYear = Convert.ToInt32(Year);
-                    }
-                    message = Credentials.ObjNav.GeneratePaySlipReport2(StaffNo, Pmonth, PYear);
-                    string filePath = Server.MapPath("~/Downloads/");
-                    string OldPayslip = "OLDPAYSLIP-" + _filename + ".pdf";
-
-                    Credentials.SaveBase64DocumentAttachment(message, filePath + OldPayslip);
-
-                    filename = "PAYSLIP-" + _filename + ".pdf";
-
-                    string FromPath = filePath + OldPayslip;
-                    string TPath = filePath + filename;
-                    addPassword(FromPath, TPath, StaffIDNo);
-                    string DestinationPath = filePath + filename;
-                    FileInfo file = new FileInfo(DestinationPath);
-                    if (file.Exists)
-                    {
-                        success = true;
-                    }
-                    else
-                    {
-                        message = "File Not Found";
-                    }
-                    if (success)
-                    {
-                        message = @"/Downloads/" + filename;
-                    }
+                    message = "File not found";
+                    return Json(new { message, success = false }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { message = message, success, view }, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception ex)
             {
                 return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
             }
         }
+
         #region add password to pdf document
         internal static void addPassword(string TfileName, string NewFileName, string password)
         {
@@ -254,29 +226,33 @@ namespace Latest_Staff_Portal.Controllers
         {
             try
             {
-                //bool s = Request.Browser.mob;
                 string staffNo = Session["Username"].ToString();
                 string message = "";
-                bool success = false, view = false;
+                bool success = false;
 
                 int period = Convert.ToInt32(Year);
                 message = Credentials.ObjNav.GeneratePNineReport(staffNo, period);
-                if (message == "")
+                if (!string.IsNullOrWhiteSpace(message))
                 {
-                    success = false;
-                    message = "File Not Found";
+                    success = true;
+                    message = message.Trim(); // just in case
+                    return Json(new { message, success }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    success = true;
+                    message = "file not found";
+                    return Json(new { message, success = false }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { message = message, success, view }, JsonRequestBehavior.AllowGet);
+
+
+
             }
             catch (Exception ex)
             {
                 return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
             }
         }
+
 
         public ActionResult LeaveStatement()
         {

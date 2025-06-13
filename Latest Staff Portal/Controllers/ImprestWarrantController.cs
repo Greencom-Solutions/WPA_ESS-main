@@ -740,7 +740,9 @@ namespace Latest_Staff_Portal.Controllers
                 {
                     var employee = Session["EmployeeData"] as EmployeeView;
                     var userId = employee?.UserID;
-                    Credentials.ObjNav.FullUtilVoucherApproval(DocNo);
+                    var staffNumber = Session["Username"].ToString();
+                    Credentials.ObjNav.sendImprestApprovalRequest(staffNumber, DocNo);
+                   /* Credentials.ObjNav.SendImprestWarrantforApproval(DocNo);*/
                     Credentials.ObjNav.UpdateApprovalEntrySenderID(57000, DocNo, userId);
                     return Json(new { message = "Imprest Warrant, Document No " + DocNo + " sent for approval Successfully", success = true }, JsonRequestBehavior.AllowGet);
                 }

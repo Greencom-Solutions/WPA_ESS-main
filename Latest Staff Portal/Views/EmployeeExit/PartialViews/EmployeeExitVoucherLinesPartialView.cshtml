@@ -76,15 +76,16 @@
 </div>
 
 <div style="text-align:right">
-    <button class="btn btn-primary action-buttons" onclick="AddExitVoucherLine();">
+    <button class="btn btn-primary action-buttons2" onclick="AddExitVoucherLine();">
         <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Line
     </button>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#datatable").DataTable(), $("#datatable-buttons2").DataTable({
-            lengthChange: !1
-        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+        $("#datatable-buttons2").DataTable({
+            lengthChange: true,
+            lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
+        });
     });
 </script>

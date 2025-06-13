@@ -1,4 +1,5 @@
-﻿using Latest_Staff_Portal.Models;
+﻿using iTextSharp.text;
+using Latest_Staff_Portal.Models;
 using Latest_Staff_Portal.ViewModel;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Crypto.Tls;
@@ -45,7 +46,6 @@ namespace Latest_Staff_Portal.Controllers
                 string empNo = employeeView.No;
 
                 string page = $"StoreRequisition?$filter=Document_Type eq 'Store Requisition' and Request_By_No eq '{empNo}' and Requisition_Type ne 'Project' and (Status eq 'Open' or Status eq 'Pending Approval')&$format=json";
-
                 HttpWebResponse httpResponse = Credentials.GetOdataData(page);
 
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -148,17 +148,24 @@ namespace Latest_Staff_Portal.Controllers
                 return View("~/Views/Common/ErrorMessange.cshtml", erroMsg);
             }
         }
-        public PartialViewResult StoreRequisitionLinesPartialView(string Document_No)
+        public PartialViewResult StoreRequisitionLinesPartialView(string Document_No, string status)
         {
             try
             {
-                // Initialize the list to hold StoreRequisitionsLines
                 List<StoreRequisitionsLines> storeRequisitionLines = new List<StoreRequisitionsLines>();
+                string pageLine = "";
+                //pageLine = $"StoreRequisitionLines?$filter=Document_No eq '{Document_No}'&$format=json";
+                
+                if (status == "Open")
+                {
+                    pageLine = "StoreRequisitionLines?$filter=Document_No eq '" + Document_No + "'&$format=json";
+                }
+                else
+                {
+                    pageLine = "PartiallyApprovedSRLines?$filter=Document_No eq '" + Document_No + "'&$format=json";
+                }
 
-                // API endpoint for fetching Store Requisition Lines
-                string pageLine = $"StoreRequisitionLines?$filter=Document_No eq '{Document_No}'&$format=json";
                 HttpWebResponse httpResponseLine = Credentials.GetOdataData(pageLine);
-
                 using (var streamReader = new StreamReader(httpResponseLine.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
@@ -182,7 +189,9 @@ namespace Latest_Staff_Portal.Controllers
                             Variant_Code = (string)config["Variant_Code"],
                             Unit_of_Measure_Code = (string)config["Unit_of_Measure_Code"],
                             Quantity_In_Store = (int?)config["Quantity_In_Store"]??0,
-                            Qty_Requested = (int)config["Qty_Requested"]
+                            Qty_Requested = (int?)config["Qty_Requested"]??0,
+                            Quantity_To_Issue= (int?)config["Quantity_To_Issue"] ??0,
+                            Quantity_issued= (int?)config["Quantity_issued"] ?? 0
                         };
 
                         // Add to the list
@@ -191,6 +200,8 @@ namespace Latest_Staff_Portal.Controllers
                 }
 
                 // Return the populated data to the partial view
+                ViewBag.DocStatus = status;
+                ViewBag.isStoreManager = false;
                 return PartialView(storeRequisitionLines);
             }
             catch (Exception ex)

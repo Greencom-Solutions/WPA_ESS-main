@@ -19,7 +19,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="button" onclick="SelectedRow('@item.No','@item.Status');" style="background: #162f25; color:whitesmoke; border-radius:10px" value="Select"/>
+                            <input class="btn btn-primary btn-sm action-buttons2" type="button" onclick="SelectedRow('@item.No','@item.Status');"  value="Select"/>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.No)

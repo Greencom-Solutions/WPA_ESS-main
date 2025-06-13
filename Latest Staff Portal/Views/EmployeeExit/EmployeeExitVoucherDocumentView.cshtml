@@ -30,11 +30,11 @@
                 {*/
                 <div class="col-md-6 text-right">
 
-                    <button class="btn btn-primary action-buttons" onclick="SendExitVoucherForApproval('@Model.DocumentNo');">
+                    <button class="btn btn-primary action-buttons2" onclick="SendExitVoucherForApproval('@Model.DocumentNo');">
                         <i class="fa fa-check-circle"></i> Send For Approval
                     </button>
 
-                    <button class="btn btn-primary action-buttons" onclick="CreateHandoverVoucher('@Model.DocumentNo');">
+                    <button class="btn btn-primary action-buttons2" onclick="CreateHandoverVoucher('@Model.DocumentNo');">
                         <i class="fas fa-handshake"></i> Create Handover Voucher
                     </button>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.DocumentNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.DocumentNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.DocumentNo, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -66,7 +66,7 @@
                 <div class="form-group">
                     @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -74,7 +74,7 @@
                 <div class="form-group">
                     @Html.Label("Employee No", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model=>model.EmployeeNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model=>model.EmployeeNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.EmployeeNo, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -82,7 +82,7 @@
                 <div class="form-group">
                     @Html.Label("Employee Names", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.EmployeeNames, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.EmployeeNames, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.EmployeeNames, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -90,7 +90,7 @@
                 <div class="form-group">
                     @Html.Label("Exit Method", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.ExitMethod, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.ExitMethod, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.ExitMethod, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -98,7 +98,7 @@
                 <div class="form-group">
                     @Html.Label("Job ID", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.JobId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.JobId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.JobId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -106,7 +106,7 @@
                 <div class="form-group">
                     @Html.Label("Reasons", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.ReasonsCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.ReasonsCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.ReasonsCode, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -114,7 +114,7 @@
                 <div class="form-group">
                     @Html.Label("Created On", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -122,7 +122,7 @@
                 <div class="form-group">
                     @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -130,7 +130,7 @@
                 <div class="form-group">
                     @Html.Label("Document Date", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.DocumentDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.DocumentDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.DocumentDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -147,7 +147,7 @@
                 <div class="form-group">
                     @Html.Label("Date of Join", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.DateofJoin, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.DateofJoin, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.DateofJoin, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -155,7 +155,7 @@
                 <div class="form-group">
                     @Html.Label("Last working Date", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.LastworkingDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.LastworkingDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.LastworkingDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -163,7 +163,7 @@
                 <div class="form-group">
                     @Html.Label("Notice Date", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.NoticeDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.NoticeDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.NoticeDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -171,7 +171,7 @@
                 <div class="form-group">
                     @Html.Label("Employee Exit Date", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.EmployeeExitDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.EmployeeExitDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.EmployeeExitDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -179,7 +179,7 @@
                 <div class="form-group">
                     @Html.Label("Leave Days Due Payable", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.Leave_Days_Due_Payable, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.Leave_Days_Due_Payable, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.Leave_Days_Due_Payable, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -187,7 +187,7 @@
                 <div class="form-group">
                     @Html.Label("Pay in Line of Notice", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.Pay_in_Line_of_Notice, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.Pay_in_Line_of_Notice, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.Pay_in_Line_of_Notice, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -195,7 +195,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Notice_Period, htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.Notice_Period, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.Notice_Period, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.Notice_Period, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -213,7 +213,7 @@
                 <div class="form-group">
                     @Html.Label("No. Of HandOver Notes", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.NoofHandOverNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.NoofHandOverNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.NoofHandOverNotes, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -221,7 +221,7 @@
                 <div class="form-group">
                     @Html.Label("No. Of Open HandOver Notes", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.NoofOpenHandOverNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.NoofOpenHandOverNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.NoofOpenHandOverNotes, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -229,7 +229,7 @@
                 <div class="form-group">
                     @Html.Label("No Of Open Hand Cleared Notes", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    @Html.EditorFor(model => model.NoofOpenHandClearedNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" } })
+                    @Html.EditorFor(model => model.NoofOpenHandClearedNotes, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" } })
                     @Html.ValidationMessageFor(model => model.NoofOpenHandClearedNotes, "", new { @class = "text-danger" })
                 </div>
             </div>

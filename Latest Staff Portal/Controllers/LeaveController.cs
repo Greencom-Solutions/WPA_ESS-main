@@ -623,7 +623,7 @@ namespace Latest_Staff_Portal.Controllers
 
                 var relieverList = new List<RelieverList>();
                 var pageReliever = "EmployeeList?$filter=No ne '" + StaffNo +
-                                   "' and Status eq 'Active'&format=json";
+                                   "'&format=json";
 
                 var httpResponseReliever = Credentials.GetOdataData(pageReliever);
                 using (var streamReader = new StreamReader(httpResponseReliever.GetResponseStream()))

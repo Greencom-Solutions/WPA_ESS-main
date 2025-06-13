@@ -208,6 +208,7 @@
     <Compile Include="Utils\LogHelper.cs" />
     <Compile Include="Utils\SetUserAuthentication.cs" />
     <Compile Include="ViewModel\Appraisal.cs" />
+    <Compile Include="ViewModel\Deposits.cs" />
     <Compile Include="ViewModel\EmployeeExit.cs" />
     <Compile Include="ViewModel\CommonViewClass.cs" />
     <Compile Include="ViewModel\DocumentAttachment.cs" />
@@ -1093,6 +1094,8 @@
     <Content Include="Views\Purchase\RequestForQuotationsDocumentView.cshtml" />
     <Content Include="Views\Purchase\RevisionVouchers.cshtml" />
     <Content Include="Views\Purchase\RevisionVouchersDocument.cshtml" />
+    <Content Include="Views\ImprestSurrender\ApprovedImprestSurrenderListPartialView.cshtml" />
+    <Content Include="Views\ImprestSurrender\ViewApprovedSurrenderDocument.cshtml" />
     <None Include="Web References\NAVWS2\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

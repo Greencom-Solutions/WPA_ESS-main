@@ -2,8 +2,9 @@
 
 @{
     ViewBag.Title = "ImprestSurrenderListPartialView";
+    var status= ViewBag.status;
 }
-
+<h4>Imprest Surrender List (@status)</h4>
 <div class="table-responsive">
     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead style="background-color:black;color:white">
@@ -21,7 +22,7 @@
             {
                 <tr>
                     <td>
-                        <input type="button" onclick="ViewDoc('@item.No');" class="btn btn-primary btn-sm action-buttons" value="Select" />
+                        <input type="button" onclick="ViewApprovedSurrDoc('@item.No');" class="btn btn-primary btn-sm action-buttons" value="Select" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.No)

@@ -1,4 +1,10 @@
 ﻿@model IEnumerable<Latest_Staff_Portal.ViewModel.ImprestSurrender>
+@{
+    var status = ViewBag.status;
+}
+<div class="text-center">
+    <h4>Imprest Surrender List (@status)</h4>
+</div>
 <div class="table-responsive">
     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead style="background-color:black;color:white">

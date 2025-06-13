@@ -38,8 +38,7 @@ namespace Latest_Staff_Portal.Models
             }
         }
 
-       
-
+    
         public static HttpWebResponse GetOdataData(string page)
         {
             HttpWebResponse httpResponse = null;

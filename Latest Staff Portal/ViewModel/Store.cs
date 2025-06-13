@@ -49,6 +49,8 @@ namespace Latest_Staff_Portal.ViewModel
         public string Unit_of_Measure_Code { get; set; }
         public int Quantity_In_Store { get; set; }
         public int Qty_Requested { get; set; }
+        public int Quantity_To_Issue { get; set; }
+        public int Quantity_issued { get; set; }
         public List<SelectListItem> ListOfPP_Planning_Category { get; set; }
         public List<SelectListItem> ListOfItems { get; set; }
         public List<SelectListItem> ListOfDescription { get; set; }

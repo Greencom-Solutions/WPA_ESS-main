@@ -1,35 +1,24 @@
 ﻿@model Latest_Staff_Portal.ViewModel.DepositReceipts
+
+@{
+    var DocumentNumber = ViewBag.DocumentNumber;
+}
+
 <div class="container mt-4">
-    <h3>Insert Imprest Receipt</h3>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="docNo">Document Number</label>
-                <input type="text" class="form-control" id="docNo" name="docNo" maxlength="20" value="@ViewBag.DocumentNumber">
+                <input type="text" class="form-control" id="docNo" name="docNo" maxlength="20" value="@Model.No" readonly; style="background-color: #f2f2f2">
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" name="description" maxlength="400" rows="3" placeholder="Enter Description" required></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="documentDate">Document Date</label>
-                <input class="form-control" id="documentDate" name="documentDate" value="@Model.Date">
+                <input class="form-control" id="documentDate" name="documentDate" value="@Model.Date" readonly; style="background-color: #f2f2f2">
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="post">Posting Date</label>
-                <input class="form-control" id="post" value="@Model.PostedDate">
-            </div>
-        </div>
-    </div>
-    <div class="row">
+
         <div class="col-md-6">
             <div class="form-group">
                 <label>Payment Mode</label>
@@ -45,32 +34,49 @@
                 }
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="form-group">
                 <label for="payRef">Payment Reference</label>
                 <input type="text" class="form-control" id="payRef" name="payRef" maxlength="100" placeholder="Enter Payment Reference" value="@Model.PaymentReference" required>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" maxlength="400" rows="3" placeholder="Enter Description" required></textarea>
+            </div>
+        </div>
+
+
+        @* <div class="col-md-6">
+            <div class="form-group">
+                <label for="post">Posting Date</label>
+                <input class="form-control" id="post" value="@Model.PostedDate">
+            </div>
+        </div>*@
+
+        <div class="col-md-12">
             File Upload
             <input type="file" class="form-control" id="AttachmentFile" />
         </div>
     </div>
+    <div class="row mt-5">
 
-    @if (Model.Status == "Open")
-    {
-        <div class="form-group" align="center">
-            <button type="submit" class="btn btn-primary" style="text-align:center" onclick="SubmitReceipt('@Model.Status')">Submit and Send For Approval</button>
-        </div>
-    }
-    else if (Model.Status != "Released")
-    {
-        <div class="form-group" align="center">
-            <button type="submit" class="btn btn-primary" style="text-align:center" onclick="SubmitReceipt('@Model.Status')">Submit Receipt</button>
-        </div>
-    }
+        @if (Model.Status == "Open")
+        {
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary action-buttons" style="text-align:center" onclick="SubmitReceipt('@Model.Status')">Submit and Send For Approval</button>
+            </div>
+        }
+        else if (Model.Status != "Released")
+        {
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary action-buttons" style="text-align:center" onclick="SubmitReceipt('@Model.Status')">Submit Receipt</button>
+            </div>
+        }
+    </div>
 </div>
 <script>
     $(document).ready(function () {

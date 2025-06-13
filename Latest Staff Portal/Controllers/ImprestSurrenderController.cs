@@ -33,63 +33,139 @@ namespace Latest_Staff_Portal.Controllers
             }
         }
 
-        public PartialViewResult ImprestSurrenderList()
+        public PartialViewResult ImprestSurrenderList(string status)
         {
             try
             {
                 var StaffNo = Session["Username"].ToString();
                 var impAccount = ImprestAccount();
                 if (impAccount != "") StaffNo = impAccount;
-                var imprestSurrenders = new List<ImprestSurrender>();
+
                 var role = Session["ESSRoleSetup"] as ESSRoleSetup;
                 var employee = Session["EmployeeData"] as EmployeeView;
                 var dimension1 = employee?.GlobalDimension1Code;
                 var page = "";
-                page = "ImprestSurrender?$filter=Account_No eq '" + StaffNo + "'&$format=json";
 
-                var httpResponse = Credentials.GetOdataData(page);
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                if (status == "Approved")
                 {
-                    var result = streamReader.ReadToEnd();
-
-                    var details = JObject.Parse(result);
-                    foreach (var jToken in details["value"])
-                    {
-                        var config = (JObject)jToken;
-                        var imprest = new ImprestSurrender();
-                        imprest.No = (string)config["No"];
-                        imprest.Date = DateTime.ParseExact((string)config["Date"], "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
-                        imprest.ImprestDeadline = DateTime.ParseExact((string)config["Imprest_Deadline"], "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
-                        imprest.ImprestMemoSurrenderNo = (string)config["Imprest_Memo_Surrender_No"];
-                        imprest.AccountType = (string)config["Account_Type"];
-                        imprest.AccountNo = (string)config["Account_No"];
-                        imprest.AccountName = (string)config["Account_Name"];
-                        imprest.Payee = (string)config["Payee"];
-                        imprest.HOD = (bool)config["HOD"];
-                        imprest.CurrencyCode = (string)config["Currency_Code"];
-                        imprest.CreatedBy = (string)config["Created_By"];
-                        imprest.Status = (string)config["Status"];
-                        imprest.ShortcutDimension1Code = (string)config["Shortcut_Dimension_1_Code"];
-                        imprest.DepartmentName = (string)config["Department_Name"];
-                        imprest.ShortcutDimension2Code = (string)config["Shortcut_Dimension_2_Code"];
-                        imprest.ProjectName = (string)config["Project_Name"];
-                        imprest.ImprestAmount = ((decimal)config["Imprest_Amount"]).ToString("C", new CultureInfo("sw-KE"));
-                        imprest.ImprestIssueDocNo = (string)config["Imprest_Issue_Doc_No"];
-                        imprest.ReferenceNo = (string)config["Reference_No"];
-                        imprest.ActualAmountSpent = ((decimal)config["Actual_Amount_Spent"]).ToString("C", new CultureInfo("sw-KE"));
-                        imprest.ActualAmountSpentLCY = (decimal)config["Actual_Amount_Spent_LCY"];
-                        imprest.CashReceiptAmount = (decimal)config["Cash_Receipt_Amount"];
-                        imprest.RemainingAmount = ((decimal)config["Remaining_Amount"]).ToString("C", new CultureInfo("sw-KE"));
-                        imprest.StrategicPlan = (string)config["Strategic_Plan"];
-                        imprest.ReportingYearCode = (string)config["Reporting_Year_Code"];
-                        imprest.WorkplanCode = (string)config["Workplan_Code"];
-                        imprest.ActivityCode = (string)config["Activity_Code"];
-                        imprest.ExpenditureRequisitionCode = (string)config["Expenditure_Requisition_Code"];
-                        imprestSurrenders.Add(imprest);
-                    }
+                    page = "ApprovedImprestSurrender?$filter=Account_No eq '" + StaffNo + "'&$format=json";
                 }
-                return PartialView("~/Views/ImprestSurrender/ImprestSurrenderListView.cshtml",
-                    imprestSurrenders.OrderByDescending(x => x.No));
+                else if (status == "Pending Approval")
+                {
+                    page = "ImprestSurrender?$filter=Account_No eq '" + StaffNo + "' and Status eq 'Pending Approval'&$format=json";
+                }
+                else
+                {
+                    page = "ImprestSurrender?$filter=Account_No eq '" + StaffNo + "' and Status eq 'Open'&$format=json";
+                }
+
+
+
+                if (status != "Approved")
+                {
+                    var imprestSurrenders = new List<ImprestSurrender>();
+                    var httpResponse = Credentials.GetOdataData(page);
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+
+                        var details = JObject.Parse(result);
+                        foreach (var jToken in details["value"])
+                        {
+                            var config = (JObject)jToken;
+                            var imprest = new ImprestSurrender();
+                            imprest.No = (string)config["No"];
+                            imprest.Date = DateTime.ParseExact((string)config["Date"], "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
+                            imprest.ImprestDeadline = DateTime.ParseExact((string)config["Imprest_Deadline"], "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
+                            imprest.ImprestMemoSurrenderNo = (string)config["Imprest_Memo_Surrender_No"];
+                            imprest.AccountType = (string)config["Account_Type"];
+                            imprest.AccountNo = (string)config["Account_No"];
+                            imprest.AccountName = (string)config["Account_Name"];
+                            imprest.Payee = (string)config["Payee"];
+                            imprest.HOD = (bool)config["HOD"];
+                            imprest.CurrencyCode = (string)config["Currency_Code"];
+                            imprest.CreatedBy = (string)config["Created_By"];
+                            imprest.Status = (string)config["Status"];
+                            imprest.ShortcutDimension1Code = (string)config["Shortcut_Dimension_1_Code"];
+                            imprest.DepartmentName = (string)config["Department_Name"];
+                            imprest.ShortcutDimension2Code = (string)config["Shortcut_Dimension_2_Code"];
+                            imprest.ProjectName = (string)config["Project_Name"];
+                            imprest.ImprestAmount = ((decimal)config["Imprest_Amount"]).ToString("C", new CultureInfo("sw-KE"));
+                            imprest.ImprestIssueDocNo = (string)config["Imprest_Issue_Doc_No"];
+                            imprest.ReferenceNo = (string)config["Reference_No"];
+                            imprest.ActualAmountSpent = ((decimal)config["Actual_Amount_Spent"]).ToString("C", new CultureInfo("sw-KE"));
+                            imprest.ActualAmountSpentLCY = (decimal)config["Actual_Amount_Spent_LCY"];
+                            imprest.CashReceiptAmount = (decimal)config["Cash_Receipt_Amount"];
+                            imprest.RemainingAmount = ((decimal)config["Remaining_Amount"]).ToString("C", new CultureInfo("sw-KE"));
+                            imprest.StrategicPlan = (string)config["Strategic_Plan"];
+                            imprest.ReportingYearCode = (string)config["Reporting_Year_Code"];
+                            imprest.WorkplanCode = (string)config["Workplan_Code"];
+                            imprest.ActivityCode = (string)config["Activity_Code"];
+                            imprest.ExpenditureRequisitionCode = (string)config["Expenditure_Requisition_Code"];
+                            imprestSurrenders.Add(imprest);
+                        }
+                    }
+
+                    ViewBag.status = status;
+                    return PartialView("~/Views/ImprestSurrender/ImprestSurrenderListView.cshtml",
+                        imprestSurrenders.OrderByDescending(x => x.No));
+                }
+                else
+                {
+                    var approvedmprestSurr = new List<ApprovedImprestSurrender>();
+                    var httpResponse = Credentials.GetOdataData(page);
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+
+                        var details = JObject.Parse(result);
+                        foreach (var jToken in details["value"])
+                        {
+                            var config = (JObject)jToken;
+                            var imprestSurr = new ApprovedImprestSurrender
+                            {
+                                No = (string)config["No"],
+                                Date = (string)config["Date"],
+                                Posting_Date = (string)config["Posting_Date"],
+                                Imprest_Deadline = (string)config["Imprest_Deadline"],
+                                Imprest_Issue_Doc_No = (string)config["Imprest_Issue_Doc_No"],
+                                Reference_No = (string)config["Reference_No"],
+                                Account_Type = (string)config["Account_Type"],
+                                Account_No = (string)config["Account_No"],
+                                Account_Name = (string)config["Account_Name"],
+                                Payee = (string)config["Payee"],
+                                Created_By = (string)config["Created_By"],
+                                Status = (string)config["Status"],
+                                Currency_Code = (string)config["Currency_Code"],
+                                Shortcut_Dimension_1_Code = (string)config["Shortcut_Dimension_1_Code"],
+                                Department_Name = (string)config["Department_Name"],
+                                Shortcut_Dimension_2_Code = (string)config["Shortcut_Dimension_2_Code"],
+                                Project_Name = (string)config["Project_Name"],
+                                Imprest_Amount = (int)config["Imprest_Amount"],
+                                Actual_Amount_Spent = (int)config["Actual_Amount_Spent"],
+                                Actual_Amount_Spent_LCY = (int)config["Imprest_Amount"],
+                                Cash_Receipt_Amount = (int)config["Cash_Receipt_Amount"],
+                                Remaining_Amount = (int)config["Remaining_Amount"],
+                                Strategic_Plan = (string)config["Strategic_Plan"],
+                                Reporting_Year_Code = (string)config["Reporting_Year_Code"],
+                                Workplan_Code = (string)config["Workplan_Code"],
+                                Activity_Code = (string)config["Activity_Code"],
+                                Expenditure_Requisition_Code = (string)config["Expenditure_Requisition_Code"]
+                            };
+
+                            approvedmprestSurr.Add(imprestSurr);
+                        }
+
+                    }
+                    if (status == "Approved")
+                    {
+                        status = "Released";
+                    }
+                    ViewBag.status = status;
+                    return PartialView("~/Views/ImprestSurrender/ApprovedImprestSurrenderListPartialView.cshtml",
+                        approvedmprestSurr.OrderByDescending(x => x.No));
+                }
+
             }
             catch (Exception ex)
             {
@@ -196,9 +272,25 @@ namespace Latest_Staff_Portal.Controllers
                 var staffNo = Session["Username"].ToString();
                 var employee = Session["EmployeeData"] as EmployeeView;
                 var userId = employee?.UserID;
-                var documentNumber = Credentials.ObjNav.createImprestSurrender(staffNo, imprestNumber, imprestNumber,"", "");
-                var successMessage = "Imprest Surrender Document, Document No: " + documentNumber + ", created Successfully";
-                return Json(new { DocNo = documentNumber, success = true, successMessage }, JsonRequestBehavior.AllowGet);
+                var docNo = "";
+                var documentNumber = "";
+                /* var documentNumber = Credentials.ObjNav.createImprestSurrender1(staffNo);
+                 docNo = Credentials.ObjNav.InsertImperestNo(imprestNumber, documentNumber);*/
+
+
+
+                if (docNo != "")
+                {
+                    var successMessage = "Imprest Surrender Document, Document No: " + documentNumber + ", created Successfully";
+                    return Json(new { message = docNo, success = false }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    string Redirect = documentNumber;
+                    return Json(new { message = Redirect, success = true }, JsonRequestBehavior.AllowGet);
+
+                }
+
             }
             catch (Exception ex)
             {
@@ -270,7 +362,69 @@ namespace Latest_Staff_Portal.Controllers
                 return View("~/Views/Common/ErrorMessange.cshtml", erroMsg);
             }
         }
+        [HttpPost]
+        public ActionResult ViewApprovedSurrenderDocument(string DocNo)
+        {
+            try
+            {
+                if (Session["Username"] == null) return RedirectToAction("Login", "Login");
 
+
+
+                var imprestSurrender = new ApprovedImprestSurrender();
+
+                var page = "ApprovedImprestSurrender?$filter=No eq '" + DocNo + "'&$format=json";
+                var httpResponse = Credentials.GetOdataData(page);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+
+                    var details = JObject.Parse(result);
+                    foreach (var jToken in details["value"])
+                    {
+                        var config = (JObject)jToken;
+
+                        imprestSurrender = new ApprovedImprestSurrender
+                        {
+                            No = (string)config["No"],
+                            Date = (string)config["Date"],
+                            Posting_Date = (string)config["Posting_Date"],
+                            Imprest_Deadline = (string)config["Imprest_Deadline"],
+                            Imprest_Issue_Doc_No = (string)config["Imprest_Issue_Doc_No"],
+                            Reference_No = (string)config["Reference_No"],
+                            Account_Type = (string)config["Account_Type"],
+                            Account_No = (string)config["Account_No"],
+                            Account_Name = (string)config["Account_Name"],
+                            Payee = (string)config["Payee"],
+                            Created_By = (string)config["Created_By"],
+                            Status = (string)config["Status"],
+                            Currency_Code = (string)config["Currency_Code"],
+                            Shortcut_Dimension_1_Code = (string)config["Shortcut_Dimension_1_Code"],
+                            Department_Name = (string)config["Department_Name"],
+                            Shortcut_Dimension_2_Code = (string)config["Shortcut_Dimension_2_Code"],
+                            Project_Name = (string)config["Project_Name"],
+                            Imprest_Amount = (int)config["Imprest_Amount"],
+                            Actual_Amount_Spent = (int)config["Actual_Amount_Spent"],
+                            Actual_Amount_Spent_LCY = (int)config["Actual_Amount_Spent_LCY"],
+                            Cash_Receipt_Amount = (int)config["Cash_Receipt_Amount"],
+                            Remaining_Amount = (int)config["Remaining_Amount"],
+                            Strategic_Plan = (string)config["Strategic_Plan"],
+                            Reporting_Year_Code = (string)config["Reporting_Year_Code"],
+                            Workplan_Code = (string)config["Workplan_Code"],
+                            Activity_Code = (string)config["Activity_Code"],
+                            Expenditure_Requisition_Code = (string)config["Expenditure_Requisition_Code"]
+                        };
+                    }
+                }
+                return View(imprestSurrender);
+            }
+            catch (Exception ex)
+            {
+                var erroMsg = new Error();
+                erroMsg.Message = ex.Message.Replace("'", "");
+                return View("~/Views/Common/ErrorMessange.cshtml", erroMsg);
+            }
+        }
         public PartialViewResult ImprestSurrenderLines(string DocNo, string Status, string applyToDocumentNumber)
         {
             try
@@ -347,8 +501,9 @@ namespace Latest_Staff_Portal.Controllers
             {
                 {
                     var employee = Session["EmployeeData"] as EmployeeView;
+                    var staffNumber = Session["Username"].ToString();
                     var userId = employee?.UserID;
-                    Credentials.ObjNav.FullUtilVoucherApproval(DocNo);
+                    Credentials.ObjNav.fnSendImprestSurrenderApproval(staffNumber, DocNo);
                     Credentials.ObjNav.UpdateApprovalEntrySenderID(57000, DocNo, userId);
                     return Json(new { message = "Imprest Surrender, Document No " + DocNo + " sent for approval Successfully", success = true }, JsonRequestBehavior.AllowGet);
                 }
@@ -384,7 +539,7 @@ namespace Latest_Staff_Portal.Controllers
             try
             {
                 Credentials.ObjNav.CancelFullUtilVoucher(DocNo);
-                return Json(new { message = "Imprest Surrender approval cancelled Successfully", success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { message = "Document approval cancelled Successfully", success = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -398,39 +553,38 @@ namespace Latest_Staff_Portal.Controllers
             return PartialView("~/Views/ImprestSurrender/FileAttachmentForm.cshtml");
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult ModifyImprestReceipt(ImprestReceipt receipt)
+        {
+            try
+            {
+                var employee = Session["EmployeeData"] as EmployeeView;
+                var userId = employee?.UserID;
+                /*DateTime postingDate = DateTime.ParseExact(receipt.PostingDate.Replace("-", "/"),
+               *//*     "dd/MM/yyyy", CultureInfo.InvariantCulture);*//*
+                DateTime documentDate = DateTime.ParseExact(receipt.DocumentDate.Replace("-", "/"),
+                    "dd/MM/yyyy", CultureInfo.InvariantCulture);*/
 
-        // [AcceptVerbs(HttpVerbs.Post)]
-        // public JsonResult ModifyImprestReceipt(ImprestReceipt receipt)
-        // {
-        //     try
-        //     {
-        //         var employee = Session["EmployeeData"] as EmployeeView;
-        //         var userId = employee?.UserID;
-        //         DateTime postingDate = DateTime.ParseExact(receipt.PostingDate.Replace("-", "/"),
-        //             "dd/MM/yyyy", CultureInfo.InvariantCulture);
-        //         DateTime documentDate = DateTime.ParseExact(receipt.DocumentDate.Replace("-", "/"),
-        //             "dd/MM/yyyy", CultureInfo.InvariantCulture);
-        //
-        //         Credentials.ObjNav.insertImprestReceipt(
-        //             receipt.DocNo,
-        //             receipt.Description,
-        //             documentDate,
-        //             postingDate,
-        //             receipt.PayMode,
-        //             receipt.PayRef,
-        //             userId
-        //         );
-        //         if (receipt.Status == "Open")
-        //         {
-        //             Credentials.ObjNav.ReceiptsendApprovalRequest(receipt.DocNo);
-        //         }
-        //         return Json(new { message = "Receipt modified and sent for approval successfully.", success = true }, JsonRequestBehavior.AllowGet);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return Json(new { message = ex.Message.Replace("'", ""), success = false }, JsonRequestBehavior.AllowGet);
-        //     }
-        // }
+                /*Credentials.ObjNav.insertImprestReceipt(
+                    receipt.DocNo,
+                    receipt.Description,
+                    documentDate,
+                    postingDate,
+                    receipt.PayMode,
+                    receipt.PayRef,
+                    userId
+                );*/
+                if (receipt.Status == "Open")
+                {
+                    /*Credentials.ObjNav.ReceiptsendApprovalRequest(receipt.DocNo);*/
+                }
+                return Json(new { message = "Receipt modified and sent for approval successfully.", success = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { message = ex.Message.Replace("'", ""), success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult ModifyImprestSurrender(string DocNo, string PostingDate)
         {
@@ -438,7 +592,7 @@ namespace Latest_Staff_Portal.Controllers
             {
                 var employee = Session["EmployeeData"] as EmployeeView;
                 var userId = employee?.UserID;
-                DateTime postingDate = DateTime.ParseExact(PostingDate.Replace("-", "/"), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                /*DateTime postingDate = DateTime.ParseExact(PostingDate.Replace("-", "/"), "dd/MM/yyyy", CultureInfo.InvariantCulture);*/
                 // Credentials.ObjNav.updateApprovedPayment(DocNo, postingDate);
                 return Json(new { message = "Imprest Surrender Modified Successfully", success = true }, JsonRequestBehavior.AllowGet);
             }
@@ -525,5 +679,103 @@ namespace Latest_Staff_Portal.Controllers
                 return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public PartialViewResult GenerateImprestReceipt(string documentNumber)
+        {
+            try
+            {
+                var employee = Session["EmployeeData"] as EmployeeView;
+                var userId = employee?.UserID;
+                var receiptNumber = "";
+                /*receiptNumber = Credentials.ObjNav.GenerateReceipt(documentNumber);*/
+                ViewBag.DocumentNumber = receiptNumber;
+                LoadPayModes();
+                var assignedAsset = new DepositReceipts();
+                var page = "DepositReceipt?$filter=No eq '" + receiptNumber + "'&$format=json";
+                var httpResponse = Credentials.GetOdataData(page);
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    var details = JObject.Parse(result);
+                    foreach (var jToken in details["value"]!)
+                    {
+                        var config = (JObject)jToken;
+                        var amountLCYString = (string)config["Amount_LCY"];
+                        decimal amountLCY;
+                        var isValidAmount = decimal.TryParse(amountLCYString, out amountLCY);
+
+                        // Format the amount with commas
+                        var formattedAmountLcy = isValidAmount ? amountLCY.ToString("N0") : "";
+                        assignedAsset = new DepositReceipts
+                        {
+                            No = (string)config["No"],
+                            Date = (string)config["Date"],
+                            /* Date = DateTime
+                                 .ParseExact((string)config["Date"], "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                 .ToString("dd/MM/yyyy"),*/
+                            PayMode = (string)config["Pay_Mode"],
+                            PaymentReference = (string)config["Payment_Reference"],
+                            PostedDate = (string)config["Posting_Date"],
+                            /*PostedDate = DateTime.ParseExact((string)config["Posting_Date"], "yyyy-MM-dd",
+                                CultureInfo.InvariantCulture).ToString("dd/MM/yyyy"),*/
+                            Status = (string)config["Status"]
+                        };
+                    }
+                }
+                return PartialView("PartialViews/GenerateImprestReceipt", assignedAsset);
+            }
+            catch (Exception ex)
+            {
+                var erroMsg = new Error();
+                erroMsg.Message = ex.Message.Replace("'", "");
+                return PartialView("Partial Views/ErroMessangeView", erroMsg);
+            }
+        }
+        public JsonResult GenerateImprestReceipt2(string documentNumber)
+        {
+            try
+            {
+                var res = "";
+                var message = "Receipt Generated";
+                bool success = false;
+               /* Credentials.ObjNav.GenerateReceipt(documentNumber);*/
+                return Json(new { message, success }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public JsonResult InitiateStaffClaim(string documentNumber)
+        {
+            try
+            {
+                var message = "";
+                bool success = false;
+                var employee = Session["EmployeeData"] as EmployeeView;
+                var staffNumber = Session["Username"].ToString();
+                var userId = employee?.UserID;
+               /* message = Credentials.ObjNav.InitiateStaffClaim(documentNumber, userId);*/
+                if (message == "")
+                {
+                    return Json(new { message, success }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    success = true;
+                    return Json(new { message, success }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
     }
 }

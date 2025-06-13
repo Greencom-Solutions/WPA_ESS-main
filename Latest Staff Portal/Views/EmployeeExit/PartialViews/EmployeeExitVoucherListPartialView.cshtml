@@ -10,13 +10,14 @@
             <tr>
                 <th>Action</th>
                 <th>Document No</th>
+                <th>Description</th>
                 @* <th>Description</th>*@
-                <th>Employee No</th>
+                @*<th>Employee No</th>*@
                 <th>Employee Names</th>
                 <th>Exit Method</th>
-                <th>Job ID</th>
+                @*  <th>Job ID</th>*@
                 <th>Reasons Code</th>
-           
+
             </tr>
 
         </thead>
@@ -31,19 +32,22 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.DocumentNo)
                     </td>
-
                     <td>
-                        @Html.DisplayFor(modelItem => item.EmployeeNo)
+                        @Html.DisplayFor(modelItem => item.Description)
                     </td>
+
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeNo)
+                        </td>*@
                     <td>
                         @Html.DisplayFor(modelItem => item.EmployeeNames)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ExitMethod)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.JobId)
-                    </td>
+                    @* <td>
+                            @Html.DisplayFor(modelItem => item.JobId)
+                        </td>*@
                     <td>
                         @Html.DisplayFor(modelItem => item.ReasonsCode)
                     </td>
@@ -55,9 +59,8 @@
     </table>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
-            lengthChange: !1
-        }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")
+    $("#datatable-buttons").DataTable({
+        lengthChange: true,
+        lengthMenu: [5, 10, 25, 50, 100] // Same options for the second table
     });
 </script>

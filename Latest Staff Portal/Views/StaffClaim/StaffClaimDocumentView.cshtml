@@ -35,159 +35,159 @@
 <hr />
 <br />
 <div class="card">
-    <div class="card-body">
-        <div class="alert alert-danger mt-3" style="font-size: 0.9em;">
-            <strong style="color: red;">*</strong> If Bank Validation Fails, click on <b>Update Details</b> in the top right tab.
-        </div>
+    <div class="card-header">
+        @* <div class="alert alert-danger mt-3" style="font-size: 0.9em;">
+                <strong style="color: red;">*</strong> If Bank Validation Fails, click on <b>Update Details</b> in the top right tab.
+            </div>*@
         <div style="text-align:right">
-            <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="GetFO22('@Model.No')">
-                <i class="fas fa-print" aria-hidden="true"></i> Preview F.O.22
-            </button>
-            <button style="background: #162f25; color: whitesmoke; border-radius: 10px" class="BtnPadding" onclick="GenerateExpenseRequisitionReport('@Model.ExpenditureRequisitionCode');">
-                <i class="fa fa-print" aria-hidden="true"></i> Print Memo Report
-            </button>
-            <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="ViewDimensions()">
-                <i class="fas fa-project-diagram" aria-hidden="true"></i> Dimensions
-            </button>
-
-            <button style="background: #162f25; color:whitesmoke; border-radius:10px" class="BtnPadding" onclick="ViewDocComments('@Model.No');">
+            @* <button style="background: #162f25; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="GetFO22('@Model.No')">
+            <i class="fas fa-print" aria-hidden="true"></i> Preview F.O.22
+        </button>*@
+            @*   <button style="background: #162f25; color: whitesmoke; border-radius: 10px" class="BtnPadding" onclick="GenerateExpenseRequisitionReport('@Model.ExpenditureRequisitionCode');">
+            <i class="fa fa-print" aria-hidden="true"></i> Print Memo Report
+        </button>*@
+            @*  <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="ViewDimensions()">
+            <i class="fas fa-project-diagram" aria-hidden="true"></i> Dimensions
+        </button>
+            *@
+            <button class="btn btn-primary action-buttons2" onclick="ViewDocComments('@Model.No');">
                 <i class="fa fa-list-ol" aria-hidden="true"></i> Comments
             </button>
             @{
-                var essRole = Session["ESSRoleSetup"] as ESSRoleSetup;
 
-                if (  Model.Status == "Released" && Model.Posted == "False")
-                {
-                    <button style="background: #162f25; color:whitesmoke;  border-radius:10px" class="BtnPadding" onclick="Post('@Model.No');">
-                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Post (@Model.No)
-                    </button>
+                @*   if (Model.Status == "Released" && Model.Posted == "False")
+            {
+                <button style="background: #162f25; color:whitesmoke;  border-radius:10px" class="BtnPadding" onclick="Post('@Model.No');">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Post (@Model.No)
+                </button>
 
-                }
+            }*@
             }
+
+            @if (Model.Status == "Open")
+            {
+                <button class="btn btn-primary action-buttons2" onclick="SendStaffClaimsDocForApproval('@Model.No');">
+                    <i class="fa fa-check" aria-hidden="true"></i> Send For Approval
+                </button>
+               
+            }
+
+
             @if (Model.Status == "Pending Approval")
             {
 
-                <button style="background: #162f25; color:whitesmoke; border-radius:10px" class="BtnPadding" onclick="CancelDocApprovalRequest('@Model.No');">
-                    <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Approval Request
+                <button class="btn btn-primary action-buttons2" onclick="CancelStaffClaimsDocApproval('@Model.No');">
+                    <i class="fa fa-close" aria-hidden="true"></i> Cancel Approval Request
                 </button>
-                <button style="background: #162f25; color:whitesmoke; border-radius:10px" class="BtnPadding" onclick="ViewApprovalTrail('@Model.No');">
-                    <i class="fa fa-barcode" aria-hidden="true"></i> Approval Trail
-                </button>
-            }
-            @if (Model.Status == "Open")
-            {
-                <button style="background: #315b7c; color: whitesmoke; border-radius: 10px;" class="BtnPadding" onclick="UpdateBankDetails('@Model.No')">
-                    <i class="fas fa-project-diagram" aria-hidden="true"></i> Update Employee Bank Details
+                <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.No');">
+                    <i class="fa fa-list" aria-hidden="true"></i> Approval Trail
                 </button>
             }
+
+
+
+            <div class="text-center mt-5"><h4>Staff Claim Document (@Model.No)</h4></div>
+            <br />
+
         </div>
-        <hr />
-        <div class="text-center mt-5"><h4>Staff Claim Document (@Model.No)</h4></div>
-        <br />
+    </div>
+    <div class="card-body">
+
         <div class="row">
             <div class="col-md-6 form-group">
                 @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
             </div>
             <div class="col-md-6 form-group">
                 @Html.Label("Date Requested", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "dtPicker" })
+                @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "dtPicker" })
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
+
+           @* <div class="col-md-6">
                 <div class="form-group">
                     @Html.Label("AIE Receipt Number", new { @class = "control-label col-md-12" })
-                    @Html.TextBoxFor(m => m.AieReceipt, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    @Html.TextBoxFor(m => m.AieReceipt, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
                 </div>
-            </div>
+            </div>*@
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.Label("Committed Amount", new { @class = "control-label col-md-12" })
-                    @Html.TextBoxFor(m => m.CommittedAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    @Html.TextBoxFor(m => m.CommittedAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     @Html.Label("Available Balance", new { @class = "control-label col-md-12" })
-                    @Html.TextBoxFor(m => m.AvailableAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd" })
+                    @Html.TextBoxFor(m => m.AvailableAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
                 </div>
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6 form-group">
                 @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.AccountType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtAccountType" })
+                @Html.TextBoxFor(m => m.AccountType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtAccountType" })
             </div>
             <div class="col-md-6 form-group">
                 @Html.Label("Account No", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtAccountNo" })
+                @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtAccountNo" })
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6 form-group">
                 @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtAccountName" })
+                @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtAccountName" })
             </div>
             <div class="col-md-6 form-group">
                 @Html.Label("Payee", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.Payee, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtPayee" })
+                @Html.TextBoxFor(m => m.Payee, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtPayee" })
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6 form-group">
                 @Html.Label("Payment Narration", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.PaymentNarration, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtPaymentNarration" })
+                @Html.TextBoxFor(m => m.PaymentNarration, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtPaymentNarration" })
             </div>
             <div class="col-md-6 form-group">
                 @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.DepartmentName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtDepartmentName" })
+                @Html.TextBoxFor(m => m.DepartmentName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtDepartmentName" })
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6 form-group">
                 @Html.Label("Administrative Unit", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ShortcutDimension2Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtShortcutDimension2Code" })
+                @Html.TextBoxFor(m => m.ShortcutDimension2Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtShortcutDimension2Code" })
             </div>
-            <div class="col-md-6 form-group">
+           @* <div class="col-md-6 form-group">
                 @Html.Label("Project Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtProjectName" })
-            </div>
-        </div>
-        <div class="row">
+                @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtProjectName" })
+            </div>*@
+
             <div class="col-md-6 form-group">
                 @Html.Label("Total Amount LCY", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.TotalAmountLCY, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtTotalAmountLCY" })
+                @Html.TextBoxFor(m => m.TotalAmountLCY, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtTotalAmountLCY" })
             </div>
             <div class="col-md-6 form-group">
                 @Html.Label("Strategic Plan", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.StrategicPlan, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStrategicPlan" })
+                @Html.TextBoxFor(m => m.StrategicPlan, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtStrategicPlan" })
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6 form-group">
                 @Html.Label("Reporting Year Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ReportingYearCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtReportingYearCode" })
+                @Html.TextBoxFor(m => m.ReportingYearCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtReportingYearCode" })
             </div>
             <div class="col-md-6 form-group">
                 @Html.Label("Workplan Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.WorkplanCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtWorkplanCode" })
+                @Html.TextBoxFor(m => m.WorkplanCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtWorkplanCode" })
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6 form-group">
                 @Html.Label("Activity Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ActivityCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtActivityCode" })
+                @Html.TextBoxFor(m => m.ActivityCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtActivityCode" })
             </div>
             <div class="col-md-6 form-group">
                 @Html.Label("Expenditure Requisition Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ExpenditureRequisitionCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtExpenditureRequisitionCode" })
+                @Html.TextBoxFor(m => m.ExpenditureRequisitionCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtExpenditureRequisitionCode" })
             </div>
-        </div>
-        <div class="row">
+
             <div class="col-md-6 form-group">
                 @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#dedebd", id = "txtStatus" })
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", id = "txtStatus" })
             </div>
         </div>
         <hr style="border:1px solid black" />
@@ -203,16 +203,7 @@
         </div>
         <hr style="border:1px solid black" />
         <hr />
-        @{
-            {
-                if (Model.Status == "Open" && essRole.Station_Accountant)
-                {
-                    <div align="center">
-                        <input type="button" class="btn btn-primary waves-effect waves-light" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
-                    </div>
-                }
-            }
-        }
+
     </div>
 </div>
 
@@ -225,14 +216,14 @@
                 <h5 class="modal-title mt-0" id="myModalLabel">
                     <label id="labelF"></label>
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" id="modalBody">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -243,7 +234,7 @@
         <div class="modal-content bg-white">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalAttachmentLabel">View Attachment</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
 
@@ -252,7 +243,7 @@
                 <iframe id="iframe" style="width:100%;height:75vh;" frameborder="0"></iframe>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger waves-effect" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -263,7 +254,7 @@
         <div class="modal-content bg-white">
             <div class="modal-header">
                 <h4 class="modal-title"></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -271,7 +262,7 @@
                 <iframe id="iframe" style="width:100%;height:450px"></iframe>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -331,29 +322,31 @@
         });
 
     }
-    	            var GetDocumentAttachments = function () {
-	var DocNo = `@Model.ExpenditureRequisitionCode`;
-	$.ajax({
-		async: true,
-		type: "POST",
-		datatype: "json",
-		contentType: "application/json; charset = utf-8",
-		processData: false,
-        data: JSON.stringify({ DocNo: DocNo}),
-        url: "/Common/EdmsDocumentAttachmentList",
-		success: function (data) {
-			$("#divAttachDocs").html(data);
-		},
-		error: function () {
-			Swal.fire("There is some problem to process your request. Please try after some time");
-		}
-	});
-};
+    var GetDocumentAttachments = function () {
+	    var DocNo = `@Model.No`;
+	    $.ajax({
+		    async: true,
+		    type: "POST",
+		    datatype: "json",
+		    contentType: "application/json; charset = utf-8",
+		    processData: false,
+            data: JSON.stringify({ DocNo: DocNo}),
+            url: "/Common/EdmsDocumentAttachmentList",
+		    success: function (data) {
+			    $("#divAttachDocs").html(data);
+		    },
+		    error: function () {
+			    Swal.fire("There is some problem to process your request. Please try after some time");
+		    }
+	    });
+    };
     var StaffClaimRequisitionLink = function () {
         ShowProgress();
         window.location = "/StaffClaim/StaffClaims";
     }
-	var SendDocForApproval = function (DocNo) {
+
+
+    var SendStaffClaimsDocForApproval = function (DocNo) {
 		ShowProgress();
 		$.ajax({
 			async: true,
@@ -362,24 +355,15 @@
 			data: JSON.stringify({ DocNo: DocNo }),
 			contentType: "application/json; charset = utf-8",
 			processData: false,
-			url: '/Imprest/SendImprestApprovalRequest',
+            url: '/StaffClaim/SendStaffClaimsDocForApproval',
 			success: function (data) {
 				if (data.success == true) {
 					HideProgress();
-                    LoadClaimDocumentLines(`@Model.No`,`@Model.Status`);
-                    var form = $('<form>', {
-                        action: '/StaffClaim/StaffClaimDocumentView',
-                        method: 'POST'
-                    }).append($('<input>', {
-                        type: 'hidden',
-                        name: 'DocNo',
-                        value: DocNo
-                    }));
-                    form.appendTo('body').submit();
+                    window.location.reload();
 				}
 				else {
 					HideProgress();
-                    LoadClaimDocumentLines(`@Model.No`,`@Model.Status`);
+
 					Swal.fire('Error', data.message, 'error');
 				}
 			},
@@ -390,8 +374,7 @@
 		});
 
 	}
-
-	var CancelDocApprovalRequest = function (DocNo) {
+    var CancelStaffClaimsDocApproval = function (DocNo) {
 		ShowProgress();
 		$.ajax({
 			async: true,
@@ -424,6 +407,7 @@
 			}
 		});
 	};
+
     var ViewApprovalTrail = function (DocNo) {
         ShowProgress();
         $.ajax({
@@ -501,38 +485,37 @@
 			}
 		});
 	};
-        	            var ViewDimensions = function () {
-                    $("#labelF").text("Dimensions");
-
-    var dimension = '@Model.DimensionSetId';
-    $.ajaxSetup({ cache: false });
-    ShowProgress();
-    $.ajax({
-        cache: false,
-        url: '/Common/Dimensions',
-        type: "POST",
-        datatype: "json",
-        cache: false,
-        data: JSON.stringify({ dimensionSetId: dimension }),
-        contentType: "application/json; charset = utf-8",
-        processData: false,
-        success: function (data) {
-            if (data) {
-                $('#modalBody').html(data);
-                $("#myModal").modal("show");
+    var ViewDimensions = function () {
+        $("#labelF").text("Dimensions");
+        var dimension = '@Model.DimensionSetId';
+        $.ajaxSetup({ cache: false });
+        ShowProgress();
+        $.ajax({
+            cache: false,
+            url: '/Common/Dimensions',
+            type: "POST",
+            datatype: "json",
+            cache: false,
+            data: JSON.stringify({ dimensionSetId: dimension }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            success: function (data) {
+                if (data) {
+                    $('#modalBody').html(data);
+                    $("#myModal").modal("show");
+                    HideProgress();
+                }
+                else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+            },
+            error: function (err) {
                 HideProgress();
+                Swal.fire('Warning', err, 'warning');
             }
-            else {
-                HideProgress();
-                Swal.fire('Warning', data.message, 'warning');
-            }
-        },
-        error: function (err) {
-            HideProgress();
-            Swal.fire('Warning', err, 'warning');
-        }
-    });
-};
+        });
+    };
     var GenerateExpenseRequisitionReport = function (docNo) {
         ShowProgress();
         $.ajax({
@@ -634,31 +617,31 @@
             }
         });
     }
-            var UpdateBankDetails  = function (DocNo) {
-    ShowProgress();
-$.ajax({
-    async: true,
-    type: "POST",
-    datatype: "json",
-    data: JSON.stringify({ DocNo: DocNo}),
-    contentType: "application/json; charset = utf-8",
-    processData: false,
-    url: '/Common/UpdateEmployeeBankDetails',
-    success: function (data) {
-        if (data.success) {
+    var UpdateBankDetails  = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ DocNo: DocNo}),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/Common/UpdateEmployeeBankDetails',
+            success: function (data) {
+                if (data.success) {
 
-            Swal.fire('Success', data.message, 'success');
-            HideProgress();
-        }
-        else {
-            Swal.fire('Error', data.message, 'error');
-            HideProgress();
-        }
-    },
-    error: function (err) {
-        HideProgress();
-        Swal.fire('Warning', err, 'warning');
+                    Swal.fire('Success', data.message, 'success');
+                    HideProgress();
+                }
+                else {
+                    Swal.fire('Error', data.message, 'error');
+                    HideProgress();
+                }
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
     }
-});
-}
 </script>

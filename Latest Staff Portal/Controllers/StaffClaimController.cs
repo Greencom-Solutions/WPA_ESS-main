@@ -251,5 +251,69 @@ namespace Latest_Staff_Portal.Controllers
                 return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        public ActionResult SendStaffClaimsDocForApproval(string DocNo)
+        {
+            try
+            {
+                var staffNo = Session["Username"].ToString();
+                var _filename = staffNo.Replace("/", "");
+                var message = "";
+                bool success = false, view = false;
+
+                var employeeView = Session["EmployeeData"] as EmployeeView;
+
+                message = Credentials.ObjNav.sendStaffClaimApproval(staffNo, DocNo);
+
+                if (string.IsNullOrEmpty(message))
+                {
+                    success = false;
+                    message = "File Not Found";
+                }
+                else
+                {
+                    success = true;
+                }
+
+                return Json(new { message, success, view }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult CancelStaffClaimsDocApproval(string DocNo)
+        {
+            try
+            {
+                var staffNo = Session["Username"].ToString();
+                var _filename = staffNo.Replace("/", "");
+                var message = "";
+                bool success = false, view = false;
+
+                var employeeView = Session["EmployeeData"] as EmployeeView;
+
+                message = Credentials.ObjNav.CancelStaffClaimRecordApproval(staffNo, DocNo, "");
+
+                if (string.IsNullOrEmpty(message))
+                {
+                    success = false;
+                    message = "File Not Found";
+                }
+                else
+                {
+                    success = true;
+                }
+
+                return Json(new { message, success, view }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { message = ex.Message, success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

@@ -1384,25 +1384,20 @@ public class ImprestMemoController : Controller
                 StaffNo,
                 DocNo,
                 ImpLine.Work_Type,
-                int.Parse(ImpLine.Type),
-                "",
+               1,//int.Parse(ImpLine.Type),
+               StaffNo,
                 ImpLine.No,
                 1,
                 "",
                 ""
              );
-
-/*
-            res = Credentials.ObjNav.addTeamMember(
-                StaffNo,
-                DocNo,
-                ImpLine.Work_Type,
-                ImpLine.Transport_Costs
-
-
-             );*/
-
-
+            
+            /*res = Credentials.ObjNav.addTeamMember(
+               StaffNo,
+               DocNo,
+               ImpLine.Work_Type,
+               ImpLine.Transport_Costs
+            );*/
 
 
             if (res!="")
@@ -1460,10 +1455,24 @@ public class ImprestMemoController : Controller
     {
         try
         {
-            /*Credentials.ObjNav.ImprestMemoRequisitionApprovalRequest(DocNo);*/
-            return Json(new { message = "Imprest Memo Requisition sent for approval Successfully", success = true },
-                JsonRequestBehavior.AllowGet);
+            var UserID = Session["UserID"].ToString();
+            var StaffNo = Session["Username"].ToString();
+            var employeeView = Session["EmployeeData"] as EmployeeView;
+            string res= Credentials.ObjNav.sendImprestRequisitionApproval(StaffNo, DocNo);
+
+            if (!res.StartsWith("danger*"))
+            {
+                return Json(new { message = "Imprest Memo Requisition sent for approval Successfully", success = true },
+                   JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string errorMessage = res.Substring(7);
+                return Json(new { message = errorMessage, success = false },
+                    JsonRequestBehavior.AllowGet);
+            }
         }
+            
         catch (Exception ex)
         {
             return Json(new { message = ex.Message.Replace("'", ""), success = false },
@@ -1475,9 +1484,22 @@ public class ImprestMemoController : Controller
     {
         try
         {
-            //   Credentials.ObjNav.HRCanceImprestMemoRequisition(DocNo);
-            return Json(new { message = "ImprestMemo Requisition approval cancelled Successfully", success = true },
-                JsonRequestBehavior.AllowGet);
+            var UserID = Session["UserID"].ToString();
+            var StaffNo = Session["Username"].ToString();
+            var employeeView = Session["EmployeeData"] as EmployeeView;
+           string res= Credentials.ObjNav.cancelRecordApproval(StaffNo, DocNo, "imprest memo");
+
+            if (!res.StartsWith("danger*"))
+            {
+                return Json(new { message = "Imprest Memo Requisition sent for approval Successfully", success = true },
+                   JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string errorMessage = res.Substring(7);
+                return Json(new { message = errorMessage, success = false },
+                    JsonRequestBehavior.AllowGet);
+            }
         }
         catch (Exception ex)
         {

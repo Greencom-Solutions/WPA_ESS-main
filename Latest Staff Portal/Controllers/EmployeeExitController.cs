@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using iTextSharp.text.pdf.parser;
 using Latest_Staff_Portal.Models;
 using Latest_Staff_Portal.ViewModel;
 using Newtonsoft.Json.Linq;
@@ -20,8 +21,6 @@ namespace Latest_Staff_Portal.Controllers
                 return RedirectToAction("Login", "Login");
             return View();
         }
-
-
         public PartialViewResult EmployeeExitVoucherListPartialView()
         {
 
@@ -29,8 +28,8 @@ namespace Latest_Staff_Portal.Controllers
             var UserID = Session["UserID"]?.ToString();
             var empExitList = new List<EmployeeExitVoucher>();
 
-            var page = "EmployeeExitVoucher?$filter=CreatedBy eq '" + UserID + "'&format=json";
-
+            /*var page = "EmployeeExit?$filter=CreatedBy eq '" + UserID + "'&format=json";*/
+            var page = "EmployeeExitVoucher?$filter=EmployeeNo eq '" + StaffNo + "'&format=json";
             var httpResponse = Credentials.GetOdataData(page);
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
@@ -54,6 +53,143 @@ namespace Latest_Staff_Portal.Controllers
 
             return PartialView("~/Views/EmployeeExit/PartialViews/EmployeeExitVoucherListPartialView.cshtml", empExitList);
         }
+        public ActionResult NewExitVoucherRequest()
+        {
+            try
+            {
+                if (Session["Username"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    EmployeeExitVoucher exitPlan = new EmployeeExitVoucher();
+                    Session["httpResponse"] = null;
+                    EmployeeView employeeView = Session["EmployeeData"] as EmployeeView;
+
+
+                    #region ExitMethods
+                    List<DropdownList> ExitMethods = new List<DropdownList>();
+                    string pageExitMethods = "ExitMethods?$format=json";
+
+                    HttpWebResponse httpResponseExitMEthods = Credentials.GetOdataData(pageExitMethods);
+                    using (var streamReader = new StreamReader(httpResponseExitMEthods.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+                        var details = JObject.Parse(result);
+
+                        foreach (JObject config in details["value"])
+                        {
+                            DropdownList dropdownList = new DropdownList();
+                            dropdownList.Text = (string)config["Description"];
+                            dropdownList.Value = (string)config["Code"];
+                            ExitMethods.Add(dropdownList);
+                        }
+                    }
+                    #endregion
+
+                    #region Reasons
+                    List<DropdownList> Reasons = new List<DropdownList>();
+                    string pageReasons = "ReasonsForExit?$format=json";
+
+                    HttpWebResponse httpResponseReasons = Credentials.GetOdataData(pageReasons);
+                    using (var streamReader = new StreamReader(httpResponseReasons.GetResponseStream()))
+                    {
+                        var result = streamReader.ReadToEnd();
+                        var details = JObject.Parse(result);
+
+                        foreach (JObject config in details["value"])
+                        {
+                            DropdownList dropdownList = new DropdownList();
+                            dropdownList.Text = (string)config["Description"];
+                            dropdownList.Value = (string)config["Code"];
+                            Reasons.Add(dropdownList);
+                        }
+                    }
+                    #endregion
+
+
+                    exitPlan.ListOfExitMethods = ExitMethods.Select(x =>
+                                       new SelectListItem()
+                                       {
+                                           Text = x.Text,
+                                           Value = x.Value
+                                       }).ToList();
+
+                    exitPlan.ListOfReasons = Reasons.Select(x =>
+                                   new SelectListItem()
+                                   {
+                                       Text = x.Text,
+                                       Value = x.Value
+                                   }).ToList();
+
+                    return PartialView("~/Views/EmployeeExit/PartialViews/NewExitVoucher.cshtml", exitPlan);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Error erroMsg = new Error();
+                erroMsg.Message = ex.Message;
+                return PartialView("~/Views/Shared/Partial Views/ErroMessangeView.cshtml", erroMsg);
+            }
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult SubmitExitVoucherRequest(EmployeeExitVoucher newExitVoucher)
+        {
+            try
+            {
+                string staffNo = Session["Username"]?.ToString();
+                EmployeeView employee = Session["EmployeeData"] as EmployeeView;
+
+                string Description = newExitVoucher.Description;
+                string ExitMethod = newExitVoucher.ExitMethod;
+                string Reasons = newExitVoucher.ReasonsCode;
+
+
+                DateTime LastworkingDate = DateTime.ParseExact(newExitVoucher.LastworkingDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime NoticeDate = DateTime.ParseExact(newExitVoucher.NoticeDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime EmployeeExitDate = DateTime.ParseExact(newExitVoucher.EmployeeExitDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+                string DocumentNo = newExitVoucher.DocumentNo;
+
+                if (DocumentNo == null) //creating new exit voucher
+                {
+                    string res = Credentials.ObjNav.createEmployeeExitVoucher(
+                        staffNo,
+                        Reasons,
+                        Description,
+                        LastworkingDate,
+                        NoticeDate,
+                        EmployeeExitDate
+                     );
+
+                }
+                else  //updating exit voucher
+                {
+
+                    /*Credentials.ObjNav.fnUpdateImprestLines(
+                                      Document_No,
+                                      Line_No,
+                                      transType,
+                                      Quantity,
+                                      UnitPrice,
+                                      UnitofMeasure
+                                  );*/
+                }
+
+
+                //Lastly, Redirect back to the document
+                string redirect = "Exit Voucher successfully created";
+                return Json(new { message = redirect, success = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { message = ex.Message.Replace("'", ""), success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         [HttpPost]
         public ActionResult EmployeeExitVoucherDocumentView(string DocumentNo)
@@ -68,9 +204,9 @@ namespace Latest_Staff_Portal.Controllers
                 EmployeeView employeeView = Session["EmployeeData"] as EmployeeView;
                 var StaffNo = Session["Username"].ToString();
                 EmployeeExitVoucher exitVoucher = new EmployeeExitVoucher();
-               
+
                 // Updated API endpoint
-                var page = "EmployeeExitVoucher?$filter= DocumentNo eq '" + DocumentNo + "'&$format=json";
+                var page = "EmployeeExit?$filter= DocumentNo eq '" + DocumentNo + "'&$format=json";
                 HttpWebResponse httpResponse = Credentials.GetOdataData(page);
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
@@ -82,7 +218,7 @@ namespace Latest_Staff_Portal.Controllers
                         exitVoucher.DocumentNo = (string)config["DocumentNo"];
                         exitVoucher.Description = (string)config["Description"];
                         exitVoucher.EmployeeNo = (string)config["EmployeeNo"];
-                        exitVoucher.EmployeeNames=(string)config["EmployeeNames"];
+                        exitVoucher.EmployeeNames = (string)config["EmployeeNames"];
                         exitVoucher.ExitMethod = (string)config["ExitMethod"];
                         exitVoucher.JobId = (string)config["JobId"];
                         exitVoucher.ReasonsCode = (string)config["ReasonsCode"];
@@ -289,7 +425,7 @@ namespace Latest_Staff_Portal.Controllers
                                    UnitofMeasure
                                );*/
 
-                
+
                 string redirect = Exit_Header_No;
                 return Json(new { message = redirect, success = true }, JsonRequestBehavior.AllowGet);
             }

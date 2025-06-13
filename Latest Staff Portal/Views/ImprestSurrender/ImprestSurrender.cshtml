@@ -36,6 +36,13 @@
 <hr />
 <br />
 <div class="card">
+    <div class="card-header">
+        <select class="col-md-3 form-control" onchange="LoadImprestSurrenderList(this.value)">
+            <option value="Open">Open</option>
+            <option value="Pending Approval">Pending Approval</option>
+            <option value="Approved">Released</option>
+        </select>
+    </div>
     <div class="card-body">
         <div style="text-align:right">
             <button  class="BtnPadding action-buttons" onclick="NewImprestSurrenderRequisition();">
@@ -87,27 +94,29 @@
 <script src="~/assets/js/ShowProgression.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        LoadImprestSurrenderList();
+        var status="Open"
+        LoadImprestSurrenderList(status);
     });
-    var LoadImprestSurrenderList = function () {
+    var LoadImprestSurrenderList = function (selectedValue) {
         ShowProgress();
         $.ajax({
             async: true,
-            type: "GET",
-            dataType: 'HTML',
-            contentType: false,
-            processData: false,
+            type: "POST", 
             url: "/ImprestSurrender/ImprestSurrenderList",
+            data: JSON.stringify({ status: selectedValue }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html", 
             success: function (data) {
                 $("#divList").html(data);
                 HideProgress();
             },
             error: function () {
                 HideProgress();
-                Swal.fire("There is some problem to process your request. Please try after some time");
+                Swal.fire("There is some problem processing your request. Please try again later.");
             }
         });
-    }
+    };
+
     var NewImprestSurrenderRequisition = function () {
         $("#labelF").text("New Imprest Surrender");
         ShowProgress();
@@ -196,6 +205,20 @@
         }));
         form.appendTo('body').submit();
     }
+
+    var ViewApprovedSurrDoc = function (DocNo) {
+        ShowProgress();
+        var form = $('<form>', {
+            action: '/ImprestSurrender/ViewApprovedSurrenderDocument',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'DocNo',
+            value: DocNo
+        }));
+        form.appendTo('body').submit();
+    }
+
     var SendDocForApproval = function (DocNo) {
         ShowProgress();
         $.ajax({

@@ -37,7 +37,7 @@
         <div class="row">
             <div class="col-md-6"><h4>Employee Exit Voucher List</h4></div>
             <div class="col-md-6" style="text-align:right">
-                <a href="#" onclick="NewExitVoucher();" class="btn action-buttons">New Exit Voucher</a>
+                <a href="#" onclick="NewExitVoucher();" class="btn btn-primary BtnPadding action-buttons">New Exit Voucher</a>
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
                 <h4 class="modal-title">
                     <label id="labelF">New Exit Voucher</label>
                 </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -63,7 +63,7 @@
             </div>
             <div class="modal-footer">
                 <input type="button" class="btn btn-primary action-buttons" value="Submit" onclick="SubmitExitVoucherRequest();" />
-                <button type="button" class="btn btn-danger waves-effect " data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger waves-effect " data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -146,43 +146,45 @@
         });
     }
     var SubmitExitVoucherRequest = function () {
-         var HelpDesk_Category = $("#HelpDesk_Category").val();
-         var HelpDesk_SubCategory = $("#Helpdesk_subcategory").val();
-         var ICT_Inventory = $("#ICT_Inventory").val();
-        var Issue_Description = $("#Issue_Description").val();
+        var Description = $("#Description").val();
+        var ExitMethod = $("#ExitMethod").val();
+        var Reason = $("#ReasonsCode").val();
+        var lastWorkingDate = $("#lastWorkingDate").val();
+        var noticeDate = $("#noticeDate").val();
+        var emplExitDate = $("#emplExitDate").val();
+      
 
          var isValid = true;
 
          //validations
-         if (!HelpDesk_Category) {
-             Swal.fire('Warning', 'Select Helpdesk Category', 'warning');
+        if (!Description) {
+            Swal.fire('Warning', 'Enter Description', 'warning');
              var isValid = false;
          }
 
-         if (!HelpDesk_SubCategory) {
-             Swal.fire('Warning', 'Select HelpDesk SubCategory', 'warning');
+        if (!ExitMethod) {
+            Swal.fire('Warning', 'Select Exit Method', 'warning');
              var isValid = false;
          }
 
-         if (!ICT_Inventory) {
-             Swal.fire('Warning', 'Select Asset Involved', 'warning');
+        if (!Reason) {
+            Swal.fire('Warning', 'Select Reason', 'warning');
              var isValid = false;
          }
 
-        if (!Issue_Description) {
-             Swal.fire('Warning', 'Enter Issue Description', 'warning');
-             var isValid = false;
-         }
+       
 
          if (!isValid) {
              return
          }
 
          var issueData = {
-             HelpDesk_Category: HelpDesk_Category,
-             Helpdesk_subcategory: HelpDesk_SubCategory,
-             ICT_Inventory: ICT_Inventory,
-             Description_of_the_issue: Issue_Description
+             Description: Description,
+             ExitMethod: ExitMethod,
+             ReasonsCode: Reason,
+             LastworkingDate: lastWorkingDate,
+             NoticeDate: noticeDate,
+             EmployeeExitDate: emplExitDate
          };
 
          // Show progress indicator

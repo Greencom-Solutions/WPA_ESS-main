@@ -1,11 +1,10 @@
-﻿@using Latest_Staff_Portal.ViewModel
-@model Latest_Staff_Portal.ViewModel.ImprestSurrender
-
+﻿@model Latest_Staff_Portal.ViewModel.ApprovedImprestSurrender
 
 @{
-    ViewBag.Title = "ViewSurrenderDocument";
+    ViewBag.Title = "ViewApprovedSurrenderDocument";
     Layout = "~/Views/Shared/Sitemaster.cshtml";
 }
+
 <style>
     thead {
         background-color: black;
@@ -42,40 +41,23 @@
         <div style="text-align:right">
 
             @{
-                var remainingAmount = Convert.ToDecimal(Model.RemainingAmount);
 
-                if (Model.Status == "Released" && Model.Posted == "False")
+
+
+                @*if (Model.Status == "Released")
                 {
-                    <button style="background: #162f25; color:whitesmoke; border-radius:10px" onclick="PostDocument('@Model.No');">
+                    <button class="btn btn-primary action-buttons2" onclick="PostDocument('@Model.No');">
                         <i class="fa fa-plus-circle" aria-hidden="true"></i> Post (@Model.No)
                     </button>
+                }*@
+
+                if (Model.Remaining_Amount < 0)
+                {
+                    <button class="btn btn-primary action-buttons2" onclick="InitiateStaffClaim('@Model.No');">
+                        <i class="fas fa-hand-holding-usd"></i> Initiate Staff Claim
+                    </button>
                 }
 
-                if (Model.Status == "Pending Approval")
-                {
-                    <button class="btn btn-primary action-buttons2" onclick="ViewApprovalTrail('@Model.No');">
-                        <i class="fa fa-list" aria-hidden="true"></i> Approval Trail
-                    </button>
-                    <button class="btn btn-primary action-buttons2" onclick="CancelDoc('@Model.No');">
-                        <i class="fa fa-superpowers" aria-hidden="true"></i> Cancel Approval
-                    </button>
-                }
-                if (Model.Status == "Open" && remainingAmount > 0)
-                {
-                    <button class="btn btn-primary action-buttons2" onclick="GenerateReceipt('@Model.No');">
-                        <i class="fa fa-object-ungroup" aria-hidden="true"></i> Generate Receipt
-                    </button>
-                }
-                @* <button class="btn btn-primary action-buttons" onclick="GenerateImprestSurrender('@Model.No');">
-                        <i class="fa fa-credit-card" aria-hidden="true"></i> Generate Imprest Surrender
-                    </button>*@
-                @*  <button class="btn btn-primary action-buttons" onclick="ViewDocComments('@Model.No');">
-                        <i class="fa fa-list-ol" aria-hidden="true"></i>  Comments
-                    </button>*@
-                if (Model.Status == "Open")
-                {
-                    <input type="button" class="btn btn-primary action-buttons2" value="Send (@Model.No) For Approval" onclick="SendDocForApproval('@Model.No');" />
-                }
 
             }
         </div>
@@ -84,138 +66,192 @@
     <div class="card-body">
 
         <div class="row">
-            <div class="col-md-6 form-group">
-
-                @Html.Label("Document No", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.No, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Date", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2", autocomplete = "off" })
-            </div>
-
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.AccountType, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Account No", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.AccountNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.AccountName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Payee", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.Payee, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Geographical Location Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ShortcutDimension1Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Geographical Location", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.DepartmentName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-
-            <div class="col-md-6 form-group">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <b></b>
-                    @Html.Label("Admin Unit Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.TextBoxFor(m => m.ShortcutDimension2Code, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
+                    @Html.Label("No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.No, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-6">
                 <div class="form-group">
+                    @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
 
-                    <b></b>
-                    @Html.Label("Admin Unit", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
+                    @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
                 </div>
             </div>
+          @*  <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Posting_Date, htmlAttributes: new { @class = "control-label col-md-2" })
 
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Imprest Amount", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ImprestAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Imprest Issue Doc No", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ImprestIssueDocNo, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Actual Amount Spent", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ActualAmountSpent, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Remaining Amount", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.RemainingAmount, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-
-            @*<div class="col-md-6 form-group">
-                    <b></b>
-                    @Html.Label("Posting Date", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.TextBoxFor(m => m.PostingDate, new { @class = "form-control", @id = "postingDate" })
-                </div>*@
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Strategic Plan", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.StrategicPlan, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Reporting Year Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.ReportingYearCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-            </div>
-            @*<div class="col-md-6 form-group">
-                    <b></b>
-                    @Html.Label("Workplan Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.TextBoxFor(m => m.WorkplanCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
+                    @Html.EditorFor(model => model.Posting_Date, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Posting_Date, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-6 form-group">
-                    <b></b>
-                    @Html.Label("Activity Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.TextBoxFor(m => m.ActivityCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
+            </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Imprest Deadline", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Imprest_Deadline, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Imprest_Deadline, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-6 form-group">
-                    <b></b>
-                    @Html.Label("Expenditure Requisition Code", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.TextBoxFor(m => m.ExpenditureRequisitionCode, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-                </div>
-                <div class="col-md-6 form-group">
-                    <b></b>
-                    @Html.Label("Created By", htmlAttributes: new { @class = "control-label col-md-2" })
-                    @Html.TextBoxFor(m => m.CreatedBy, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
-                </div>*@
-            <div class="col-md-6 form-group">
-                <b></b>
-                @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = "readonly", style = "background-color:#f2f2f2" })
             </div>
-        </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Imprest Issue Doc No", htmlAttributes: new { @class = "control-label col-md-2" })
 
-        <div class="mt-3 text-center">
-            @if (Model.Status != "Open")
-            {
+                    @Html.EditorFor(model => model.Imprest_Issue_Doc_No, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Imprest_Issue_Doc_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Reference No", htmlAttributes: new { @class = "control-label col-md-2" })
 
-                @*<button class="btn btn-primary action-buttons" onclick="UpdatePostingDate();">
-                        <i class="fa fa-history" aria-hidden="true"></i> Update Document
-                    </button>*@
-            }
+                    @Html.EditorFor(model => model.Reference_No, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Reference_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Account Type", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Account_Type, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Account_Type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Account_No, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Account_No, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Account_Name", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Account_Name, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Account_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Payee", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Payee, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Payee, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Created_By", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Created_By, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Created_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Currency Code", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Currency_Code, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Currency_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Region", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Shortcut_Dimension_1_Code, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Shortcut_Dimension_1_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+          @*  <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Department_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Department_Name, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Department_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Shortcut_Dimension_2_Code, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Shortcut_Dimension_2_Code, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           @* <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Project_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Project_Name, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Project_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Imprest Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Imprest_Amount, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Imprest_Amount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Actual Amount Spent", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Actual_Amount_Spent, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Actual_Amount_Spent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Actual Amount Spent LCY", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Actual_Amount_Spent_LCY, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Actual_Amount_Spent_LCY, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Cash Receipt Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Cash_Receipt_Amount, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Cash_Receipt_Amount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Remaining Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Remaining_Amount, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Remaining_Amount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Strategic Plan", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    @Html.EditorFor(model => model.Strategic_Plan, new { htmlAttributes = new { @class = "form-control", @readonly="readonly", @style="background-color: #f2f2f2" } })
+                    @Html.ValidationMessageFor(model => model.Strategic_Plan, "", new { @class = "text-danger" })
+                </div>
+            </div>
+       
+
         </div>
 
         <div class="mt-3" id="DivImpLines">
@@ -231,9 +267,9 @@
         </div>
         <hr style="border:1px solid black" />
 
+
     </div>
 </div>
-
 @*//////////////////////Modal////////////////////////////*@
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
@@ -292,9 +328,10 @@
     $(document).ready(function () {
         LoadImprestSurrenderLines(`@Model.No`, `@Model.Status`);
         GetDocumentAttachments();
+
     });
     var LoadImprestSurrenderLines = function (DocNo, Status) {
-        var applyToDocNo = '@Model.ImprestIssueDocNo'
+        var applyToDocNo = '@Model.Imprest_Issue_Doc_No'
         ShowProgress();
         $.ajax({
             async: true,
@@ -317,6 +354,7 @@
     };
     var GenerateReceipt = function (DocNo) {
         $("#labelF").text("Imprest surrender Receipt");
+
         labelF
         ShowProgress();
         $.ajax({
@@ -388,7 +426,32 @@
         });
     }
 
-
+    var InitiateStaffClaim = function (DocNo) {
+        ShowProgress();
+        $.ajax({
+            async: true,
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify({ documentNumber: DocNo }),
+            contentType: "application/json; charset = utf-8",
+            processData: false,
+            url: '/ImprestSurrender/InitiateStaffClaim',
+            success: function (data) {
+                if (data.success) {
+                    HideProgress();
+                    Swal.fire('Success', data.message, 'success');
+                } else {
+                    HideProgress();
+                    Swal.fire('Warning', data.message, 'warning');
+                }
+                    
+            },
+            error: function (err) {
+                HideProgress();
+                Swal.fire('Warning', err, 'warning');
+            }
+        });
+    }
 
     var GenerateImprestSurrender = function (DocNo) {
         ShowProgress();
@@ -545,6 +608,7 @@
             }
         });
     };
+
     var UpdatePostingDate = function () {
         var postingDate = $('#postingDate').val();
         var docNo = '@Model.No';

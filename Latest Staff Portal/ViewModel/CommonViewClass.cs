@@ -176,12 +176,12 @@ namespace Latest_Staff_Portal.ViewModel
         public string DocumentId { get; set; }
         public string OrderNo { get; set; }
     }
-    public class ApiResponse
+   /* public class ApiResponse
     {
         public bool Success { get; set; }
         public int status_code { get; set; }
         public string message { get; set; }
-    }
+    }*/
     public class DocComments
     {
         public string Comment { get; set; }

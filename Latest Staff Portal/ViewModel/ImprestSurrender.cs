@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -49,6 +50,38 @@ namespace Latest_Staff_Portal.ViewModel
         public List<SelectListItem> ListOfDirectorate { get; set; }
         public List<SelectListItem> ListOfResponsibility { get; set; }
         public List<SelectListItem> ListOfImprestIssueDoc { get; set; }
+    }
+
+    public class ApprovedImprestSurrender
+    {
+
+        public string No { get; set; }
+        public string Date { get; set; }
+        public string Posting_Date { get; set; }
+        public string Imprest_Deadline { get; set; }
+        public string Imprest_Issue_Doc_No { get; set; }
+        public string Reference_No { get; set; }
+        public string Account_Type { get; set; }
+        public string Account_No { get; set; }
+        public string Account_Name { get; set; }
+        public string Payee { get; set; }
+        public string Created_By { get; set; }
+        public string Status { get; set; }
+        public string Currency_Code { get; set; }
+        public string Shortcut_Dimension_1_Code { get; set; }
+        public string Department_Name { get; set; }
+        public string Shortcut_Dimension_2_Code { get; set; }
+        public string Project_Name { get; set; }
+        public int Imprest_Amount { get; set; }
+        public int Actual_Amount_Spent { get; set; }
+        public int Actual_Amount_Spent_LCY { get; set; }
+        public int Cash_Receipt_Amount { get; set; }
+        public int Remaining_Amount { get; set; }
+        public string Strategic_Plan { get; set; }
+        public string Reporting_Year_Code { get; set; }
+        public string Workplan_Code { get; set; }
+        public string Activity_Code { get; set; }
+        public string Expenditure_Requisition_Code { get; set; }
     }
 
     public class ImprestSurrenderLine
