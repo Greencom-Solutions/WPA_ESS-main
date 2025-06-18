@@ -365,6 +365,7 @@ namespace Latest_Staff_Portal.Controllers
 
                 var employee = Session["EmployeeData"] as EmployeeView;
                 expenseRequisition.GlobalDimension1Code = employee.GlobalDimension1Code;
+                var dim2 = employee.GlobalDimension2Code;
                 var userId = employee.UserID;
 
                 var docNo = "";
@@ -372,7 +373,7 @@ namespace Latest_Staff_Portal.Controllers
                 docNo = Credentials.ObjNav.InsertExpenseRequisition(
                     expenseRequisition.Description,
                     expenseRequisition.GlobalDimension1Code,
-                    expenseRequisition.GlobalDimension2Code,
+                    dim2,
                     "",
                     reqImprest,
                     impType,
@@ -556,7 +557,6 @@ namespace Latest_Staff_Portal.Controllers
                 expenseRequisitionLineList);
         }
 
-
         public ActionResult NewExpenseRequisition()
         {
             try
@@ -612,16 +612,16 @@ namespace Latest_Staff_Portal.Controllers
                 var rsrceReq = "";
                 var geographical = employeeView?.GlobalDimension1Code;
                 var adminUnit = employeeView?.AdministrativeUnit;
-                if (geographical == "00000001")
+                /*if (geographical == "00000001")
                 {
                     pageWp = $"DraftWorkPlans?$filter=Global_Dimension_1_Code eq '{expenseRequisition.LocationCode}' and Global_Dimension_2_Code eq '{expenseRequisition.GlobalDimension2Code}' and Posted eq true and Archived eq false&$format=json";
 
                 }
                 else
-                {
-                    pageWp = $"DraftWorkPlans?$filter=Global_Dimension_1_Code eq '{expenseRequisition.LocationCode}' and Global_Dimension_2_Code eq '{expenseRequisition.GlobalDimension2Code}' and Posted eq true and Archived eq false&$format=json";
+                {*/
+               pageWp = $"DraftWorkPlans?$filter=Global_Dimension_1_Code eq '{expenseRequisition.LocationCode}' and Global_Dimension_2_Code eq '{expenseRequisition.GlobalDimension2Code}' and Posted eq true and Archived eq false&$format=json";
 
-                }
+              /*  }*/
                 var httpResponseWp = Credentials.GetOdataData(pageWp);
                 using (var streamReader = new StreamReader(httpResponseWp.GetResponseStream()))
                 {
@@ -953,7 +953,6 @@ namespace Latest_Staff_Portal.Controllers
                     JsonRequestBehavior.AllowGet);
             }
         }
-
         public JsonResult GetProcurementPlanCategories(string procurementPlanId)
         {
             try

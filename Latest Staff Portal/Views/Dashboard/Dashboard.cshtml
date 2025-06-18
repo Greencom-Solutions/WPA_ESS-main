@@ -8,7 +8,11 @@
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/Sitemaster.cshtml";
     string approvals = "0";
-    string warrants = "";
+
+    var leaveBalances = ViewBag.leaveBalances;
+    var assignedAssetsCount = ViewBag.assignedAssetsCount;
+    var imprestCount = ViewBag.imprestCount;
+    var approvalsCount = ViewBag.approvalsCount;
 
 
 }
@@ -185,38 +189,32 @@
     </div>
 </div>
 
-@*<div class="row" id="content">
-    <p><br /></p>
-    <div class="col-xl-12 col-sm-12 col-12">*@
-
 <div class="row pt-4 pb-4">
+
     <!-- Approval Card -->
     <div class="col-xl-3 col-sm-6 col-12 mb-3">
         <div class="card shadow-sm hover-shadow transition-all">
             <div class="card-body p-4">
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <div class="dashboard-card-title">
-                        <h6 class="mb-1">
-                            <a href="@Url.Action("DocumentForApprovalSummery","DocumentApproval",new { rn = "Open" })" class="text-decoration-none">
+                    <div>
+                        <h6 class="text-success mb-1">
+                            <a href="@Url.Action("LeaveRequisitionList", "Leave")" class="text-decoration-none">
                                 Approvals
                             </a>
                         </h6>
-                        <h4 class="mb-0 font-weight-bold">
-                            <a href="@Url.Action("DocumentForApprovalSummery","DocumentApproval",new { rn = "Open" })" class="text-decoration-none">
-                                @ViewBag.Approvals
-                            </a>
-                        </h4>
+                        <h5><a href="@Url.Action("DocumentForApprovalSummery","DocumentApproval",new { rn = "Open" })">@approvalsCount</a></h5>
                     </div>
-                    <div class="icon-circle bg-light-primary">
+                    <div class="icon-circle bg-light-success">
                         <i class="fas fa-file-signature text-primary"></i>
                     </div>
                 </div>
                 <div class="progress progress-sm rounded-pill">
-                    <div class="progress-bar bg-primary" style="width: @ViewBag.ApprovalProgress%"></div>
+                    <div class="progress-bar bg-success" style="width: @ViewBag.LeaveBalanceProgress%"></div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Leave Balance Card -->
     <div class="col-xl-3 col-sm-6 col-12 mb-3">
@@ -229,11 +227,7 @@
                                 Leave Balance
                             </a>
                         </h6>
-                        <h4 class="mb-0 font-weight-bold">
-                            <a href="@Url.Action("LeaveRequisitionList", "Leave")" class="text-decoration-none">
-                                @ViewBag.LeaveBalance
-                            </a>
-                        </h4>
+                        <h5><a href="@Url.Action("DocumentForApprovalSummery","DocumentApproval",new { rn = "Open" })">@leaveBalances</a></h5>
                     </div>
                     <div class="icon-circle bg-light-success">
                         <i class="fas fa-calendar-alt text-success"></i>
@@ -257,11 +251,7 @@
                                 My Imprests
                             </a>
                         </h6>
-                        <h4 class="mb-0 font-weight-bold">
-                            <a href='@Url.Action("Imprest","Imprest")?userType=User' class="text-decoration-none">
-                                @ViewBag.Imprests
-                            </a>
-                        </h4>
+                        <h5><a href="@Url.Action("ImprestList","Imprest",new { rn = "Open" })">@imprestCount</a></h5>
                     </div>
                     <div class="icon-circle bg-light-warning">
                         <i class="fas fa-wallet text-warning"></i>
@@ -285,11 +275,7 @@
                                 Assigned Assets
                             </a>
                         </h6>
-                        <h4 class="mb-0 font-weight-bold">
-                            <a href="@Url.Action("IssuanceVoucherList","ICT")" class="text-decoration-none">
-                                @ViewBag.AssignedAssets
-                            </a>
-                        </h4>
+                        <h5><a href="@Url.Action("DocumentForApprovalSummery","DocumentApproval",new { rn = "Open" })">@assignedAssetsCount</a></h5>
                     </div>
                     <div class="icon-circle bg-light-info">
                         <i class="fas fa-laptop text-info"></i>
@@ -302,11 +288,7 @@
         </div>
     </div>
 </div>
-@*</div>
 
-
-
-    </div>*@
 <div class="col-xl-12 col-sm-12 col-12 p-0">
     <div class="card">
         <div class="card-header">
