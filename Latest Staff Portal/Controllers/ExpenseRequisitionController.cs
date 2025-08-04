@@ -235,6 +235,7 @@ namespace Latest_Staff_Portal.Controllers
             }
         }
 
+
         protected void LoadActivities(string workPlanCode)
         {
             try
